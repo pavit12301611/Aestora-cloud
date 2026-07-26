@@ -1,5 +1,6 @@
 import { plans, pricingSection } from "@/lib/content";
 import SectionHeading from "./SectionHeading";
+import SmartLink from "./SmartLink";
 
 export default function Pricing() {
   return (
@@ -21,7 +22,7 @@ export default function Pricing() {
               <article
                 className={`spotlight group relative flex h-full flex-col overflow-hidden rounded-4xl p-8 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                   plan.featured
-                    ? "ring-conic glass-strong sheen shadow-[0_50px_100px_-40px_rgba(122,81,255,.6)] lg:-translate-y-5 lg:scale-[1.03]"
+                    ? "ring-conic glass-strong sheen shadow-[0_50px_100px_-40px_var(--brand-glow-soft)] lg:-translate-y-5 lg:scale-[1.03]"
                     : "spotlight-edge ring-gradient glass sheen lift"
                 } ${plan.muted ? "opacity-[0.9]" : ""}`}
               >
@@ -105,12 +106,12 @@ export default function Pricing() {
                   ))}
                 </ul>
 
-                <a
+                <SmartLink
                   href={plan.cta.href}
                   data-magnetic="0.14"
                   className={`shine magnetic relative z-10 mt-8 inline-flex items-center justify-center gap-2 rounded-2xl px-6 py-3.5 text-[15px] font-semibold transition-shadow duration-300 ${
                     plan.featured
-                      ? "bg-gradient-to-r from-brand-500 to-brand-600 text-white glow-ring hover:shadow-[0_26px_60px_-18px_rgba(122,81,255,.9)]"
+                      ? "bg-gradient-to-r from-brand-500 to-brand-600 text-white glow-ring hover:shadow-[0_26px_60px_-18px_var(--brand-glow)]"
                       : "glass hover:border-brand-400/40"
                   }`}
                 >
@@ -128,7 +129,7 @@ export default function Pricing() {
                   >
                     <path d="M5 12h14M13 6l6 6-6 6" />
                   </svg>
-                </a>
+                </SmartLink>
               </article>
             </div>
           ))}

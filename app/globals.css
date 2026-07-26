@@ -39,6 +39,16 @@
   --animate-pulse-ring: pulse-ring 3.2s ease-out infinite;
   --animate-marquee: marquee 34s linear infinite;
   --animate-spin-slow: spin 14s linear infinite;
+  --animate-beam: beam 11s ease-in-out infinite;
+  --animate-sweep: sweep 7s ease-in-out infinite;
+}
+
+/* Registered so the conic focal ring can actually animate its angle.
+   Without @property the browser cannot interpolate a custom property. */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
 }
 
 @keyframes shimmer { 0% { background-position: -200% 0 } 100% { background-position: 200% 0 } }
@@ -46,7 +56,55 @@
 @keyframes marquee { from { transform: translateX(0) } to { transform: translateX(-50%) } }
 @keyframes rise { from { opacity: 0; transform: translateY(18px) } to { opacity: 1; transform: none } }
 
-:root,
+/* `float` and `drift` animate the independent `translate`/`scale` properties
+   rather than `transform`, so they compose with the pointer-driven `.tilt`
+   transform instead of fighting it. */
+@keyframes float {
+  0%, 100% { translate: 0 0 }
+  50% { translate: 0 -14px }
+}
+@keyframes drift {
+  from { translate: 0 0; scale: 1 }
+  to { translate: 4% -3%; scale: 1.08 }
+}
+@keyframes beam {
+  0%, 100% { opacity: .28; translate: -4% 0 }
+  50% { opacity: .7; translate: 4% 0 }
+}
+@keyframes sweep {
+  0% { translate: 0 0; opacity: 0 }
+  12% { opacity: .55 }
+  88% { opacity: .55 }
+  100% { translate: 460% 0; opacity: 0 }
+}
+@keyframes spin-angle { to { --angle: 360deg } }
+
+/* Dark is the default so it matches the server-rendered `data-theme="dark"`
+   on <html>; light is opt-in via the attribute set by the theme bootstrap. */
+:root {
+  color-scheme: dark;
+  --bg: #05060f;
+  --bg-elev: #0b0c17;
+  --surface: 255 255 255 / 0.035;
+  --surface-strong: 255 255 255 / 0.065;
+  --hairline: 255 255 255 / 0.07;
+  --hairline-strong: 255 255 255 / 0.13;
+  --text: #f5f3fa;
+  --text-muted: #a7a1c0;
+  --text-faint: #706b8b;
+  --glow-a: rgba(209, 149, 62, 0.38);
+  --glow-b: rgba(86, 191, 179, 0.32);
+  --glow-c: rgba(210, 160, 122, 0.24);
+  --brand-glow: rgba(209, 149, 62, 0.55);
+  --brand-glow-soft: rgba(209, 149, 62, 0.32);
+  --card-shadow: 0 40px 90px -32px rgba(0,0,0,.96), 0 0 0 1px rgb(var(--hairline-strong));
+  --grid-line: rgba(255,255,255,.028);
+  --spot: rgba(209, 149, 62, 0.13);
+  --spot-strong: rgba(209, 149, 62, 0.16);
+  --sheen: rgba(255, 255, 255, 0.085);
+  --shine: rgba(255, 255, 255, 0.38);
+}
+
 :root[data-theme="light"] {
   color-scheme: light;
   --bg: #faf8f4;
@@ -61,40 +119,33 @@
   --glow-a: rgba(209, 149, 62, 0.26);
   --glow-b: rgba(86, 191, 179, 0.22);
   --glow-c: rgba(210, 160, 122, 0.24);
+  --brand-glow: rgba(194, 125, 48, 0.4);
+  --brand-glow-soft: rgba(194, 125, 48, 0.22);
   --card-shadow: 0 30px 70px -30px rgba(40, 30, 70, 0.14), 0 0 0 1px rgb(var(--hairline-strong));
   --grid-line: rgba(200, 195, 180, 0.35);
   --spot: rgba(209, 149, 62, 0.14);
+  --spot-strong: rgba(209, 149, 62, 0.2);
   --sheen: rgba(255, 255, 255, 0.6);
-}
-
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --bg: #05060f;
-  --bg-elev: #0b0c17;
-  --surface: 255 255 255 / 0.035;
-  --surface-strong: 255 255 255 / 0.065;
-  --hairline: 255 255 255 / 0.07;
-  --hairline-strong: 255 255 255 / 0.13;
-  --text: #f5f3fa;
-  --text-muted: #a7a1c0;
-  --text-faint: #706b8b;
-  --glow-a: rgba(209, 149, 62, 0.38);
-  --glow-b: rgba(86, 191, 179, 0.32);
-  --glow-c: rgba(210, 160, 122, 0.24);
-  --card-shadow: 0 40px 90px -32px rgba(0,0,0,.96), 0 0 0 1px rgb(var(--hairline-strong));
-  --grid-line: rgba(255,255,255,.028);
-  --spot: rgba(209, 149, 62, 0.13);
-  --sheen: rgba(255, 255, 255, 0.085);
+  --shine: rgba(255, 255, 255, 0.55);
 }
 
 @layer base {
   * { border-color: rgb(var(--hairline)); }
-  html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
-  body { background-color: var(--bg); color: var(--text); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: hidden; }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    /* Reserve the scrollbar so locking body scroll (mobile menu) cannot
+       shift the whole layout sideways. */
+    scrollbar-gutter: stable;
+    overflow-x: hidden;
+  }
+  body { background-color: var(--bg); color: var(--text); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
   ::selection { background: rgba(209, 149, 62, 0.28); color: inherit; }
   h1, h2, h3, h4 { letter-spacing: -0.038em; text-wrap: balance; }
   p { text-wrap: pretty; }
-  ::focus-visible { outline: 2px solid var(--color-brand-400); outline-offset: 3px; border-radius: 8px; }
+  /* `:focus-visible` is a pseudo-CLASS. The previous `::focus-visible`
+     was invalid and silently removed every focus ring on the site. */
+  :focus-visible { outline: 2px solid var(--color-brand-400); outline-offset: 3px; border-radius: 8px; }
   ::-webkit-scrollbar { width: 11px; height: 11px }
   ::-webkit-scrollbar-track { background: transparent }
   ::-webkit-scrollbar-thumb { background: rgb(var(--hairline-strong)); border-radius: 99px; border: 3px solid transparent; background-clip: content-box; }
@@ -104,17 +155,27 @@
 @layer utilities {
   .text-muted { color: var(--text-muted) }
   .text-faint { color: var(--text-faint) }
-  .surface { background: rgb(var(--surface)); border: 1px solid rgb(var(--hairline)); }
-  .glass { background: rgb(var(--surface)); border: 1px solid rgb(var(--hairline)); backdrop-filter: blur(24px) saturate(160%); -webkit-backdrop-filter: blur(24px) saturate(160%); }
-  .glass-strong { background: rgb(var(--surface-strong)); border: 1px solid rgb(var(--hairline-strong)); backdrop-filter: blur(32px) saturate(180%); -webkit-backdrop-filter: blur(32px) saturate(180%); }
-  .sheen { position: relative; }
-  .sheen::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: linear-gradient(to bottom, var(--sheen) 0%, transparent 22%); opacity: 0.55; mix-blend-mode: overlay; }
-  .text-gradient { background: linear-gradient(100deg, var(--color-brand-500) 0%, var(--color-brand-300) 30%, var(--color-plasma-400) 58%, var(--color-accent-400) 92%); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shimmer 9s linear infinite; }
+  /* `background-color` (not the `background` shorthand) so `.sheen` can layer
+     a background-image gloss on the same element without erasing the fill. */
+  .surface { background-color: rgb(var(--surface)); border: 1px solid rgb(var(--hairline)); }
+  .glass { background-color: rgb(var(--surface)); border: 1px solid rgb(var(--hairline)); backdrop-filter: blur(24px) saturate(160%); -webkit-backdrop-filter: blur(24px) saturate(160%); }
+  .glass-strong { background-color: rgb(var(--surface-strong)); border: 1px solid rgb(var(--hairline-strong)); backdrop-filter: blur(32px) saturate(180%); -webkit-backdrop-filter: blur(32px) saturate(180%); }
+
+  /* Top-edge gloss. Implemented as a background layer rather than a
+     pseudo-element so it can coexist with the ring/spotlight pseudo-elements
+     on the very same card. */
+  .sheen { background-image: linear-gradient(to bottom, var(--sheen) 0%, transparent 22%); }
+
+  .text-gradient { background-image: linear-gradient(100deg, var(--color-brand-500) 0%, var(--color-brand-300) 30%, var(--color-plasma-400) 58%, var(--color-accent-400) 92%); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shimmer 9s linear infinite; }
+  .shimmer-text { background-image: linear-gradient(100deg, var(--text) 25%, var(--color-brand-300) 50%, var(--text) 75%); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shimmer 5s linear infinite; }
   .grid-bg { background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px); background-size: 64px 64px; }
+
+  /* Tabular figures keep count-up numerals from reflowing every frame. */
+  .tabular { font-variant-numeric: tabular-nums; }
 
   /* Subtle elegant noise texture for aurora / background */
   .noise {
-    background-image: 
+    background-image:
       radial-gradient(circle at 25% 30%, rgba(255,255,255,0.035) 0.6px, transparent 1px),
       radial-gradient(circle at 70% 65%, rgba(255,255,255,0.025) 0.8px, transparent 1.2px),
       radial-gradient(circle at 40% 80%, rgba(255,255,255,0.03) 0.5px, transparent 0.9px);
@@ -122,12 +183,183 @@
     background-position: 0 0, 40px 60px, 90px 30px;
     opacity: 0.65;
   }
+
+  /* ---- edge fades -------------------------------------------------- */
+  .mask-fade-b {
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%);
+  }
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%);
+  }
+
+  /* ---- scroll reveal ----------------------------------------------- */
   .reveal { opacity: 0; transform: translateY(28px) scale(0.99); transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo); will-change: opacity, transform; }
-  .reveal.is-visible { opacity: 1; transform: none; }
+  .reveal.is-visible { opacity: 1; transform: none; will-change: auto; }
   .word { display: inline-block; opacity: 0; transform: translateY(0.55em) rotate(2deg); animation: rise 0.95s var(--ease-out-expo) forwards; }
   .lift { transition: transform 0.45s var(--ease-out-expo), box-shadow 0.45s var(--ease-out-expo), border-color 0.45s ease; }
   .lift:hover { transform: translateY(-6px); box-shadow: var(--card-shadow); border-color: rgb(var(--hairline-strong)); }
+
+  /* ---- cursor spotlight -------------------------------------------- */
+  /* Driven by --mx/--my, written by components/Interactions.tsx. */
+  .spotlight { position: relative; isolation: isolate; }
+  .spotlight::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.45s ease;
+    background: radial-gradient(
+      320px circle at var(--mx, 50%) var(--my, 50%),
+      var(--spot-strong),
+      transparent 72%
+    );
+  }
+  .spotlight:hover::before { opacity: 1; }
+
+  /* ---- gradient / cursor-lit hairline rings ------------------------ */
+  /* `.ring-gradient` and `.spotlight-edge` deliberately share one ::after so
+     a card can wear both (plus `.sheen`) without pseudo-element collisions. */
+  .ring-gradient,
+  .spotlight-edge { position: relative; }
+  .ring-gradient::after,
+  .spotlight-edge::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    background: linear-gradient(
+      140deg,
+      rgb(var(--hairline-strong)),
+      transparent 42%,
+      transparent 62%,
+      rgb(var(--hairline-strong))
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    transition: background 0.3s ease;
+  }
+  .spotlight-edge:hover::after {
+    background:
+      radial-gradient(
+        260px circle at var(--mx, 50%) var(--my, 50%),
+        var(--color-brand-400),
+        transparent 62%
+      ),
+      linear-gradient(
+        140deg,
+        rgb(var(--hairline-strong)),
+        transparent 42%,
+        transparent 62%,
+        rgb(var(--hairline-strong))
+      );
+  }
+
+  /* Rotating conic border for the focal pricing tier. */
+  .ring-conic { position: relative; }
+  .ring-conic::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    padding: 1.5px;
+    pointer-events: none;
+    background: conic-gradient(
+      from var(--angle),
+      transparent 0deg,
+      var(--color-brand-400) 40deg,
+      var(--color-accent-400) 90deg,
+      transparent 150deg,
+      transparent 360deg
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    animation: spin-angle 6s linear infinite;
+  }
+
+  /* ---- CTA treatments ---------------------------------------------- */
+  /* Inner highlight ring. Uses ::after so component-level `hover:shadow-*`
+     utilities can still own `box-shadow` without wiping the ring out. */
+  .glow-ring { position: relative; }
+  .glow-ring::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.3),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  }
+
+  .shine { position: relative; overflow: hidden; }
+  .shine-layer {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(
+      105deg,
+      transparent 38%,
+      var(--shine) 50%,
+      transparent 62%
+    );
+    transform: translateX(-130%);
+    transition: transform 0.9s var(--ease-out-expo);
+  }
+  .shine:hover .shine-layer,
+  .shine:focus-visible .shine-layer { transform: translateX(130%); }
+
+  /* ---- pointer-driven transforms ----------------------------------- */
+  /* --rx/--ry/--tx/--ty are written by components/Interactions.tsx. */
+  /* Perspective lives on the tilting element itself, not on a shared parent:
+     a single `perspective` on a grid makes cards near the edges shear away
+     from a vanishing point they don't own. */
+  .tilt-scene { transform-style: preserve-3d; }
+  .tilt {
+    transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform 0.7s var(--ease-out-expo);
+  }
+  .tilt.is-active { transition-duration: 0.18s; }
+
+  .magnetic {
+    transform: translate3d(var(--tx, 0px), var(--ty, 0px), 0);
+    transition: transform 0.55s var(--ease-out-expo);
+  }
+  .magnetic.is-active { transition-duration: 0.15s; }
 }
 
-@media (hover: none) { .lift:hover { transform: none; } }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; } .reveal, .word { opacity: 1 !important; transform: none !important; } }
+/* Touch / coarse pointers never get the pointer-driven layers, so make sure
+   nothing is left in a half-applied hover state. */
+@media (hover: none), (pointer: coarse) {
+  .lift:hover { transform: none; }
+  .spotlight:hover::before { opacity: 0; }
+  .tilt { transform: none; }
+  .magnetic { transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal, .word { opacity: 1 !important; transform: none !important; }
+  .tilt, .magnetic { transform: none !important; }
+  .ring-conic::after { animation: none !important; }
+}
+
+

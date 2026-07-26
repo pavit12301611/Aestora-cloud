@@ -1,4 +1,5 @@
 import Logo from "./Logo";
+import SmartLink from "./SmartLink";
 
 const columns = [
   {
@@ -69,7 +70,7 @@ export default function Footer() {
               <ul className="mt-4 space-y-2.5">
                 {col.links.map((link) => (
                   <li key={link.label}>
-                    <a
+                    <SmartLink
                       href={link.href}
                       className="group/link inline-flex items-center gap-1.5 text-[14px] text-muted transition-colors hover:text-[var(--text)]"
                     >
@@ -78,7 +79,7 @@ export default function Footer() {
                         className="h-px w-0 bg-gradient-to-r from-brand-400 to-accent-400 transition-all duration-300 group-hover/link:w-3"
                       />
                       {link.label}
-                    </a>
+                    </SmartLink>
                   </li>
                 ))}
               </ul>

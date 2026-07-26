@@ -7,8 +7,12 @@ export default function Aurora() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden noise"
+      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
     >
+      {/* Grain sits in its own layer. Previously `.noise` was on the wrapper,
+          so its `opacity: 0.65` washed out every bloom underneath it. */}
+      <div className="absolute inset-0 noise" />
+
       {/* Base wash - deep elegant navy with subtle gold spot */}
       <div
         className="absolute inset-0"
@@ -64,13 +68,17 @@ export default function Aurora() {
         />
       </div>
 
-      {/* Cursor-following bloom */}
+      {/* Cursor-following bloom.
+          --gx/--gy are written to <body> by Interactions; this layer is a
+          descendant of <body>, so it inherits them. The old
+          `transition: background` animated a gradient that browsers cannot
+          interpolate cheaply — it forced a repaint of a full-viewport layer on
+          every pointer frame. The rAF throttle upstream is smoothing enough. */}
       <div
         className="absolute inset-0 hidden md:block"
         style={{
           background:
             "radial-gradient(420px circle at var(--gx, -999px) var(--gy, -999px), var(--spot), transparent 70%)",
-          transition: "background .18s linear",
         }}
       />
     </div>

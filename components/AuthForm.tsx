@@ -1,41 +1,81 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 
-type Field = {
+export type Field = {
   id: string;
   label: string;
   type: string;
   placeholder: string;
   autoComplete: string;
   hint?: { label: string; href: string };
+  /** Forwarded to the input so the browser can validate before submit. */
+  minLength?: number;
+  inputMode?: "text" | "email" | "numeric";
 };
 
 export default function AuthForm({
   fields,
   submitLabel,
+  onSubmit,
 }: {
   fields: Field[];
   submitLabel: string;
+  /**
+   * Wire this to the real auth endpoint. Left optional so the screens can be
+   * previewed standalone, but the default is now an explicit, visible
+   * "not connected yet" state instead of a submit button that silently does
+   * nothing — which reads to a user as a broken login.
+   */
+  onSubmit?: (values: Record<string, string>) => void | Promise<void>;
 }) {
   const [show, setShow] = useState<Record<string, boolean>>({});
+  const [notice, setNotice] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+  // Namespaced so two AuthForms on one page can't collide on `id="email"`,
+  // which would break every <label for> pairing.
+  const uid = useId();
+  const fieldId = (id: string) => `${uid}-${id}`;
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (pending) return;
+
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const values = Object.fromEntries(
+      fields.map((f) => [f.id, String(data.get(f.id) ?? "")])
+    );
+
+    if (!onSubmit) {
+      setNotice(
+        "This is a preview build — authentication isn't connected yet."
+      );
+      return;
+    }
+
+    setNotice(null);
+    setPending(true);
+    try {
+      await onSubmit(values);
+    } catch {
+      setNotice("Something went wrong. Please try again.");
+    } finally {
+      setPending(false);
+    }
+  };
 
   return (
-    <form
-      className="space-y-4"
-      onSubmit={(e) => {
-        // Presentational shell — wire to the real auth endpoint.
-        e.preventDefault();
-      }}
-    >
+    <form className="space-y-4" onSubmit={handleSubmit} noValidate={false}>
       {fields.map((field) => {
         const isPassword = field.type === "password";
-        const revealed = show[field.id];
+        const revealed = Boolean(show[field.id]);
+        const inputId = fieldId(field.id);
         return (
           <div key={field.id}>
             <div className="mb-1.5 flex items-baseline justify-between">
               <label
-                htmlFor={field.id}
+                htmlFor={inputId}
                 className="text-[13px] font-medium text-muted"
               >
                 {field.label}
@@ -52,13 +92,25 @@ export default function AuthForm({
 
             <div className="relative">
               <input
-                id={field.id}
+                id={inputId}
                 name={field.id}
                 type={isPassword && revealed ? "text" : field.type}
                 placeholder={field.placeholder}
                 autoComplete={field.autoComplete}
+                minLength={field.minLength}
+                inputMode={field.inputMode}
+                // Browsers helpfully "correct" and capitalise the first letter
+                // of an email on mobile, which breaks sign-in.
+                autoCapitalize={field.type === "email" ? "none" : undefined}
+                autoCorrect={field.type === "email" ? "off" : undefined}
+                spellCheck={field.type === "email" ? false : undefined}
                 required
-                className="w-full rounded-2xl surface px-4 py-3 text-[14.5px] outline-none transition-all duration-300 placeholder:text-faint hover:border-[rgb(var(--hairline-strong))] focus:border-brand-400/60 focus:ring-4 focus:ring-brand-500/15"
+                disabled={pending}
+                // Right padding clears the reveal button so a long value can't
+                // slide underneath it.
+                className={`w-full rounded-2xl surface py-3 pl-4 text-[14.5px] outline-none transition-all duration-300 placeholder:text-faint hover:border-[rgb(var(--hairline-strong))] focus:border-brand-400/60 focus:ring-4 focus:ring-brand-500/15 disabled:opacity-60 ${
+                  isPassword ? "pr-12" : "pr-4"
+                }`}
               />
               {isPassword && (
                 <button
@@ -67,6 +119,8 @@ export default function AuthForm({
                     setShow((s) => ({ ...s, [field.id]: !s[field.id] }))
                   }
                   aria-label={revealed ? "Hide password" : "Show password"}
+                  aria-pressed={revealed}
+                  aria-controls={inputId}
                   className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-faint transition-colors hover:text-[var(--text)]"
                 >
                   <svg
@@ -98,24 +152,39 @@ export default function AuthForm({
         );
       })}
 
+      {notice && (
+        // `role="status"` so the message is announced when it appears.
+        <p
+          role="status"
+          className="rounded-2xl border border-brand-400/30 bg-brand-500/10 px-4 py-3 text-[13.5px] text-muted"
+        >
+          {notice}
+        </p>
+      )}
+
       <button
         type="submit"
-        className="shine group relative mt-2 w-full rounded-2xl bg-gradient-to-r from-brand-500 via-brand-500 to-brand-600 px-6 py-3.5 text-[15px] font-semibold text-white glow-ring transition-shadow duration-300 hover:shadow-[0_24px_55px_-18px_rgba(122,81,255,.9)]"
+        disabled={pending}
+        aria-busy={pending}
+        className="shine group relative mt-2 w-full rounded-2xl bg-gradient-to-r from-brand-500 via-brand-500 to-brand-600 px-6 py-3.5 text-[15px] font-semibold text-white glow-ring transition-shadow duration-300 hover:shadow-[0_24px_55px_-18px_var(--brand-glow)] disabled:cursor-not-allowed disabled:opacity-70"
       >
         <span className="shine-layer" aria-hidden="true" />
-        <span className="relative">{submitLabel}</span>
+        <span className="relative">{pending ? "Please wait…" : submitLabel}</span>
       </button>
 
       <div className="flex items-center gap-4 py-2">
-        <span className="h-px flex-1 bg-[rgb(var(--hairline))]" />
+        <span aria-hidden="true" className="h-px flex-1 bg-[rgb(var(--hairline))]" />
         <span className="text-[11px] font-medium uppercase tracking-widest text-faint">
           or
         </span>
-        <span className="h-px flex-1 bg-[rgb(var(--hairline))]" />
+        <span aria-hidden="true" className="h-px flex-1 bg-[rgb(var(--hairline))]" />
       </div>
 
       <button
         type="button"
+        onClick={() =>
+          setNotice("Google sign-in isn't connected in this preview build.")
+        }
         className="flex w-full items-center justify-center gap-3 rounded-2xl glass px-6 py-3.5 text-[14.5px] font-semibold transition-colors duration-300 hover:border-brand-400/40"
       >
         <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" aria-hidden="true">

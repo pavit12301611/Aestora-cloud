@@ -2,14 +2,25 @@
 
 import { useEffect, useState } from "react";
 
-const files = [
+type FileKind = "zip" | "video" | "doc" | "image";
+
+const files: {
+  name: string;
+  size: string;
+  tint: string;
+  kind: FileKind;
+}[] = [
   { name: "brand-kit-final.zip", size: "84.2 MB", tint: "from-brand-400 to-brand-600", kind: "zip" },
   { name: "launch-teaser.mp4", size: "62.8 MB", tint: "from-accent-400 to-accent-600", kind: "video" },
-  { name: "portfolio-2026.pdf", size: "12.4 MB", tint: "from-fuchsia-400 to-brand-500", kind: "doc" },
-  { name: "cover-art@2x.png", size: "8.6 MB", tint: "from-amber-300 to-orange-500", kind: "image" },
+  // Was `from-fuchsia-400` — an off-palette magenta left over from the old
+  // violet theme. Swapped to the plasma ramp that the design system defines.
+  { name: "portfolio-2026.pdf", size: "12.4 MB", tint: "from-plasma-400 to-brand-500", kind: "doc" },
+  { name: "cover-art@2x.png", size: "8.6 MB", tint: "from-brand-300 to-plasma-500", kind: "image" },
 ];
 
-const icons: Record<string, React.ReactNode> = {
+// Keyed by the union, so adding a kind without an icon is a compile error
+// instead of a silently empty <svg> at runtime.
+const icons: Record<FileKind, React.ReactNode> = {
   zip: <path d="M10 3v2M14 5v2M10 7v2M14 9v2M10 11v2M12 13h.01M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z" />,
   video: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m10 9.5 5 2.5-5 2.5z" /></>,
   doc: <><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" /><path d="M14 3v5h5M9 13h6M9 17h4" /></>,
@@ -24,14 +35,43 @@ export default function StoragePanel() {
       setProgress(72);
       return;
     }
-    const id = setInterval(() => {
-      setProgress((p) => (p >= 100 ? 0 : p + 1.4));
-    }, 45);
-    return () => clearInterval(id);
+
+    let id: ReturnType<typeof setInterval> | undefined;
+
+    const tick = () =>
+      // Clamp at 100 before wrapping so the readout can't render "101%".
+      setProgress((p) => (p >= 100 ? 0 : Math.min(100, p + 1.4)));
+
+    const run = () => {
+      if (id === undefined) id = setInterval(tick, 45);
+    };
+    const pause = () => {
+      if (id !== undefined) {
+        clearInterval(id);
+        id = undefined;
+      }
+    };
+
+    // A decorative 22 Hz timer has no business running in a hidden tab.
+    const onVisibility = () => (document.hidden ? pause() : run());
+
+    run();
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      pause();
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
   }, []);
 
   return (
-    <div className="tilt relative animate-float" data-tilt="8">
+    // A decorative product mock full of invented filenames and a fake upload
+    // percentage. Announcing it would tell a screen-reader user they have 27
+    // files and an upload in flight, none of which is true.
+    <div
+      className="tilt relative animate-float"
+      data-tilt="8"
+      aria-hidden="true"
+    >
       {/* Glow bed */}
       <div
         aria-hidden="true"

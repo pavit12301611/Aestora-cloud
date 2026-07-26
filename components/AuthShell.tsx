@@ -3,6 +3,7 @@ import Aurora from "./Aurora";
 import ThemeToggle from "./ThemeToggle";
 import Interactions from "./Interactions";
 import Cursor from "./Cursor";
+import SmartLink from "./SmartLink";
 
 export default function AuthShell({
   title,
@@ -30,9 +31,9 @@ export default function AuthShell({
           className="w-full max-w-[430px] opacity-0 [animation:rise_.9s_var(--ease-out-expo)_forwards]"
         >
           <div className="flex justify-center">
-            <a href="/" aria-label="Aestora home" className="rounded-xl">
+            <SmartLink href="/" aria-label="Aestora home" className="rounded-xl">
               <Logo />
-            </a>
+            </SmartLink>
           </div>
 
           <div className="tilt-scene mt-8">
