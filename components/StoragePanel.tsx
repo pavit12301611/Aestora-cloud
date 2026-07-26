@@ -31,7 +31,7 @@ export default function StoragePanel() {
   }, []);
 
   return (
-    <div className="relative animate-float">
+    <div className="tilt relative animate-float" data-tilt="8">
       {/* Glow bed */}
       <div
         aria-hidden="true"
@@ -42,7 +42,7 @@ export default function StoragePanel() {
         }}
       />
 
-      <div className="ring-gradient overflow-hidden rounded-4xl glass-strong shadow-2xl">
+      <div className="ring-gradient overflow-hidden rounded-4xl glass-strong sheen shadow-2xl">
         {/* Window chrome */}
         <div className="flex items-center gap-2 border-b border-[rgb(var(--hairline))] px-5 py-3.5">
           <span className="h-2.5 w-2.5 rounded-full bg-red-400/70" />
@@ -84,7 +84,7 @@ export default function StoragePanel() {
             </div>
             <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-[rgb(var(--hairline))]">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-brand-400 via-brand-500 to-accent-400 transition-[width] duration-150 ease-linear"
+                className="h-full rounded-full bg-gradient-to-r from-brand-400 via-plasma-400 to-accent-400 shadow-[0_0_12px] shadow-brand-500/60 transition-[width] duration-150 ease-linear"
                 style={{ width: `${Math.min(100, progress)}%` }}
               />
             </div>

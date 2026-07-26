@@ -160,3 +160,17 @@ export const finalCta = {
     "Create your free Aestora account in seconds. No credit card required.",
   cta: { label: "Get 1 GB free", href: "/register" },
 };
+
+/**
+ * Ticker items between the hero and features. Decorative — each phrase is
+ * drawn from copy that already appears elsewhere on the page.
+ */
+export const marqueeItems = [
+  "Drag & drop uploads",
+  "Private by default",
+  "Lightning fast CDN",
+  "Automatic cleanup",
+  "1 GB free daily uploads",
+  "99.9% uptime",
+  "No credit card required",
+];

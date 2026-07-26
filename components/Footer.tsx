@@ -31,8 +31,21 @@ const columns = [
 
 export default function Footer() {
   return (
-    <footer className="relative border-t border-[rgb(var(--hairline))]">
-      <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8">
+    <footer className="relative overflow-hidden border-t border-[rgb(var(--hairline))]">
+      {/* Horizon glow along the top edge */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-brand-400/60 to-transparent"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-40 left-1/2 h-72 w-[70%] -translate-x-1/2 rounded-full blur-3xl"
+        style={{
+          background: "radial-gradient(circle, var(--glow-a), transparent 70%)",
+          opacity: 0.5,
+        }}
+      />
+      <div className="relative mx-auto max-w-7xl px-5 py-16 sm:px-8">
         <div className="grid gap-10 md:grid-cols-[1.4fr_repeat(3,1fr)]">
           <div>
             <Logo />
@@ -58,8 +71,12 @@ export default function Footer() {
                   <li key={link.label}>
                     <a
                       href={link.href}
-                      className="text-[14px] text-muted transition-colors hover:text-[var(--text)]"
+                      className="group/link inline-flex items-center gap-1.5 text-[14px] text-muted transition-colors hover:text-[var(--text)]"
                     >
+                      <span
+                        aria-hidden="true"
+                        className="h-px w-0 bg-gradient-to-r from-brand-400 to-accent-400 transition-all duration-300 group-hover/link:w-3"
+                      />
                       {link.label}
                     </a>
                   </li>

@@ -47,6 +47,36 @@ Dark by default, light on demand, toggled from the navbar and persisted to
 **before first paint**, so there is no flash of the wrong theme. First-time
 visitors get their OS preference.
 
+### Client-side effects (v3)
+
+A single delegated pointer layer (`components/Interactions.tsx`) drives every
+interactive effect on the page — one `pointermove` listener, rAF-throttled,
+writing CSS custom properties. Nothing is per-component, so adding a class is
+all it takes to opt an element in:
+
+| Class        | Effect                                              |
+| ------------ | --------------------------------------------------- |
+| `.spotlight` | Radial glow tracks the cursor inside the card        |
+| `.spotlight-edge` | Card border lights up nearest the cursor        |
+| `.tilt`      | 3D perspective tilt (`data-tilt` sets max degrees)   |
+| `.magnetic`  | Button leans toward the cursor (`data-magnetic`)     |
+| `.shine`     | Diagonal light sweep across CTAs on hover            |
+| `.sheen`     | Static top-edge gloss on glass panels                |
+
+Plus:
+
+- **Trailing cursor halo** — lerped ring that swells over interactive elements
+- **Scroll progress rail** — gradient bar, compositor-only `scaleX`
+- **Count-up numerals** — stats animate from zero when scrolled into view,
+  preserving prefixes/suffixes (`1,000+`, `99.9%`, `248 MB`)
+- **Ambient cursor bloom** — the aurora backdrop brightens around the pointer
+- **Scroll-spy navbar** — the active section's pill is highlighted
+- **Rotating conic border** on the focal Pro pricing tier
+
+All of it is gated behind `(hover: hover) and (pointer: fine)` and
+`prefers-reduced-motion`, so touch devices and motion-sensitive users never pay
+for a listener that wouldn't help them.
+
 ### Motion
 
 - Scroll-reveal via a single shared `IntersectionObserver` (one observer for the
@@ -109,9 +139,10 @@ app/
   login/, register/   auth screens
   not-found.tsx       404
 components/
-  Aurora, Navbar, Hero, StoragePanel, Features,
-  Stats, Pricing, Faq, FinalCta, Footer,
-  ThemeToggle, Reveal, Logo, AuthShell, AuthForm
+  Aurora, Navbar, Hero, StoragePanel, Marquee, Features,
+  Stats, Pricing, Faq, FinalCta, Footer, SectionHeading,
+  ThemeToggle, Reveal, Logo, AuthShell, AuthForm,
+  Interactions, ScrollProgress, Cursor, Counter
 lib/
   content.ts          all site copy (single source of truth)
 ```

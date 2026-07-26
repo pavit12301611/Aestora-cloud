@@ -1,5 +1,6 @@
 /**
- * Ambient page backdrop: aurora blooms + grid + noise.
+ * Ambient page backdrop: aurora blooms, vertical light beams, grid + noise,
+ * plus a cursor-following bloom driven by --gx/--gy (set by <Interactions />).
  * Purely decorative, fixed behind all content.
  */
 export default function Aurora() {
@@ -8,8 +9,18 @@ export default function Aurora() {
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 -z-10 overflow-hidden noise"
     >
+      {/* Base wash */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(120% 80% at 50% -10%, var(--spot), transparent 60%)",
+        }}
+      />
+
       <div className="absolute inset-0 grid-bg mask-fade-b" />
 
+      {/* Drifting blooms */}
       <div
         className="absolute -left-[18%] -top-[22%] h-[68vw] w-[68vw] rounded-full blur-[120px] animate-drift"
         style={{
@@ -31,6 +42,35 @@ export default function Aurora() {
           animationDelay: "-16s",
           background:
             "radial-gradient(circle at 50% 50%, var(--glow-c), transparent 70%)",
+        }}
+      />
+
+      {/* Light beams raking down from the top */}
+      <div className="absolute inset-x-0 top-0 h-[70vh] overflow-hidden">
+        <div
+          className="absolute -top-[30%] left-[18%] h-[130%] w-[16vw] rotate-12 blur-3xl animate-beam"
+          style={{
+            background:
+              "linear-gradient(to bottom, var(--glow-a), transparent 72%)",
+          }}
+        />
+        <div
+          className="absolute -top-[30%] right-[22%] h-[130%] w-[11vw] -rotate-12 blur-3xl animate-beam"
+          style={{
+            animationDelay: "-2.2s",
+            background:
+              "linear-gradient(to bottom, var(--glow-b), transparent 72%)",
+          }}
+        />
+      </div>
+
+      {/* Cursor bloom — coordinates come from <Interactions /> */}
+      <div
+        className="absolute inset-0 hidden md:block"
+        style={{
+          background:
+            "radial-gradient(420px circle at var(--gx, -999px) var(--gy, -999px), var(--spot), transparent 70%)",
+          transition: "background .18s linear",
         }}
       />
     </div>

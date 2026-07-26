@@ -1,16 +1,54 @@
 import { hero, heroStats } from "@/lib/content";
 import StoragePanel from "./StoragePanel";
+import Counter from "./Counter";
+
+/**
+ * Splits a phrase into per-word spans that rise in on load, staggered.
+ *
+ * `gradient` wraps the words in a single clipped-gradient parent rather than
+ * painting each word separately — so the ramp runs continuously across the
+ * whole phrase, and the shimmer animation doesn't collide with the per-word
+ * `rise` animation.
+ */
+function Words({
+  text,
+  gradient = false,
+  delay = 0,
+}: {
+  text: string;
+  gradient?: boolean;
+  delay?: number;
+}) {
+  const words = text.split(" ");
+
+  const inner = words.map((word, i) => (
+    <span
+      key={`${word}-${i}`}
+      className="word"
+      style={{ animationDelay: `${delay + i * 75}ms` }}
+    >
+      {word}
+      {i < words.length - 1 ? "\u00A0" : ""}
+    </span>
+  ));
+
+  return gradient ? (
+    <span className="text-gradient">{inner}</span>
+  ) : (
+    <>{inner}</>
+  );
+}
 
 export default function Hero() {
   return (
     <section id="top" className="relative overflow-hidden pt-32 sm:pt-40">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
-        <div className="grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10">
+        <div className="grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
           {/* ---------- Copy ---------- */}
-          <div className="reveal">
+          <div>
             <a
               href="/register"
-              className="group inline-flex items-center gap-2.5 rounded-full glass py-1.5 pl-1.5 pr-4 text-[13px] font-medium transition-colors hover:border-brand-400/40"
+              className="group inline-flex items-center gap-2.5 rounded-full glass py-1.5 pl-1.5 pr-4 text-[13px] font-medium opacity-0 transition-colors duration-300 hover:border-brand-400/40 [animation:rise_.8s_var(--ease-out-expo)_forwards]"
             >
               <span className="relative grid h-6 w-6 place-items-center rounded-full bg-brand-500/15">
                 <span className="absolute inset-0 rounded-full bg-brand-500/40 animate-pulse-ring" />
@@ -31,21 +69,32 @@ export default function Hero() {
               </svg>
             </a>
 
-            <h1 className="mt-7 text-[clamp(2.6rem,7vw,4.6rem)] font-semibold leading-[1.02]">
-              {hero.titleLead}{" "}
-              <span className="text-gradient">{hero.titleAccent}</span>
+            <h1 className="mt-7 text-[clamp(2.7rem,7.2vw,4.9rem)] font-semibold leading-[0.99]">
+              <Words text={hero.titleLead} delay={120} />{" "}
+              <Words
+                text={hero.titleAccent}
+                gradient
+                delay={120 + hero.titleLead.split(" ").length * 75}
+              />
             </h1>
 
-            <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-muted sm:text-lg">
+            <p
+              className="mt-6 max-w-xl text-[17px] leading-relaxed text-muted opacity-0 sm:text-[18px] [animation:rise_.9s_var(--ease-out-expo)_forwards]"
+              style={{ animationDelay: "520ms" }}
+            >
               {hero.subtitle}
             </p>
 
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div
+              className="mt-9 flex flex-col gap-3 opacity-0 sm:flex-row sm:items-center [animation:rise_.9s_var(--ease-out-expo)_forwards]"
+              style={{ animationDelay: "640ms" }}
+            >
               <a
                 href={hero.primaryCta.href}
-                className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-r from-brand-500 to-brand-600 px-7 py-3.5 text-[15px] font-semibold text-white shadow-xl shadow-brand-600/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-brand-500/40"
+                data-magnetic="0.2"
+                className="shine magnetic group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-brand-500 via-brand-500 to-brand-600 px-7 py-3.5 text-[15px] font-semibold text-white glow-ring transition-shadow duration-300 hover:shadow-[0_26px_60px_-18px_rgba(122,81,255,.9)]"
               >
-                <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+                <span className="shine-layer" aria-hidden="true" />
                 <span className="relative">{hero.primaryCta.label}</span>
                 <svg
                   viewBox="0 0 24 24"
@@ -63,14 +112,18 @@ export default function Hero() {
 
               <a
                 href={hero.secondaryCta.href}
-                className="inline-flex items-center justify-center rounded-2xl glass px-7 py-3.5 text-[15px] font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-400/40"
+                data-magnetic="0.14"
+                className="magnetic inline-flex items-center justify-center rounded-2xl glass px-7 py-3.5 text-[15px] font-semibold transition-colors duration-300 hover:border-brand-400/40"
               >
                 {hero.secondaryCta.label}
               </a>
             </div>
 
             {/* Trust row */}
-            <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-3 text-[13px] text-faint">
+            <div
+              className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-3 text-[13px] text-faint opacity-0 [animation:rise_.9s_var(--ease-out-expo)_forwards]"
+              style={{ animationDelay: "760ms" }}
+            >
               {[
                 "No credit card required",
                 "Private by default",
@@ -96,36 +149,47 @@ export default function Hero() {
           </div>
 
           {/* ---------- Product visual ---------- */}
-          <div className="reveal" style={{ transitionDelay: "120ms" }}>
+          <div
+            className="tilt-scene opacity-0 [animation:rise_1s_var(--ease-out-expo)_forwards]"
+            style={{ animationDelay: "300ms" }}
+          >
             <StoragePanel />
           </div>
         </div>
 
         {/* ---------- Live stat strip ---------- */}
-        <div className="mt-16 grid gap-4 sm:mt-20 sm:grid-cols-3">
+        <div className="mt-16 grid gap-4 sm:mt-24 sm:grid-cols-3">
           {heroStats.map((stat, i) => (
-            <div key={stat.label} className="reveal" style={{ transitionDelay: `${i * 70}ms` }}>
             <div
-              className="ring-gradient lift group relative h-full overflow-hidden rounded-3xl glass p-6"
+              key={stat.label}
+              className="reveal"
+              style={{ transitionDelay: `${i * 70}ms` }}
             >
-              <div className="flex items-start justify-between gap-3">
-                <p className="text-[13px] font-medium uppercase tracking-wider text-faint">
-                  {stat.label}
-                </p>
-                <span className="h-2 w-2 rounded-full bg-accent-400 shadow-[0_0_12px] shadow-accent-400/70" />
-              </div>
-              <p className="mt-3 text-4xl font-semibold tracking-tight">
-                {stat.value}
-              </p>
-              <p className="mt-1 text-sm text-muted">{stat.hint}</p>
+              <div className="spotlight spotlight-edge ring-gradient lift group relative h-full overflow-hidden rounded-3xl glass sheen p-6">
+                <div className="relative z-10 flex items-start justify-between gap-3">
+                  <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-faint">
+                    {stat.label}
+                  </p>
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-400 opacity-70" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-accent-400" />
+                  </span>
+                </div>
 
-              <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-[rgb(var(--hairline))]">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-brand-400 to-accent-400 transition-[width] duration-1000 ease-out"
-                  style={{ width: `${stat.pct}%` }}
-                />
+                <p className="relative z-10 mt-3 text-4xl font-semibold tracking-tight tabular">
+                  <Counter value={stat.value} />
+                </p>
+                <p className="relative z-10 mt-1 text-sm text-muted">
+                  {stat.hint}
+                </p>
+
+                <div className="relative z-10 mt-5 h-1.5 overflow-hidden rounded-full bg-[rgb(var(--hairline))]">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-brand-400 via-plasma-400 to-accent-400 shadow-[0_0_12px] shadow-brand-500/50 transition-[width] duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+                    style={{ width: `${stat.pct}%` }}
+                  />
+                </div>
               </div>
-            </div>
             </div>
           ))}
         </div>

@@ -6,11 +6,16 @@ export default function Logo({
   showWordmark?: boolean;
 }) {
   return (
-    <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <span className="relative grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-brand-400 via-brand-500 to-accent-500 shadow-lg shadow-brand-500/25">
+    <span className={`group/logo inline-flex items-center gap-2.5 ${className}`}>
+      <span className="relative grid h-9 w-9 place-items-center overflow-hidden rounded-xl bg-gradient-to-br from-brand-400 via-brand-500 to-accent-500 shadow-lg shadow-brand-500/30 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/logo:scale-105">
+        {/* Sweeping highlight on hover */}
+        <span
+          aria-hidden="true"
+          className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/45 to-transparent transition-transform duration-700 group-hover/logo:translate-x-full"
+        />
         <svg
           viewBox="0 0 24 24"
-          className="h-[19px] w-[19px] text-white"
+          className="relative h-[19px] w-[19px] text-white"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
