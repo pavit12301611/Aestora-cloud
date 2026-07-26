@@ -24,7 +24,7 @@ export default function Faq() {
                 <div
                   className={`spotlight spotlight-edge relative overflow-hidden rounded-3xl glass sheen transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                     isOpen
-                      ? "border-brand-400/30 shadow-[0_24px_60px_-32px_rgba(122,81,255,.8)]"
+                      ? "border-brand-400/30 shadow-[0_24px_60px_-32px_var(--brand-glow-soft)]"
                       : "hover:border-[rgb(var(--hairline-strong))]"
                   }`}
                 >
@@ -38,6 +38,7 @@ export default function Faq() {
 
                   <h3>
                     <button
+                      id={`faq-trigger-${i}`}
                       type="button"
                       onClick={() => setOpen(isOpen ? null : i)}
                       aria-expanded={isOpen}
@@ -75,6 +76,13 @@ export default function Faq() {
 
                   <div
                     id={`faq-panel-${i}`}
+                    role="region"
+                    aria-labelledby={`faq-trigger-${i}`}
+                    // A collapsed 0fr row is only *visually* collapsed: the
+                    // answer text stayed in the accessibility tree and in the
+                    // find-in-page results. `inert` takes it out of both while
+                    // preserving the height transition.
+                    inert={!isOpen}
                     className="relative z-10 grid transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
                     style={{
                       gridTemplateRows: isOpen ? "1fr" : "0fr",

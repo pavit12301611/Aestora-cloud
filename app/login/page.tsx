@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
 import AuthShell from "@/components/AuthShell";
 import AuthForm from "@/components/AuthForm";
+import SmartLink from "@/components/SmartLink";
 
 export const metadata: Metadata = {
   title: "Sign in",
   description: "Sign in to your Aestora account.",
+  // Without an explicit canonical every route inherited the root layout's
+  // `canonical: "/"`, telling crawlers /login was a duplicate of the homepage.
+  alternates: { canonical: "/login" },
+  // A sign-in form is not a useful search result.
+  robots: { index: false, follow: true },
 };
 
 export default function LoginPage() {
@@ -15,12 +21,12 @@ export default function LoginPage() {
       footer={
         <>
           Don&apos;t have an account?{" "}
-          <a
+          <SmartLink
             href="/register"
             className="font-semibold text-brand-400 transition-colors hover:text-brand-300"
           >
             Create one
-          </a>
+          </SmartLink>
         </>
       }
     >

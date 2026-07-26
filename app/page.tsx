@@ -29,7 +29,11 @@ export default function Home() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        // `<` is escaped so a future copy edit containing "</script>" can't
+        // break out of the tag — the classic JSON-in-script injection.
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqSchema).replace(/</g, "\\u003c"),
+        }}
       />
       <Aurora />
       <Reveal />

@@ -4,15 +4,50 @@ import { useCallback, useEffect, useState } from "react";
 
 type Theme = "dark" | "light";
 
+export const THEME_STORAGE_KEY = "aestora-theme";
+
 export default function ThemeToggle({ className = "" }: { className?: string }) {
   const [theme, setTheme] = useState<Theme>("dark");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const current =
-      (document.documentElement.getAttribute("data-theme") as Theme) || "dark";
+      document.documentElement.getAttribute("data-theme") === "light"
+        ? "light"
+        : "dark";
     setTheme(current);
     setMounted(true);
+  }, []);
+
+  /* Follow the OS preference until the visitor makes an explicit choice, and
+     stay in sync with any other tab that toggles the theme. */
+  useEffect(() => {
+    const apply = (next: Theme) => {
+      document.documentElement.setAttribute("data-theme", next);
+      setTheme(next);
+    };
+
+    const system = window.matchMedia("(prefers-color-scheme: light)");
+    const onSystemChange = () => {
+      try {
+        if (localStorage.getItem(THEME_STORAGE_KEY)) return;
+      } catch {
+        /* storage unavailable — treat as "no explicit choice" */
+      }
+      apply(system.matches ? "light" : "dark");
+    };
+
+    const onStorage = (e: StorageEvent) => {
+      if (e.key !== THEME_STORAGE_KEY) return;
+      apply(e.newValue === "light" ? "light" : "dark");
+    };
+
+    system.addEventListener("change", onSystemChange);
+    window.addEventListener("storage", onStorage);
+    return () => {
+      system.removeEventListener("change", onSystemChange);
+      window.removeEventListener("storage", onStorage);
+    };
   }, []);
 
   const toggle = useCallback(() => {
@@ -20,7 +55,7 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
       const next: Theme = prev === "dark" ? "light" : "dark";
       document.documentElement.setAttribute("data-theme", next);
       try {
-        localStorage.setItem("aestora-theme", next);
+        localStorage.setItem(THEME_STORAGE_KEY, next);
       } catch {
         /* storage unavailable — theme still applies for this session */
       }
@@ -29,16 +64,24 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
   }, []);
 
   const isDark = theme === "dark";
+  // Before mount we cannot know the real theme (it is decided by an inline
+  // script), so render a stable, theme-neutral label rather than asserting
+  // "Switch to light theme" and having it flip after hydration.
+  const label = mounted
+    ? `Switch to ${isDark ? "light" : "dark"} theme`
+    : "Switch theme";
 
   return (
     <button
       type="button"
       onClick={toggle}
-      aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}
-      title={`Switch to ${isDark ? "light" : "dark"} theme`}
+      aria-label={label}
+      title={label}
+      aria-pressed={mounted ? !isDark : undefined}
       className={`group relative grid h-9 w-9 place-items-center rounded-xl glass transition-colors hover:border-brand-400/40 ${className}`}
     >
       <span
+        aria-hidden="true"
         className="pointer-events-none absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{ background: "radial-gradient(circle at 50% 50%, var(--glow-a), transparent 70%)" }}
       />

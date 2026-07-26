@@ -1,35 +1,71 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Logo from "./Logo";
 import ThemeToggle from "./ThemeToggle";
 import { nav } from "@/lib/content";
+import SmartLink from "./SmartLink";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState<string>("");
+  const sheet = useRef<HTMLDivElement>(null);
+  const toggleButton = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    onScroll();
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      setScrolled(window.scrollY > 12);
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(measure);
+    };
+    measure();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   /* Highlight the nav item for whichever section owns the viewport. */
   useEffect(() => {
     const sections = nav
-      .map((n) => document.querySelector(n.href))
-      .filter((el): el is Element => Boolean(el));
-    if (!sections.length) return;
+      .map((n) => {
+        // `nav` hrefs are hashes; querySelector would throw on anything else.
+        if (!n.href.startsWith("#")) return null;
+        return document.getElementById(n.href.slice(1));
+      })
+      .filter((el): el is HTMLElement => Boolean(el));
+    if (!sections.length || typeof IntersectionObserver === "undefined") return;
+
+    // Track ratios across observations instead of only looking at the entries
+    // in the current callback — a section leaving the band fires an entry with
+    // isIntersecting false, and the previous code then kept a stale winner.
+    const ratios = new Map<Element, number>();
 
     const observer = new IntersectionObserver(
       (entries) => {
-        const hit = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (hit) setActive(`#${hit.target.id}`);
+        entries.forEach((entry) => {
+          ratios.set(
+            entry.target,
+            entry.isIntersecting ? entry.intersectionRatio : 0
+          );
+        });
+
+        let best: Element | null = null;
+        let bestRatio = 0;
+        ratios.forEach((ratio, el) => {
+          if (ratio > bestRatio) {
+            bestRatio = ratio;
+            best = el;
+          }
+        });
+
+        // No section in the band (e.g. scrolled back to the hero) → clear it.
+        setActive(best ? `#${(best as Element).id}` : "");
       },
       { rootMargin: "-45% 0px -45% 0px", threshold: [0, 0.25, 0.5, 1] }
     );
@@ -38,12 +74,40 @@ export default function Navbar() {
     return () => observer.disconnect();
   }, []);
 
+  /* Lock page scroll behind the mobile sheet without losing scroll position. */
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
+    if (!open) return;
+    const { body } = document;
+    const previous = body.style.overflow;
+    body.style.overflow = "hidden";
     return () => {
-      document.body.style.overflow = "";
+      body.style.overflow = previous;
     };
   }, [open]);
+
+  /* Escape closes the sheet, and focus is returned to the trigger. */
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        toggleButton.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [open]);
+
+  /* A viewport that grows past the mobile breakpoint must not leave the sheet
+     open (and body scroll locked) behind a now-hidden close button. */
+  useEffect(() => {
+    const query = window.matchMedia("(min-width: 768px)");
+    const sync = () => {
+      if (query.matches) setOpen(false);
+    };
+    query.addEventListener("change", sync);
+    return () => query.removeEventListener("change", sync);
+  }, []);
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
@@ -60,13 +124,13 @@ export default function Navbar() {
               : "border border-transparent bg-transparent py-3"
           }`}
         >
-          <a
+          <SmartLink
             href="#top"
             className="group shrink-0 rounded-xl"
             aria-label="Aestora home"
           >
             <Logo />
-          </a>
+          </SmartLink>
 
           <nav
             className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 md:flex"
@@ -75,10 +139,12 @@ export default function Navbar() {
             {nav.map((item) => {
               const isActive = active === item.href;
               return (
-                <a
+                <SmartLink
                   key={item.href}
                   href={item.href}
-                  aria-current={isActive ? "true" : undefined}
+                  // `aria-current="true"` is not a valid token for a nav link;
+                  // "location" is the value screen readers expect here.
+                  aria-current={isActive ? "location" : undefined}
                   className={`relative rounded-xl px-3.5 py-2 text-[13.5px] font-medium transition-colors duration-300 ${
                     isActive
                       ? "text-[var(--text)]"
@@ -92,33 +158,35 @@ export default function Navbar() {
                     />
                   )}
                   {item.label}
-                </a>
+                </SmartLink>
               );
             })}
           </nav>
 
           <div className="flex items-center gap-2">
             <ThemeToggle />
-            <a
+            <SmartLink
               href="/login"
               className="hidden rounded-xl px-3.5 py-2 text-[13.5px] font-medium text-muted transition-colors hover:text-[var(--text)] sm:block"
             >
               Sign in
-            </a>
-            <a
+            </SmartLink>
+            <SmartLink
               href="/register"
               className="shine magnetic hidden rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-4 py-2 text-[13.5px] font-semibold text-white shadow-lg shadow-brand-600/25 transition-shadow duration-300 hover:shadow-brand-500/45 sm:block"
               data-magnetic="0.16"
             >
               <span className="shine-layer" aria-hidden="true" />
               <span className="relative">Get started</span>
-            </a>
+            </SmartLink>
 
             <button
+              ref={toggleButton}
               type="button"
               onClick={() => setOpen((v) => !v)}
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
+              aria-controls="mobile-menu"
               className="grid h-9 w-9 place-items-center rounded-xl glass md:hidden"
             >
               <svg
@@ -146,12 +214,20 @@ export default function Navbar() {
         className={`md:hidden ${open ? "pointer-events-auto" : "pointer-events-none"}`}
       >
         <div
+          // Decorative scrim: the button above is the accessible control, so
+          // this must not also be announced or reachable by keyboard.
+          aria-hidden="true"
           onClick={() => setOpen(false)}
-          className={`fixed inset-0 top-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${
+          className={`fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${
             open ? "opacity-100" : "opacity-0"
           }`}
         />
         <div
+          id="mobile-menu"
+          ref={sheet}
+          // Hidden from the a11y tree and from tab order when closed —
+          // otherwise the links stay focusable behind an invisible panel.
+          inert={!open}
           className={`absolute inset-x-3 top-[72px] origin-top rounded-3xl glass-strong sheen p-3 shadow-2xl transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             open
               ? "translate-y-0 scale-100 opacity-100"
@@ -160,28 +236,30 @@ export default function Navbar() {
         >
           <nav className="flex flex-col" aria-label="Mobile">
             {nav.map((item) => (
-              <a
+              <SmartLink
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="rounded-2xl px-4 py-3 text-[15px] font-medium text-muted transition-colors hover:bg-white/5 hover:text-[var(--text)]"
+                className="rounded-2xl px-4 py-3 text-[15px] font-medium text-muted transition-colors hover:bg-[rgb(var(--hairline))] hover:text-[var(--text)]"
               >
                 {item.label}
-              </a>
+              </SmartLink>
             ))}
             <div className="my-2 h-px bg-[rgb(var(--hairline))]" />
-            <a
+            <SmartLink
               href="/login"
-              className="rounded-2xl px-4 py-3 text-[15px] font-medium text-muted transition-colors hover:bg-white/5 hover:text-[var(--text)]"
+              onClick={() => setOpen(false)}
+              className="rounded-2xl px-4 py-3 text-[15px] font-medium text-muted transition-colors hover:bg-[rgb(var(--hairline))] hover:text-[var(--text)]"
             >
               Sign in
-            </a>
-            <a
+            </SmartLink>
+            <SmartLink
               href="/register"
+              onClick={() => setOpen(false)}
               className="mt-1 rounded-2xl bg-gradient-to-r from-brand-500 to-brand-600 px-4 py-3 text-center text-[15px] font-semibold text-white"
             >
               Get started
-            </a>
+            </SmartLink>
           </nav>
         </div>
       </div>

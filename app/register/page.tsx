@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import AuthShell from "@/components/AuthShell";
 import AuthForm from "@/components/AuthForm";
+import SmartLink from "@/components/SmartLink";
 
 export const metadata: Metadata = {
   title: "Create account",
   description: "Create your free Aestora account in seconds.",
+  alternates: { canonical: "/register" },
 };
 
 export default function RegisterPage() {
@@ -15,12 +17,12 @@ export default function RegisterPage() {
       footer={
         <>
           Already have an account?{" "}
-          <a
+          <SmartLink
             href="/login"
             className="font-semibold text-brand-400 transition-colors hover:text-brand-300"
           >
             Sign in
-          </a>
+          </SmartLink>
         </>
       }
     >
@@ -47,6 +49,8 @@ export default function RegisterPage() {
             type: "password",
             placeholder: "At least 8 characters",
             autoComplete: "new-password",
+            // The placeholder promised a minimum that was never enforced.
+            minLength: 8,
           },
         ]}
       />

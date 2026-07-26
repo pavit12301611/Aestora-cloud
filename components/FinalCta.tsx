@@ -1,4 +1,5 @@
 import { finalCta } from "@/lib/content";
+import SmartLink from "./SmartLink";
 
 export default function FinalCta() {
   return (
@@ -36,10 +37,10 @@ export default function FinalCta() {
               {finalCta.subtitle}
             </p>
 
-            <a
+            <SmartLink
               href={finalCta.cta.href}
               data-magnetic="0.22"
-              className="shine magnetic group mt-10 inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-brand-500 via-brand-500 to-brand-600 px-8 py-4 text-[15px] font-semibold text-white glow-ring transition-shadow duration-300 hover:shadow-[0_30px_70px_-18px_rgba(122,81,255,.95)]"
+              className="shine magnetic group mt-10 inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-brand-500 via-brand-500 to-brand-600 px-8 py-4 text-[15px] font-semibold text-white glow-ring transition-shadow duration-300 hover:shadow-[0_30px_70px_-18px_var(--brand-glow)]"
             >
               <span className="shine-layer" aria-hidden="true" />
               <span className="relative">{finalCta.cta.label}</span>
@@ -55,7 +56,7 @@ export default function FinalCta() {
               >
                 <path d="M5 12h14M13 6l6 6-6 6" />
               </svg>
-            </a>
+            </SmartLink>
           </div>
         </div>
       </div>

@@ -1,6 +1,8 @@
+import { Fragment } from "react";
 import { hero, heroStats } from "@/lib/content";
 import StoragePanel from "./StoragePanel";
 import Counter from "./Counter";
+import SmartLink from "./SmartLink";
 
 /**
  * Splits a phrase into per-word spans that rise in on load, staggered.
@@ -19,17 +21,19 @@ function Words({
   gradient?: boolean;
   delay?: number;
 }) {
-  const words = text.split(" ");
+  const words = text.split(" ").filter(Boolean);
 
+  // The separator is a real space in its own text node, not a NBSP glued to
+  // the end of each word. A NBSP is a *non-breaking* space, so the previous
+  // version made the whole headline unbreakable and forced it to overflow on
+  // narrow viewports instead of wrapping.
   const inner = words.map((word, i) => (
-    <span
-      key={`${word}-${i}`}
-      className="word"
-      style={{ animationDelay: `${delay + i * 75}ms` }}
-    >
-      {word}
-      {i < words.length - 1 ? "\u00A0" : ""}
-    </span>
+    <Fragment key={`${word}-${i}`}>
+      {i > 0 ? " " : null}
+      <span className="word" style={{ animationDelay: `${delay + i * 75}ms` }}>
+        {word}
+      </span>
+    </Fragment>
   ));
 
   return gradient ? (
@@ -46,7 +50,7 @@ export default function Hero() {
         <div className="grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
           {/* ---------- Copy ---------- */}
           <div>
-            <a
+            <SmartLink
               href="/register"
               className="group inline-flex items-center gap-2.5 rounded-full glass py-1.5 pl-1.5 pr-4 text-[13px] font-medium opacity-0 transition-colors duration-300 hover:border-brand-400/40 [animation:rise_.8s_var(--ease-out-expo)_forwards]"
             >
@@ -67,7 +71,7 @@ export default function Hero() {
               >
                 <path d="m9 18 6-6-6-6" />
               </svg>
-            </a>
+            </SmartLink>
 
             <h1 className="mt-7 text-[clamp(2.7rem,7.2vw,4.9rem)] font-semibold leading-[0.99]">
               <Words text={hero.titleLead} delay={120} />{" "}
@@ -89,10 +93,10 @@ export default function Hero() {
               className="mt-9 flex flex-col gap-3 opacity-0 sm:flex-row sm:items-center [animation:rise_.9s_var(--ease-out-expo)_forwards]"
               style={{ animationDelay: "640ms" }}
             >
-              <a
+              <SmartLink
                 href={hero.primaryCta.href}
                 data-magnetic="0.2"
-                className="shine magnetic group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-brand-500 via-brand-500 to-brand-600 px-7 py-3.5 text-[15px] font-semibold text-white glow-ring transition-shadow duration-300 hover:shadow-[0_26px_60px_-18px_rgba(122,81,255,.9)]"
+                className="shine magnetic group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-brand-500 via-brand-500 to-brand-600 px-7 py-3.5 text-[15px] font-semibold text-white glow-ring transition-shadow duration-300 hover:shadow-[0_26px_60px_-18px_var(--brand-glow)]"
               >
                 <span className="shine-layer" aria-hidden="true" />
                 <span className="relative">{hero.primaryCta.label}</span>
@@ -108,15 +112,15 @@ export default function Hero() {
                 >
                   <path d="M5 12h14M13 6l6 6-6 6" />
                 </svg>
-              </a>
+              </SmartLink>
 
-              <a
+              <SmartLink
                 href={hero.secondaryCta.href}
                 data-magnetic="0.14"
                 className="magnetic inline-flex items-center justify-center rounded-2xl glass px-7 py-3.5 text-[15px] font-semibold transition-colors duration-300 hover:border-brand-400/40"
               >
                 {hero.secondaryCta.label}
-              </a>
+              </SmartLink>
             </div>
 
             {/* Trust row */}
