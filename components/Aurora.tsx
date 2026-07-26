@@ -1,6 +1,6 @@
 /**
- * Ambient page backdrop: aurora blooms, vertical light beams, grid + noise,
- * plus a cursor-following bloom driven by --gx/--gy (set by <Interactions />).
+ * Ambient page backdrop: Elegant gold-amber & teal aurora for Aestora's luxury cloud aesthetic.
+ * Soft drifting blooms, refined light beams, subtle grid + noise texture.
  * Purely decorative, fixed behind all content.
  */
 export default function Aurora() {
@@ -9,7 +9,7 @@ export default function Aurora() {
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 -z-10 overflow-hidden noise"
     >
-      {/* Base wash */}
+      {/* Base wash - deep elegant navy with subtle gold spot */}
       <div
         className="absolute inset-0"
         style={{
@@ -20,7 +20,7 @@ export default function Aurora() {
 
       <div className="absolute inset-0 grid-bg mask-fade-b" />
 
-      {/* Drifting blooms */}
+      {/* Drifting luxury aurora blooms (gold + teal) */}
       <div
         className="absolute -left-[18%] -top-[22%] h-[68vw] w-[68vw] rounded-full blur-[120px] animate-drift"
         style={{
@@ -45,7 +45,7 @@ export default function Aurora() {
         }}
       />
 
-      {/* Light beams raking down from the top */}
+      {/* Elegant vertical light beams (refined for premium look) */}
       <div className="absolute inset-x-0 top-0 h-[70vh] overflow-hidden">
         <div
           className="absolute -top-[30%] left-[18%] h-[130%] w-[16vw] rotate-12 blur-3xl animate-beam"
@@ -64,7 +64,7 @@ export default function Aurora() {
         />
       </div>
 
-      {/* Cursor bloom — coordinates come from <Interactions /> */}
+      {/* Cursor-following bloom */}
       <div
         className="absolute inset-0 hidden md:block"
         style={{
