@@ -1,0 +1,83 @@
+import Logo from "./Logo";
+
+const columns = [
+  {
+    title: "Product",
+    links: [
+      { label: "Features", href: "#features" },
+      { label: "Pricing", href: "#pricing" },
+      { label: "My Storage", href: "/storage" },
+      { label: "FAQ", href: "#faq" },
+    ],
+  },
+  {
+    title: "Account",
+    links: [
+      { label: "Sign in", href: "/login" },
+      { label: "Create account", href: "/register" },
+      { label: "Reset password", href: "/reset-password" },
+      { label: "Upgrade to Pro", href: "/membership/patreon" },
+    ],
+  },
+  {
+    title: "Plans",
+    links: [
+      { label: "Free", href: "#pricing" },
+      { label: "Cloud Pro", href: "#pricing" },
+      { label: "Cloud Exclusive", href: "#pricing" },
+    ],
+  },
+];
+
+export default function Footer() {
+  return (
+    <footer className="relative border-t border-[rgb(var(--hairline))]">
+      <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8">
+        <div className="grid gap-10 md:grid-cols-[1.4fr_repeat(3,1fr)]">
+          <div>
+            <Logo />
+            <p className="mt-4 max-w-xs text-[14px] leading-relaxed text-muted">
+              Fast, private, and ridiculously easy cloud storage.
+            </p>
+            <div className="mt-5 inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-[12px] text-muted">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+              </span>
+              All systems operational
+            </div>
+          </div>
+
+          {columns.map((col) => (
+            <div key={col.title}>
+              <h4 className="text-[13px] font-semibold uppercase tracking-wider text-faint">
+                {col.title}
+              </h4>
+              <ul className="mt-4 space-y-2.5">
+                {col.links.map((link) => (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      className="text-[14px] text-muted transition-colors hover:text-[var(--text)]"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-[rgb(var(--hairline))] pt-7 sm:flex-row">
+          <p className="text-[13px] text-faint">
+            © {new Date().getFullYear()} Aestora. All rights reserved.
+          </p>
+          <p className="text-[13px] text-faint">
+            Built for people who just want their files to work.
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}

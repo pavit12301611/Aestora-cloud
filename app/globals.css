@@ -1,0 +1,301 @@
+@import "tailwindcss";
+
+/* ============================================================
+   AESTORA DESIGN SYSTEM v2
+   Dual-theme token architecture (dark default / light opt-in)
+   ============================================================ */
+
+@theme {
+  --font-sans: "Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SF Mono", "JetBrains Mono", ui-monospace, SFMono-Regular,
+    Menlo, Consolas, monospace;
+
+  /* Brand ramp — aurora violet */
+  --color-brand-50: #f2f0ff;
+  --color-brand-100: #e7e3ff;
+  --color-brand-200: #d1caff;
+  --color-brand-300: #b3a5ff;
+  --color-brand-400: #9175ff;
+  --color-brand-500: #7c5cff;
+  --color-brand-600: #6d3fef;
+  --color-brand-700: #5c2ed4;
+  --color-brand-800: #4b28ab;
+  --color-brand-900: #3f2688;
+
+  /* Accent ramp — signal cyan */
+  --color-accent-300: #7cf3e5;
+  --color-accent-400: #38e0d0;
+  --color-accent-500: #14c8ba;
+  --color-accent-600: #0ea79c;
+
+  --radius-4xl: 2rem;
+  --radius-5xl: 2.75rem;
+
+  --animate-float: float 9s ease-in-out infinite;
+  --animate-drift: drift 24s ease-in-out infinite alternate;
+  --animate-shimmer: shimmer 2.6s linear infinite;
+  --animate-pulse-ring: pulse-ring 3.2s ease-out infinite;
+  --animate-marquee: marquee 38s linear infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) }
+  50% { transform: translateY(-14px) }
+}
+@keyframes drift {
+  0%   { transform: translate3d(-4%, -2%, 0) scale(1) }
+  100% { transform: translate3d(6%, 4%, 0) scale(1.15) }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% 0 }
+  100% { background-position: 200% 0 }
+}
+@keyframes pulse-ring {
+  0%   { transform: scale(.85); opacity: .55 }
+  70%  { transform: scale(1.35); opacity: 0 }
+  100% { transform: scale(1.35); opacity: 0 }
+}
+@keyframes marquee {
+  from { transform: translateX(0) }
+  to   { transform: translateX(-50%) }
+}
+
+/* ---------- Semantic surface tokens ---------- */
+
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #07060d;
+  --bg-elev: #0d0b16;
+  --surface: 255 255 255 / 0.045;
+  --surface-strong: 255 255 255 / 0.075;
+  --hairline: 255 255 255 / 0.09;
+  --hairline-strong: 255 255 255 / 0.16;
+  --text: #f4f2fb;
+  --text-muted: #a49fbd;
+  --text-faint: #6f6a89;
+  --glow-a: rgba(124, 92, 255, 0.5);
+  --glow-b: rgba(20, 200, 186, 0.35);
+  --glow-c: rgba(214, 92, 255, 0.28);
+  --card-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.9);
+  --grid-line: rgba(255, 255, 255, 0.035);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f7f6fc;
+  --bg-elev: #ffffff;
+  --surface: 255 255 255 / 0.82;
+  --surface-strong: 255 255 255 / 0.95;
+  --hairline: 17 12 46 / 0.09;
+  --hairline-strong: 17 12 46 / 0.16;
+  --text: #14102a;
+  --text-muted: #58527a;
+  --text-faint: #837da3;
+  --glow-a: rgba(124, 92, 255, 0.28);
+  --glow-b: rgba(20, 200, 186, 0.22);
+  --glow-c: rgba(214, 92, 255, 0.18);
+  --card-shadow: 0 24px 60px -28px rgba(40, 24, 110, 0.32);
+  --grid-line: rgba(20, 16, 42, 0.045);
+}
+
+@layer base {
+  * {
+    border-color: rgb(var(--hairline));
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "cv02", "cv03", "cv04", "ss01";
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: rgba(124, 92, 255, 0.32);
+    color: var(--text);
+  }
+
+  h1, h2, h3, h4 {
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  p { text-wrap: pretty; }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-400);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  ::-webkit-scrollbar { width: 11px; height: 11px }
+  ::-webkit-scrollbar-track { background: transparent }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--hairline-strong));
+    border-radius: 99px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover { background-color: var(--color-brand-500) }
+}
+
+@layer utilities {
+  .text-muted { color: var(--text-muted) }
+  .text-faint { color: var(--text-faint) }
+
+  .surface {
+    background: rgb(var(--surface));
+    border: 1px solid rgb(var(--hairline));
+  }
+
+  .glass {
+    background: rgb(var(--surface));
+    border: 1px solid rgb(var(--hairline));
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+  }
+
+  .glass-strong {
+    background: rgb(var(--surface-strong));
+    border: 1px solid rgb(var(--hairline-strong));
+    backdrop-filter: blur(28px) saturate(170%);
+    -webkit-backdrop-filter: blur(28px) saturate(170%);
+  }
+
+  .text-gradient {
+    background: linear-gradient(
+      100deg,
+      var(--color-brand-300) 0%,
+      var(--color-brand-500) 32%,
+      var(--color-accent-400) 78%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  :root[data-theme="light"] .text-gradient {
+    background: linear-gradient(
+      100deg,
+      var(--color-brand-600) 0%,
+      var(--color-brand-500) 38%,
+      var(--color-accent-600) 82%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Gradient hairline border via mask */
+  .ring-gradient {
+    position: relative;
+  }
+  .ring-gradient::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      140deg,
+      rgba(124, 92, 255, 0.55),
+      rgba(255, 255, 255, 0.06) 42%,
+      rgba(20, 200, 186, 0.4)
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+
+  .noise::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.028;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .shimmer-text {
+    background: linear-gradient(
+      90deg,
+      var(--text-muted) 20%,
+      var(--color-brand-300) 46%,
+      var(--text-muted) 72%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: var(--animate-shimmer);
+  }
+
+  .mask-fade-b {
+    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  }
+
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .lift {
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 0.45s ease;
+  }
+  .lift:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--card-shadow);
+    border-color: rgb(var(--hairline-strong));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
