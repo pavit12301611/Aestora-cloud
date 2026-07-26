@@ -4,7 +4,7 @@ export default function FinalCta() {
   return (
     <section className="relative pb-24 pt-8 sm:pb-32">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
-        <div className="reveal ring-gradient relative overflow-hidden rounded-5xl glass-strong px-6 py-16 text-center sm:px-16 sm:py-20">
+        <div className="reveal spotlight ring-gradient relative overflow-hidden rounded-5xl glass-strong sheen px-6 py-16 text-center sm:px-16 sm:py-24">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0"
@@ -21,20 +21,27 @@ export default function FinalCta() {
                 "radial-gradient(circle, var(--glow-b), transparent 70%)",
             }}
           />
+          {/* Top hairline highlight */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-16 top-0 h-px bg-gradient-to-r from-transparent via-brand-300 to-transparent"
+          />
+          <div className="absolute inset-0 grid-bg opacity-60 mask-fade-b" aria-hidden="true" />
 
           <div className="relative">
-            <h2 className="mx-auto max-w-2xl text-[clamp(2.1rem,5vw,3.4rem)] font-semibold leading-[1.06]">
+            <h2 className="mx-auto max-w-2xl text-[clamp(2.2rem,5.2vw,3.6rem)] font-semibold leading-[1.04]">
               {finalCta.title}
             </h2>
-            <p className="mx-auto mt-5 max-w-xl text-[17px] text-muted">
+            <p className="mx-auto mt-5 max-w-xl text-[17px] leading-relaxed text-muted">
               {finalCta.subtitle}
             </p>
 
             <a
               href={finalCta.cta.href}
-              className="group relative mt-9 inline-flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-r from-brand-500 to-brand-600 px-8 py-4 text-[15px] font-semibold text-white shadow-xl shadow-brand-600/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-brand-500/40"
+              data-magnetic="0.22"
+              className="shine magnetic group mt-10 inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-brand-500 via-brand-500 to-brand-600 px-8 py-4 text-[15px] font-semibold text-white glow-ring transition-shadow duration-300 hover:shadow-[0_30px_70px_-18px_rgba(122,81,255,.95)]"
             >
-              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+              <span className="shine-layer" aria-hidden="true" />
               <span className="relative">{finalCta.cta.label}</span>
               <svg
                 viewBox="0 0 24 24"

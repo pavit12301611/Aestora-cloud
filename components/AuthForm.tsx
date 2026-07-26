@@ -58,7 +58,7 @@ export default function AuthForm({
                 placeholder={field.placeholder}
                 autoComplete={field.autoComplete}
                 required
-                className="w-full rounded-2xl surface px-4 py-3 text-[14.5px] outline-none transition-all placeholder:text-faint focus:border-brand-400/60 focus:ring-4 focus:ring-brand-500/12"
+                className="w-full rounded-2xl surface px-4 py-3 text-[14.5px] outline-none transition-all duration-300 placeholder:text-faint hover:border-[rgb(var(--hairline-strong))] focus:border-brand-400/60 focus:ring-4 focus:ring-brand-500/15"
               />
               {isPassword && (
                 <button
@@ -100,9 +100,9 @@ export default function AuthForm({
 
       <button
         type="submit"
-        className="group relative mt-2 w-full overflow-hidden rounded-2xl bg-gradient-to-r from-brand-500 to-brand-600 px-6 py-3.5 text-[15px] font-semibold text-white shadow-xl shadow-brand-600/25 transition-all duration-300 hover:shadow-2xl hover:shadow-brand-500/40"
+        className="shine group relative mt-2 w-full rounded-2xl bg-gradient-to-r from-brand-500 via-brand-500 to-brand-600 px-6 py-3.5 text-[15px] font-semibold text-white glow-ring transition-shadow duration-300 hover:shadow-[0_24px_55px_-18px_rgba(122,81,255,.9)]"
       >
-        <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+        <span className="shine-layer" aria-hidden="true" />
         <span className="relative">{submitLabel}</span>
       </button>
 
@@ -116,7 +116,7 @@ export default function AuthForm({
 
       <button
         type="button"
-        className="flex w-full items-center justify-center gap-3 rounded-2xl glass px-6 py-3.5 text-[14.5px] font-semibold transition-all hover:border-brand-400/40"
+        className="flex w-full items-center justify-center gap-3 rounded-2xl glass px-6 py-3.5 text-[14.5px] font-semibold transition-colors duration-300 hover:border-brand-400/40"
       >
         <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" aria-hidden="true">
           <path

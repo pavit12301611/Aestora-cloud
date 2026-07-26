@@ -8,6 +8,10 @@ import Faq from "@/components/Faq";
 import FinalCta from "@/components/FinalCta";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
+import Interactions from "@/components/Interactions";
+import ScrollProgress from "@/components/ScrollProgress";
+import Cursor from "@/components/Cursor";
+import Marquee from "@/components/Marquee";
 import { faqs } from "@/lib/content";
 
 const faqSchema = {
@@ -29,9 +33,13 @@ export default function Home() {
       />
       <Aurora />
       <Reveal />
+      <Interactions />
+      <ScrollProgress />
+      <Cursor />
       <Navbar />
       <main id="main">
         <Hero />
+        <Marquee />
         <Features />
         <Stats />
         <Pricing />
