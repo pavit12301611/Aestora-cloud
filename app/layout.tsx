@@ -3,7 +3,7 @@ import "./globals.css";
 
 const SITE_URL = "https://cloud.aestora.cc";
 const DESCRIPTION =
-  "Aestora — Secure Cloud Storage. Fast, private, and ridiculously easy cloud storage. Upload, share, and access your files from anywhere.";
+  "Aestora — Your cloud, beautifully simple. Fast, private, and ridiculously easy cloud storage. Upload, share, and access your files from anywhere.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#060218",
+  themeColor: "#0a1328",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -67,7 +67,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen antialiased bg-[#060218]">
+      <body className="min-h-screen antialiased">
         <a
           href="#top"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-black focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"

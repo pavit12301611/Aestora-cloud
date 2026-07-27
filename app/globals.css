@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 /* ============================================================
-   AESTORA DESIGN SYSTEM v5 — "Marketeam"
-   Electric violet on deep ink, Urbanist display + Inter body,
-   pill geometry and rotating conic borders.
+   AESTORA DESIGN SYSTEM v6 — "Lux Minimal"
+   Premium light-luxury gold-amber + deep navy theme.
+   High-end, ridiculously simple, boutique SaaS feel.
    ============================================================ */
 
 @theme {
@@ -14,27 +14,27 @@
   --font-mono: "SF Mono", "JetBrains Mono", ui-monospace, SFMono-Regular,
     Menlo, Consolas, monospace;
 
-  /* Brand ramp built around the Marketeam accent #A068FF */
-  --color-brand-50: #f6f0ff;
-  --color-brand-100: #ede0ff;
-  --color-brand-200: #dcc4ff;
-  --color-brand-300: #d9a1ff;
-  --color-brand-400: #b98aff;
-  --color-brand-500: #a068ff;
-  --color-brand-600: #8a4df0;
-  --color-brand-700: #6f3ad0;
-  --color-brand-800: #532a9e;
-  --color-brand-900: #2d1760;
+  /* Lux Minimal palette: Deep navy + warm gold-amber */
+  --color-brand-50: #f9f5eb;
+  --color-brand-100: #f2e9d6;
+  --color-brand-200: #e6d4a8;
+  --color-brand-300: #d9c07c;
+  --color-brand-400: #d1b46a;
+  --color-brand-500: #c5a26f;     /* core warm gold */
+  --color-brand-600: #b38e5a;
+  --color-brand-700: #8f7147;
+  --color-brand-800: #68553a;
+  --color-brand-900: #423725;
 
-  --color-accent-300: #cbb4ff;
-  --color-accent-400: #9f7dff;
-  --color-accent-500: #7d55f5;
-  --color-accent-600: #6135d6;
+  --color-accent-300: #e8c670;
+  --color-accent-400: #d4af37;
+  --color-accent-500: #c9a227;
+  --color-accent-600: #a17f1f;
 
-  --color-plasma-400: #ff7ab4;
-  --color-plasma-500: #e0559b;
+  --color-plasma-400: #e8c670;
+  --color-plasma-500: #d4af37;
 
-  /* Pill geometry — the Marketeam language is fully rounded */
+  /* Pill geometry */
   --radius-4xl: 2rem;
   --radius-5xl: 2.75rem;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -48,16 +48,12 @@
   --animate-sweep: sweep 7s ease-in-out infinite;
 }
 
-/* Registered so the conic focal ring can actually animate its angle.
-   Without @property the browser cannot interpolate a custom property. */
 @property --angle {
   syntax: "<angle>";
   initial-value: 0deg;
   inherits: false;
 }
 
-/* Drives the rotating conic border on `.btn-border-wrap`. Registered for the
-   same reason as --angle: unregistered custom properties cannot animate. */
 @property --border-angle {
   syntax: "<angle>";
   initial-value: 0deg;
@@ -78,9 +74,6 @@
 @keyframes marquee { from { transform: translateX(0) } to { transform: translateX(-50%) } }
 @keyframes rise { from { opacity: 0; transform: translateY(18px) } to { opacity: 1; transform: none } }
 
-/* `float` and `drift` animate the independent `translate`/`scale` properties
-   rather than `transform`, so they compose with the pointer-driven `.tilt`
-   transform instead of fighting it. */
 @keyframes float {
   0%, 100% { translate: 0 0 }
   50% { translate: 0 -14px }
@@ -101,52 +94,53 @@
 }
 @keyframes spin-angle { to { --angle: 360deg } }
 
-/* Dark is the default so it matches the server-rendered `data-theme="dark"`
-   on <html>; light is opt-in via the attribute set by the theme bootstrap. */
+/* ============================================
+   LUX MINIMAL THEME — Deep Navy + Gold/Amber
+   ============================================ */
 :root {
   color-scheme: dark;
-  --bg: #060218;
-  --bg-elev: #0d0726;
-  --surface: 255 255 255 / 0.04;
-  --surface-strong: 255 255 255 / 0.075;
-  --hairline: 217 161 255 / 0.14;
-  --hairline-strong: 217 161 255 / 0.28;
-  --text: #f7f4ff;
-  --text-muted: #b5a9d6;
-  --text-faint: #7e73a3;
-  --glow-a: rgba(160, 104, 255, 0.42);
-  --glow-b: rgba(217, 161, 255, 0.3);
-  --glow-c: rgba(255, 122, 180, 0.22);
-  --brand-glow: rgba(160, 104, 255, 0.6);
-  --brand-glow-soft: rgba(160, 104, 255, 0.34);
-  --card-shadow: 0 40px 90px -32px rgba(6, 2, 24, .96), 0 0 0 1px rgb(var(--hairline-strong));
-  --grid-line: rgba(217, 161, 255, .04);
-  --spot: rgba(160, 104, 255, 0.15);
-  --spot-strong: rgba(160, 104, 255, 0.2);
-  --sheen: rgba(255, 255, 255, 0.085);
+  --bg: #0a1328;               /* Deep navy */
+  --bg-elev: #121e35;
+  --surface: 255 255 255 / 0.045;
+  --surface-strong: 255 255 255 / 0.08;
+  --hairline: 197 162 111 / 0.18;   /* warm gold hairline */
+  --hairline-strong: 197 162 111 / 0.32;
+  --text: #f5f1e6;                  /* warm off-white */
+  --text-muted: #b9a98c;
+  --text-faint: #8d7c5f;
+  --glow-a: rgba(197, 162, 111, 0.38);
+  --glow-b: rgba(212, 175, 55, 0.28);
+  --glow-c: rgba(232, 198, 112, 0.22);
+  --brand-glow: rgba(197, 162, 111, 0.55);
+  --brand-glow-soft: rgba(197, 162, 111, 0.32);
+  --card-shadow: 0 40px 90px -32px rgba(5, 12, 32, .96), 0 0 0 1px rgb(var(--hairline-strong));
+  --grid-line: rgba(197, 162, 111, .055);
+  --spot: rgba(197, 162, 111, 0.14);
+  --spot-strong: rgba(197, 162, 111, 0.2);
+  --sheen: rgba(255, 255, 255, 0.07);
 }
 
 :root[data-theme="light"] {
   color-scheme: light;
-  --bg: #f6f2ff;
+  --bg: #f4f0e6;               /* warm cream */
   --bg-elev: #ffffff;
-  --surface: 255 255 255 / 0.74;
-  --surface-strong: 255 255 255 / 0.93;
-  --hairline: 160 104 255 / 0.18;
-  --hairline-strong: 160 104 255 / 0.32;
-  --text: #100823;
-  --text-muted: #5b5175;
-  --text-faint: #8a80a6;
-  --glow-a: rgba(160, 104, 255, 0.28);
-  --glow-b: rgba(217, 161, 255, 0.24);
-  --glow-c: rgba(255, 122, 180, 0.2);
-  --brand-glow: rgba(138, 77, 240, 0.42);
-  --brand-glow-soft: rgba(138, 77, 240, 0.24);
-  --card-shadow: 0 30px 70px -30px rgba(45, 23, 96, 0.18), 0 0 0 1px rgb(var(--hairline-strong));
-  --grid-line: rgba(160, 104, 255, 0.12);
-  --spot: rgba(160, 104, 255, 0.14);
-  --spot-strong: rgba(160, 104, 255, 0.2);
-  --sheen: rgba(255, 255, 255, 0.6);
+  --surface: 255 255 255 / 0.82;
+  --surface-strong: 255 255 255 / 0.95;
+  --hairline: 181 146 89 / 0.22;
+  --hairline-strong: 181 146 89 / 0.36;
+  --text: #1f1a12;
+  --text-muted: #64563f;
+  --text-faint: #8f7c5f;
+  --glow-a: rgba(181, 146, 89, 0.26);
+  --glow-b: rgba(197, 162, 111, 0.22);
+  --glow-c: rgba(212, 175, 55, 0.18);
+  --brand-glow: rgba(181, 146, 89, 0.38);
+  --brand-glow-soft: rgba(181, 146, 89, 0.22);
+  --card-shadow: 0 30px 70px -30px rgba(45, 34, 19, 0.16), 0 0 0 1px rgb(var(--hairline-strong));
+  --grid-line: rgba(181, 146, 89, 0.13);
+  --spot: rgba(181, 146, 89, 0.12);
+  --spot-strong: rgba(181, 146, 89, 0.19);
+  --sheen: rgba(255, 255, 255, 0.68);
 }
 
 @layer base {
@@ -154,20 +148,15 @@
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 6rem;
-    /* Reserve the scrollbar so locking body scroll (mobile menu) cannot
-       shift the whole layout sideways. */
     scrollbar-gutter: stable;
     overflow-x: hidden;
   }
   body { background-color: var(--bg); color: var(--text); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-  ::selection { background: rgba(160, 104, 255, 0.34); color: inherit; }
-  /* Urbanist is the Marketeam display face — headings only, Inter for body. */
+  ::selection { background: rgba(197, 162, 111, 0.32); color: inherit; }
   h1, h2, h3 { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.032em; text-wrap: balance; }
   h4 { letter-spacing: -0.02em; text-wrap: balance; }
   p { text-wrap: pretty; }
-  /* `:focus-visible` is a pseudo-CLASS. The previous `::focus-visible`
-     was invalid and silently removed every focus ring on the site. */
-  :focus-visible { outline: 2px solid var(--color-brand-400); outline-offset: 3px; border-radius: 8px; }
+  :focus-visible { outline: 2px solid var(--color-brand-500); outline-offset: 3px; border-radius: 8px; }
   ::-webkit-scrollbar { width: 11px; height: 11px }
   ::-webkit-scrollbar-track { background: transparent }
   ::-webkit-scrollbar-thumb { background: rgb(var(--hairline-strong)); border-radius: 99px; border: 3px solid transparent; background-clip: content-box; }
@@ -177,25 +166,33 @@
 @layer utilities {
   .text-muted { color: var(--text-muted) }
   .text-faint { color: var(--text-faint) }
-  /* `background-color` (not the `background` shorthand) so `.sheen` can layer
-     a background-image gloss on the same element without erasing the fill. */
+
   .surface { background-color: rgb(var(--surface)); border: 1px solid rgb(var(--hairline)); }
   .glass { background-color: rgb(var(--surface)); border: 1px solid rgb(var(--hairline)); backdrop-filter: blur(24px) saturate(160%); -webkit-backdrop-filter: blur(24px) saturate(160%); }
   .glass-strong { background-color: rgb(var(--surface-strong)); border: 1px solid rgb(var(--hairline-strong)); backdrop-filter: blur(32px) saturate(180%); -webkit-backdrop-filter: blur(32px) saturate(180%); }
 
-  /* Top-edge gloss. Implemented as a background layer rather than a
-     pseudo-element so it can coexist with the ring/spotlight pseudo-elements
-     on the very same card. */
   .sheen { background-image: linear-gradient(to bottom, var(--sheen) 0%, transparent 22%); }
 
-  .text-gradient { background-image: linear-gradient(100deg, var(--color-brand-500) 0%, var(--color-brand-300) 30%, var(--color-plasma-400) 58%, var(--color-accent-400) 92%); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shimmer 9s linear infinite; }
-  .shimmer-text { background-image: linear-gradient(100deg, var(--text) 25%, var(--color-brand-300) 50%, var(--text) 75%); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shimmer 5s linear infinite; }
+  .text-gradient { 
+    background-image: linear-gradient(100deg, var(--color-brand-500) 0%, var(--color-accent-400) 32%, var(--color-brand-400) 60%, var(--color-accent-500) 92%); 
+    background-size: 200% auto; 
+    -webkit-background-clip: text; 
+    background-clip: text; 
+    color: transparent; 
+    animation: shimmer 9s linear infinite; 
+  }
+  .shimmer-text { 
+    background-image: linear-gradient(100deg, var(--text) 25%, var(--color-brand-400) 48%, var(--text) 75%); 
+    background-size: 200% auto; 
+    -webkit-background-clip: text; 
+    background-clip: text; 
+    color: transparent; 
+    animation: shimmer 5s linear infinite; 
+  }
   .grid-bg { background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px); background-size: 64px 64px; }
 
-  /* Tabular figures keep count-up numerals from reflowing every frame. */
   .tabular { font-variant-numeric: tabular-nums; }
 
-  /* Subtle elegant noise texture for aurora / background */
   .noise {
     background-image:
       radial-gradient(circle at 25% 30%, rgba(255,255,255,0.035) 0.6px, transparent 1px),
@@ -206,7 +203,6 @@
     opacity: 0.65;
   }
 
-  /* ---- edge fades -------------------------------------------------- */
   .mask-fade-b {
     -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%);
     mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%);
@@ -216,14 +212,11 @@
     mask-image: linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%);
   }
 
-  /* ---- scroll reveal ----------------------------------------------- */
   .reveal { opacity: 0; transform: translateY(28px) scale(0.99); transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo); will-change: opacity, transform; }
   .reveal.is-visible { opacity: 1; transform: none; will-change: auto; }
   .lift { transition: transform 0.45s var(--ease-out-expo), box-shadow 0.45s var(--ease-out-expo), border-color 0.45s ease; }
   .lift:hover { transform: translateY(-6px); box-shadow: var(--card-shadow); border-color: rgb(var(--hairline-strong)); }
 
-  /* ---- cursor spotlight -------------------------------------------- */
-  /* Driven by --mx/--my, written by components/Interactions.tsx. */
   .spotlight { position: relative; isolation: isolate; }
   .spotlight::before {
     content: "";
@@ -242,9 +235,6 @@
   }
   .spotlight:hover::before { opacity: 1; }
 
-  /* ---- gradient / cursor-lit hairline rings ------------------------ */
-  /* `.ring-gradient` and `.spotlight-edge` deliberately share one ::after so
-     a card can wear both (plus `.sheen`) without pseudo-element collisions. */
   .ring-gradient,
   .spotlight-edge { position: relative; }
   .ring-gradient::after,
@@ -285,7 +275,6 @@
       );
   }
 
-  /* Nav links draw an underline out from the left on hover. */
   .nav-underline { position: relative; }
   .nav-underline::after {
     content: "";
@@ -302,7 +291,6 @@
   .nav-underline:hover::after,
   .nav-underline:focus-visible::after { transform: scaleX(1); }
 
-  /* Blinking caret for the typewriter headline. */
   .type-caret {
     display: inline-block;
     width: 3px;
@@ -315,9 +303,7 @@
     animation: caret-blink 0.9s steps(1) infinite;
   }
 
-  /* ---- Marketeam pill CTA -------------------------------------------
-     A pill button whose purple fill slides in on hover, wrapped by an
-     optional `.btn-border-wrap` that paints a rotating conic border. */
+  /* Lux pill CTA — warm gold fill sweep */
   .pill-btn {
     position: relative;
     overflow: hidden;
@@ -336,8 +322,6 @@
   }
   .pill-btn:hover::after,
   .pill-btn:focus-visible::after { transform: translateX(0); }
-  /* Secondary CTAs sweep in from the right instead, so a pair of buttons
-     side by side reads as one gesture rather than two identical ones. */
   .pill-btn-rtl::after { transform: translateX(100%); }
 
   .btn-border-wrap {
@@ -357,9 +341,9 @@
     background: conic-gradient(
       from var(--border-angle),
       var(--color-brand-500),
-      #070319,
+      #0a1328,
       var(--color-brand-500),
-      #070319,
+      #0a1328,
       var(--color-brand-500)
     );
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -369,13 +353,12 @@
     animation: border-spin 3s linear infinite;
   }
 
-  /* Gradient hairline ring used by the orbit circles. */
   .orbit-ring {
     background: linear-gradient(
       180deg,
-      rgba(217, 161, 255, 0) 0%,
-      rgba(217, 161, 255, 1) 43%,
-      rgba(217, 161, 255, 0) 100%
+      rgba(197, 162, 111, 0) 0%,
+      rgba(197, 162, 111, 1) 43%,
+      rgba(197, 162, 111, 0) 100%
     );
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
@@ -383,7 +366,6 @@
     mask-composite: exclude;
   }
 
-  /* Rotating conic border for the focal pricing tier. */
   .ring-conic { position: relative; }
   .ring-conic::after {
     content: "";
@@ -408,9 +390,6 @@
     animation: spin-angle 6s linear infinite;
   }
 
-  /* ---- CTA treatments ---------------------------------------------- */
-  /* Inner highlight ring. Uses ::after so component-level `hover:shadow-*`
-     utilities can still own `box-shadow` without wiping the ring out. */
   .glow-ring { position: relative; }
   .glow-ring::after {
     content: "";
@@ -423,12 +402,6 @@
       inset 0 0 0 1px rgba(255, 255, 255, 0.12);
   }
 
-
-  /* ---- pointer-driven transforms ----------------------------------- */
-  /* --rx/--ry/--tx/--ty are written by components/Interactions.tsx. */
-  /* Perspective lives on the tilting element itself, not on a shared parent:
-     a single `perspective` on a grid makes cards near the edges shear away
-     from a vanishing point they don't own. */
   .tilt-scene { transform-style: preserve-3d; }
   .tilt {
     transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
@@ -443,8 +416,6 @@
   .magnetic.is-active { transition-duration: 0.15s; }
 }
 
-/* Touch / coarse pointers never get the pointer-driven layers, so make sure
-   nothing is left in a half-applied hover state. */
 @media (hover: none), (pointer: coarse) {
   .lift:hover { transform: none; }
   .spotlight:hover::before { opacity: 0; }
@@ -462,11 +433,6 @@
   .reveal { opacity: 1 !important; transform: none !important; }
   .tilt, .magnetic { transform: none !important; }
   .ring-conic::after, .btn-border-wrap::before { animation: none !important; }
-  /* The orbit nodes fly in from scale(.3); with animations neutered they
-     would freeze at their start frame, so land them at rest instead. */
-  .orbit-node { opacity: 1 !important; filter: none !important;
-    transform: translate(-50%, -50%) !important; }
+  .orbit-node { opacity: 1 !important; filter: none !important; transform: translate(-50%, -50%) !important; }
   .type-caret { display: none !important; }
 }
-
-
