@@ -105,6 +105,25 @@ export default function StoragePanel() {
         </div>
 
         <div className="p-5">
+          {/* High-Fidelity Storage Metrics Header */}
+          <div className="mb-4 grid grid-cols-3 gap-2 rounded-2xl bg-[rgb(var(--surface))] p-3 text-[10px] border border-[rgb(var(--hairline))]">
+            <div>
+              <div className="font-medium text-faint uppercase tracking-[1px]">Storage</div>
+              <div className="mt-0.5 text-[13px] font-semibold tabular">248 MB <span className="font-normal text-[10px] text-faint">of 1 GB</span></div>
+              <div className="mt-1 h-[3px] rounded bg-[rgb(var(--hairline))] overflow-hidden">
+                <div className="h-[3px] w-[24.8%] bg-gradient-to-r from-brand-400 to-accent-400 rounded" />
+              </div>
+            </div>
+            <div>
+              <div className="font-medium text-faint uppercase tracking-[1px]">Uploads</div>
+              <div className="mt-0.5 text-[13px] font-semibold tabular">27 <span className="font-normal text-[10px] text-faint">active</span></div>
+            </div>
+            <div>
+              <div className="font-medium text-faint uppercase tracking-[1px]">Retention</div>
+              <div className="mt-0.5 text-[13px] font-semibold tabular">30 days <span className="font-normal text-[10px] text-faint">auto-managed</span></div>
+            </div>
+          </div>
+
           {/* Dropzone */}
           <div className="relative overflow-hidden rounded-3xl border border-dashed border-brand-400/35 bg-brand-500/[0.06] p-6 text-center transition-all duration-300 hover:border-brand-400/60 hover:bg-brand-500/[0.09]">
             <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 shadow-lg shadow-brand-600/30">

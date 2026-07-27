@@ -1,17 +1,18 @@
 /**
  * Single source of truth for all site copy.
- * Text is preserved verbatim from the original Aestora site — the overhaul
- * is presentational only.
+ * Updated to match exact Aestora Cloud brand positioning, value props,
+ * pricing tiers, stats, FAQ and CTAs from provided brand context.
  */
 
 export const nav = [
   { label: "Features", href: "#features" },
   { label: "Pricing", href: "#pricing" },
   { label: "FAQ", href: "#faq" },
+  { label: "My Storage", href: "/storage" },
 ];
 
 export const hero = {
-  badge: "New — 1 GB free daily uploads",
+  badge: "Premium • Ridiculously simple",
   titleLead: "Your cloud,",
   titleAccent: "beautifully simple.",
   subtitle:
@@ -21,9 +22,9 @@ export const hero = {
 };
 
 export const heroStats = [
-  { label: "Storage used", value: "248 MB", hint: "of 1 GB today", pct: 24.8 },
-  { label: "Files", value: "27", hint: "active uploads", pct: 68 },
-  { label: "Days until expiry", value: "30", hint: "auto-managed", pct: 100 },
+  { label: "Storage Allocation", value: "248 MB", hint: "of 1 GB today", pct: 24.8 },
+  { label: "Active Uploads", value: "27", hint: "in progress", pct: 68 },
+  { label: "Retention", value: "30 days", hint: "auto-managed", pct: 100 },
 ];
 
 export const featuresSection = {
@@ -40,22 +41,22 @@ export type Feature = {
 
 export const features: Feature[] = [
   {
-    title: "Drag & drop uploads",
+    title: "Drag & Drop Uploads",
     body: "Upload any file in seconds with a clean, focused interface.",
     icon: "upload",
   },
   {
-    title: "Private by default",
+    title: "Private by Default",
     body: "Files are only accessible to you unless you choose to share.",
     icon: "shield",
   },
   {
-    title: "Lightning fast CDN",
+    title: "Lightning Fast CDN",
     body: "Globally distributed delivery for instant downloads anywhere.",
     icon: "bolt",
   },
   {
-    title: "Automatic cleanup",
+    title: "Automatic Cleanup",
     body: "Expired files are permanently removed — no clutter, no surprises.",
     icon: "broom",
   },
@@ -64,7 +65,7 @@ export const features: Feature[] = [
 export const stats = [
   { value: "1,000+", label: "Active Users", hint: "Growing daily" },
   { value: "5k+", label: "Files Stored", hint: "And counting" },
-  { value: "99.9%", label: "Uptime", hint: "Reliable storage" },
+  { value: "99.9%", label: "Uptime Guarantee", hint: "Reliable storage" },
 ];
 
 export const pricingSection = {
@@ -92,10 +93,10 @@ export const plans: Plan[] = [
     period: "forever",
     features: [
       "1 GB daily upload limit",
-      "200 MB max file size",
+      "200 MB max file size limit",
       "30-day file retention",
       "Basic file preview",
-      "Email support",
+      "Standard email support",
     ],
     cta: { label: "Get started", href: "/register" },
   },
@@ -108,7 +109,7 @@ export const plans: Plan[] = [
     featured: true,
     features: [
       "5 GB daily upload limit",
-      "400 MB max file size",
+      "400 MB max file size limit",
       "60-day file retention",
       "10 GB daily share limit",
       "Priority support",
@@ -156,20 +157,18 @@ export const faqs = [
 
 export const finalCta = {
   title: "Ready to store smarter?",
-  subtitle:
-    "Create your free Aestora account in seconds. No credit card required.",
+  subtitle: "Create your free Aestora account in seconds. No credit card required.",
   cta: { label: "Get 1 GB free", href: "/register" },
 };
 
 /**
- * Ticker items between the hero and features. Decorative — each phrase is
- * drawn from copy that already appears elsewhere on the page.
+ * Ticker items between the hero and features.
  */
 export const marqueeItems = [
-  "Drag & drop uploads",
-  "Private by default",
-  "Lightning fast CDN",
-  "Automatic cleanup",
+  "Drag & Drop Uploads",
+  "Private by Default",
+  "Lightning Fast CDN",
+  "Automatic Cleanup",
   "1 GB free daily uploads",
   "99.9% uptime",
   "No credit card required",
