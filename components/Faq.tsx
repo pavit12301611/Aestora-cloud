@@ -22,7 +22,7 @@ export default function Faq() {
                 style={{ transitionDelay: `${i * 60}ms` }}
               >
                 <div
-                  className={`spotlight spotlight-edge relative overflow-hidden rounded-3xl glass sheen transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                  className={`spotlight spotlight-edge relative overflow-hidden rounded-[1.75rem] glass sheen transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                     isOpen
                       ? "border-brand-400/30 shadow-[0_24px_60px_-32px_var(--brand-glow-soft)]"
                       : "hover:border-[rgb(var(--hairline-strong))]"

@@ -47,7 +47,7 @@ export default function Features() {
             >
               <article
                 data-tilt="6"
-                className="tilt spotlight spotlight-edge ring-gradient group relative h-full overflow-hidden rounded-3xl glass sheen p-7 transition-shadow duration-500 hover:shadow-[var(--card-shadow)]"
+                className="tilt spotlight spotlight-edge ring-gradient group relative h-full overflow-hidden rounded-[1.75rem] glass sheen p-7 transition-shadow duration-500 hover:shadow-[var(--card-shadow)]"
               >
                 {/* Corner bloom */}
                 <div
@@ -67,7 +67,7 @@ export default function Features() {
                   {String(i + 1).padStart(2, "0")}
                 </span>
 
-                <span className="relative z-10 grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-brand-500/25 to-accent-500/15 ring-1 ring-inset ring-[rgb(var(--hairline-strong))] transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:scale-105">
+                <span className="relative z-10 grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-brand-500/30 to-accent-500/15 ring-1 ring-inset ring-[rgb(var(--hairline-strong))] transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:scale-105">
                   <svg
                     viewBox="0 0 24 24"
                     className={`h-[22px] w-[22px] text-brand-300 transition-all duration-300 group-hover:text-brand-200 ${iconClass[feature.icon]}`}

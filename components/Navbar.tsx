@@ -118,7 +118,7 @@ export default function Navbar() {
       >
         {/* Floating pill bar — condenses and lifts on scroll */}
         <div
-          className={`relative flex items-center justify-between gap-4 rounded-2xl px-3 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:px-4 ${
+          className={`relative flex items-center justify-between gap-4 rounded-full px-3 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:px-4 ${
             scrolled
               ? "glass-strong sheen py-2 shadow-[0_20px_50px_-24px_rgba(0,0,0,.85)]"
               : "border border-transparent bg-transparent py-3"
@@ -145,7 +145,7 @@ export default function Navbar() {
                   // `aria-current="true"` is not a valid token for a nav link;
                   // "location" is the value screen readers expect here.
                   aria-current={isActive ? "location" : undefined}
-                  className={`relative rounded-xl px-3.5 py-2 text-[13.5px] font-medium transition-colors duration-300 ${
+                  className={`nav-underline relative rounded-full px-3.5 py-2 text-[13.5px] font-medium transition-colors duration-300 ${
                     isActive
                       ? "text-[var(--text)]"
                       : "text-muted hover:text-[var(--text)]"
@@ -154,7 +154,7 @@ export default function Navbar() {
                   {isActive && (
                     <span
                       aria-hidden="true"
-                      className="absolute inset-0 -z-10 rounded-xl bg-[rgb(var(--hairline))] ring-1 ring-inset ring-[rgb(var(--hairline-strong))]"
+                      className="absolute inset-0 -z-10 rounded-full bg-[rgb(var(--hairline))] ring-1 ring-inset ring-[rgb(var(--hairline-strong))]"
                     />
                   )}
                   {item.label}
@@ -167,18 +167,19 @@ export default function Navbar() {
             <ThemeToggle />
             <SmartLink
               href="/login"
-              className="hidden rounded-xl px-3.5 py-2 text-[13.5px] font-medium text-muted transition-colors hover:text-[var(--text)] sm:block"
+              className="nav-underline hidden rounded-full px-3.5 py-2 text-[13.5px] font-medium text-muted transition-colors hover:text-[var(--text)] sm:block"
             >
               Sign in
             </SmartLink>
-            <SmartLink
-              href="/register"
-              className="shine magnetic hidden rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-4 py-2 text-[13.5px] font-semibold text-white shadow-lg shadow-brand-600/25 transition-shadow duration-300 hover:shadow-brand-500/45 sm:block"
-              data-magnetic="0.16"
-            >
-              <span className="shine-layer" aria-hidden="true" />
-              <span className="relative">Get started</span>
-            </SmartLink>
+            <span className="btn-border-wrap hidden sm:inline-flex">
+              <SmartLink
+                href="/register"
+                className="pill-btn magnetic bg-[#060218] px-4 py-2 text-[13.5px] font-semibold text-white"
+                data-magnetic="0.16"
+              >
+                <span className="relative">Get started</span>
+              </SmartLink>
+            </span>
 
             <button
               ref={toggleButton}
@@ -187,7 +188,7 @@ export default function Navbar() {
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
               aria-controls="mobile-menu"
-              className="grid h-9 w-9 place-items-center rounded-xl glass md:hidden"
+              className="grid h-9 w-9 place-items-center rounded-full glass md:hidden"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -240,7 +241,7 @@ export default function Navbar() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="rounded-2xl px-4 py-3 text-[15px] font-medium text-muted transition-colors hover:bg-[rgb(var(--hairline))] hover:text-[var(--text)]"
+                className="rounded-full px-4 py-3 text-[15px] font-medium text-muted transition-colors hover:bg-[rgb(var(--hairline))] hover:text-[var(--text)]"
               >
                 {item.label}
               </SmartLink>
@@ -249,14 +250,14 @@ export default function Navbar() {
             <SmartLink
               href="/login"
               onClick={() => setOpen(false)}
-              className="rounded-2xl px-4 py-3 text-[15px] font-medium text-muted transition-colors hover:bg-[rgb(var(--hairline))] hover:text-[var(--text)]"
+              className="rounded-full px-4 py-3 text-[15px] font-medium text-muted transition-colors hover:bg-[rgb(var(--hairline))] hover:text-[var(--text)]"
             >
               Sign in
             </SmartLink>
             <SmartLink
               href="/register"
               onClick={() => setOpen(false)}
-              className="mt-1 rounded-2xl bg-gradient-to-r from-brand-500 to-brand-600 px-4 py-3 text-center text-[15px] font-semibold text-white"
+              className="pill-btn mt-1 block bg-gradient-to-r from-brand-500 to-brand-600 px-4 py-3 text-center text-[15px] font-semibold text-white"
             >
               Get started
             </SmartLink>

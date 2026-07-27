@@ -35,8 +35,10 @@ A token-driven architecture replaces ad-hoc styling. Semantic CSS variables
 (`--bg`, `--surface`, `--hairline`, `--text`, `--glow-*`) are defined once per
 theme, so every component inherits the right values automatically.
 
-- **Brand ramp** — aurora violet (`brand-50 … brand-900`)
-- **Accent ramp** — signal cyan (`accent-300 … accent-600`)
+- **Brand ramp** — electric violet built around `#A068FF` (`brand-50 … brand-900`)
+- **Accent ramp** — orchid (`accent-300 … accent-600`), with rose as the third hue
+- **Type** — Urbanist (600/700) for headings, Inter (400–700) for everything else
+- **Geometry** — pill CTAs (`border-radius: 50px`) and softly rounded glass cards
 - **Surfaces** — layered glassmorphism with real `backdrop-filter` blur
 - **Depth** — gradient hairline borders via `mask-composite`, not flat 1px lines
 
@@ -60,11 +62,26 @@ all it takes to opt an element in:
 | `.spotlight-edge` | Card border lights up nearest the cursor        |
 | `.tilt`      | 3D perspective tilt (`data-tilt` sets max degrees)   |
 | `.magnetic`  | Button leans toward the cursor (`data-magnetic`)     |
-| `.shine`     | Diagonal light sweep across CTAs on hover            |
 | `.sheen`     | Static top-edge gloss on glass panels                |
+
+Static (CSS-only) treatments in the same vocabulary:
+
+| Class              | Effect                                                     |
+| ------------------ | ---------------------------------------------------------- |
+| `.pill-btn`        | Pill CTA whose violet fill sweeps in from the left on hover |
+| `.pill-btn-rtl`    | Same, sweeping from the right — used for secondary CTAs     |
+| `.btn-border-wrap` | Rotating conic-gradient border around a pill (`--border-angle`) |
+| `.nav-underline`   | Nav underline that draws out from the left                  |
+| `.orbit-ring`      | Masked 1px gradient ring used by the hero orbits            |
 
 Plus:
 
+- **Typewriter headline** — the hero h1 types itself in, accent phrase in the
+  brand gradient, with a blinking violet caret. The full phrase is always in
+  the DOM as visually-hidden text, so SSR, crawlers and screen readers get the
+  finished headline; reduced-motion visitors skip the animation entirely.
+- **Hero orbits** — four concentric gradient rings counter-rotating at 30/40/50/60s
+  behind the storage panel, each carrying glowing nodes that fly in on load
 - **Trailing cursor halo** — lerped ring that swells over interactive elements
 - **Scroll progress rail** — gradient bar, compositor-only `scaleX`
 - **Count-up numerals** — stats animate from zero when scrolled into view,

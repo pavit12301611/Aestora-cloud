@@ -1,47 +1,9 @@
-import { Fragment } from "react";
 import { hero, heroStats } from "@/lib/content";
 import StoragePanel from "./StoragePanel";
 import Counter from "./Counter";
 import SmartLink from "./SmartLink";
-
-/**
- * Splits a phrase into per-word spans that rise in on load, staggered.
- *
- * `gradient` wraps the words in a single clipped-gradient parent rather than
- * painting each word separately — so the ramp runs continuously across the
- * whole phrase, and the shimmer animation doesn't collide with the per-word
- * `rise` animation.
- */
-function Words({
-  text,
-  gradient = false,
-  delay = 0,
-}: {
-  text: string;
-  gradient?: boolean;
-  delay?: number;
-}) {
-  const words = text.split(" ").filter(Boolean);
-
-  // The separator is a real space in its own text node, not a NBSP glued to
-  // the end of each word. A NBSP is a *non-breaking* space, so the previous
-  // version made the whole headline unbreakable and forced it to overflow on
-  // narrow viewports instead of wrapping.
-  const inner = words.map((word, i) => (
-    <Fragment key={`${word}-${i}`}>
-      {i > 0 ? " " : null}
-      <span className="word" style={{ animationDelay: `${delay + i * 75}ms` }}>
-        {word}
-      </span>
-    </Fragment>
-  ));
-
-  return gradient ? (
-    <span className="text-gradient">{inner}</span>
-  ) : (
-    <>{inner}</>
-  );
-}
+import Typewriter from "./Typewriter";
+import Orbits from "./Orbits";
 
 export default function Hero() {
   return (
@@ -73,13 +35,8 @@ export default function Hero() {
               </svg>
             </SmartLink>
 
-            <h1 className="mt-7 text-[clamp(2.7rem,7.2vw,4.9rem)] font-semibold leading-[0.99]">
-              <Words text={hero.titleLead} delay={120} />{" "}
-              <Words
-                text={hero.titleAccent}
-                gradient
-                delay={120 + hero.titleLead.split(" ").length * 75}
-              />
+            <h1 className="mt-7 text-[clamp(2.7rem,7.2vw,4.9rem)] font-semibold leading-[0.99] tracking-[-0.03em]">
+              <Typewriter lead={hero.titleLead} accent={hero.titleAccent} />
             </h1>
 
             <p
@@ -93,33 +50,36 @@ export default function Hero() {
               className="mt-9 flex flex-col gap-3 opacity-0 sm:flex-row sm:items-center [animation:rise_.9s_var(--ease-out-expo)_forwards]"
               style={{ animationDelay: "640ms" }}
             >
-              <SmartLink
-                href={hero.primaryCta.href}
-                data-magnetic="0.2"
-                className="shine magnetic group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-brand-500 via-brand-500 to-brand-600 px-7 py-3.5 text-[15px] font-semibold text-white glow-ring transition-shadow duration-300 hover:shadow-[0_26px_60px_-18px_var(--brand-glow)]"
-              >
-                <span className="shine-layer" aria-hidden="true" />
-                <span className="relative">{hero.primaryCta.label}</span>
-                <svg
-                  viewBox="0 0 24 24"
-                  className="relative h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
+              {/* Primary CTA — ink pill inside a rotating conic border, with
+                  the accent fill sweeping in from the left on hover. */}
+              <span className="btn-border-wrap">
+                <SmartLink
+                  href={hero.primaryCta.href}
+                  data-magnetic="0.2"
+                  className="pill-btn magnetic group inline-flex items-center justify-center gap-2 bg-[#060218] px-7 py-3.5 text-[15px] font-semibold text-white"
                 >
-                  <path d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </SmartLink>
+                  <span className="relative">{hero.primaryCta.label}</span>
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="relative h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14M13 6l6 6-6 6" />
+                  </svg>
+                </SmartLink>
+              </span>
 
               <SmartLink
                 href={hero.secondaryCta.href}
                 data-magnetic="0.14"
-                className="magnetic inline-flex items-center justify-center rounded-2xl glass px-7 py-3.5 text-[15px] font-semibold transition-colors duration-300 hover:border-brand-400/40"
+                className="pill-btn pill-btn-rtl magnetic inline-flex items-center justify-center glass px-7 py-3.5 text-[15px] font-semibold transition-colors duration-300 hover:border-brand-400/40 hover:text-white"
               >
-                {hero.secondaryCta.label}
+                <span className="relative">{hero.secondaryCta.label}</span>
               </SmartLink>
             </div>
 
@@ -153,11 +113,15 @@ export default function Hero() {
           </div>
 
           {/* ---------- Product visual ---------- */}
-          <div
-            className="tilt-scene opacity-0 [animation:rise_1s_var(--ease-out-expo)_forwards]"
-            style={{ animationDelay: "300ms" }}
-          >
-            <StoragePanel />
+          <div className="relative">
+            {/* Slowly counter-rotating orbit rings framing the panel. */}
+            <Orbits className="hidden lg:block" />
+            <div
+              className="tilt-scene relative opacity-0 [animation:rise_1s_var(--ease-out-expo)_forwards]"
+              style={{ animationDelay: "300ms" }}
+            >
+              <StoragePanel />
+            </div>
           </div>
         </div>
 
@@ -169,7 +133,7 @@ export default function Hero() {
               className="reveal"
               style={{ transitionDelay: `${i * 70}ms` }}
             >
-              <div className="spotlight spotlight-edge ring-gradient lift group relative h-full overflow-hidden rounded-3xl glass sheen p-6">
+              <div className="spotlight spotlight-edge ring-gradient lift group relative h-full overflow-hidden rounded-[1.75rem] glass sheen p-6">
                 <div className="relative z-10 flex items-start justify-between gap-3">
                   <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-faint">
                     {stat.label}

@@ -39,20 +39,21 @@ export default function NotFound() {
         </p>
 
         <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-          <SmartLink
-            href="/"
-            data-magnetic="0.2"
-            className="shine magnetic rounded-2xl bg-gradient-to-r from-brand-500 to-brand-600 px-7 py-3.5 text-[15px] font-semibold text-white glow-ring transition-shadow duration-300 hover:shadow-[0_26px_60px_-18px_var(--brand-glow)]"
-          >
-            <span className="shine-layer" aria-hidden="true" />
-            <span className="relative">Go home</span>
-          </SmartLink>
+          <span className="btn-border-wrap">
+            <SmartLink
+              href="/"
+              data-magnetic="0.2"
+              className="pill-btn magnetic bg-[#060218] px-7 py-3.5 text-[15px] font-semibold text-white"
+            >
+              <span className="relative">Go home</span>
+            </SmartLink>
+          </span>
           <SmartLink
             href="/storage"
             data-magnetic="0.14"
-            className="magnetic rounded-2xl glass px-7 py-3.5 text-[15px] font-semibold transition-colors duration-300 hover:border-brand-400/40"
+            className="pill-btn pill-btn-rtl magnetic glass px-7 py-3.5 text-[15px] font-semibold transition-colors duration-300 hover:border-brand-400/40 hover:text-white"
           >
-            My Storage
+            <span className="relative">My Storage</span>
           </SmartLink>
         </div>
       </main>
