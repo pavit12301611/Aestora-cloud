@@ -1,45 +1,46 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import "./marketeam.css";
 
 const SITE_URL = "https://cloud.aestora.cc";
 const DESCRIPTION =
-  "Marketeam — Unlock top marketing talent you thought was out of reach. Now just one click away.";
+  "Aestora — Secure Cloud Storage. Fast, private, and ridiculously easy cloud storage. Upload, share, and access your files from anywhere.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Marketeam — Unlock Top Marketing Talent",
-    template: "%s — Marketeam",
+    default: "Aestora — Secure Cloud Storage",
+    template: "%s — Aestora",
   },
   description: DESCRIPTION,
-  applicationName: "Marketeam",
+  applicationName: "Aestora",
   keywords: [
-    "marketing talent",
-    "freelance marketers",
-    "growth specialists",
-    "marketing platform",
-    "Marketeam",
+    "cloud storage",
+    "secure storage",
+    "private file sharing",
+    "file upload",
+    "Aestora",
+    "fast CDN",
+    "encryption",
   ],
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     url: SITE_URL,
-    siteName: "Marketeam",
+    siteName: "Aestora",
     locale: "en_US",
-    title: "Marketeam — Unlock Top Marketing Talent",
+    title: "Aestora — Secure Cloud Storage",
     description: DESCRIPTION,
   },
   twitter: {
     card: "summary",
-    title: "Marketeam — Unlock Top Marketing Talent",
+    title: "Aestora — Secure Cloud Storage",
     description: DESCRIPTION,
   },
   robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#060218",
+  themeColor: "#05060f",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -52,7 +53,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="dark">
       <head>
         {/* Google Fonts: Inter (400/500/600/700) + Urbanist (600/700) */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -66,9 +67,9 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen antialiased">
+      <body className="min-h-screen antialiased bg-[#05060f]">
         <a
-          href="#main"
+          href="#top"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-black focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
         >
           Skip to content

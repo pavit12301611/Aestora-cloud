@@ -1,8 +1,29 @@
+"use client";
+
+import { useState } from "react";
 import { plans, pricingSection } from "@/lib/content";
 import SectionHeading from "./SectionHeading";
 import SmartLink from "./SmartLink";
 
 export default function Pricing() {
+  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annually">("monthly");
+
+  const getPrice = (name: string, defaultPrice: string) => {
+    if (name === "Free") return "$0";
+    const numeric = parseFloat(defaultPrice.replace("$", ""));
+    if (billingPeriod === "annually") {
+      // 20% off and round to 2 decimal places
+      return `$${(numeric * 0.8).toFixed(2)}`;
+    }
+    return defaultPrice;
+  };
+
+  const getPeriodText = (name: string, defaultPeriod: string) => {
+    if (name === "Free") return "forever";
+    if (billingPeriod === "annually") return "/month, billed annually";
+    return defaultPeriod;
+  };
+
   return (
     <section id="pricing" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
@@ -12,7 +33,33 @@ export default function Pricing() {
           subtitle={pricingSection.subtitle}
         />
 
-        <div className="mt-16 grid items-start gap-6 lg:grid-cols-3">
+        {/* Billing Toggle Switch */}
+        <div className="reveal mt-10 flex items-center justify-center gap-4" style={{ transitionDelay: "100ms" }}>
+          <span className={`text-sm font-medium transition-colors duration-300 ${billingPeriod === "monthly" ? "text-[var(--text)]" : "text-faint"}`}>
+            Billed Monthly
+          </span>
+          <button
+            type="button"
+            onClick={() => setBillingPeriod(billingPeriod === "monthly" ? "annually" : "monthly")}
+            className="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-[rgb(var(--hairline-strong))] transition-colors duration-300 ease-in-out hover:border-brand-400/40 focus:outline-none"
+            aria-label="Toggle billing period"
+            aria-pressed={billingPeriod === "annually"}
+          >
+            <span
+              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-brand-400 shadow-md ring-0 transition duration-300 ease-in-out ${
+                billingPeriod === "annually" ? "translate-x-5 bg-brand-300" : "translate-x-0"
+              }`}
+            />
+          </button>
+          <span className={`inline-flex items-center gap-2 text-sm font-medium transition-colors duration-300 ${billingPeriod === "annually" ? "text-[var(--text)]" : "text-faint"}`}>
+            Billed Annually
+            <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11px] font-semibold text-emerald-400 border border-emerald-500/20">
+              Save 20%
+            </span>
+          </span>
+        </div>
+
+        <div className="mt-14 grid items-start gap-6 lg:grid-cols-3">
           {plans.map((plan, i) => (
             <div
               key={plan.name}
@@ -64,13 +111,15 @@ export default function Pricing() {
 
                 <div className="relative z-10 mt-6 flex items-baseline gap-1.5">
                   <span
-                    className={`text-[3.4rem] font-semibold leading-none tracking-tight ${
+                    className={`text-[3.4rem] font-semibold leading-none tracking-tight transition-all duration-300 ${
                       plan.featured ? "text-gradient" : ""
                     }`}
                   >
-                    {plan.price}
+                    {getPrice(plan.name, plan.price)}
                   </span>
-                  <span className="text-[15px] text-faint">{plan.period}</span>
+                  <span className="text-[15px] text-faint transition-all duration-300">
+                    {getPeriodText(plan.name, plan.period)}
+                  </span>
                 </div>
 
                 <div className="relative z-10 my-7 h-px bg-gradient-to-r from-[rgb(var(--hairline-strong))] to-transparent" />

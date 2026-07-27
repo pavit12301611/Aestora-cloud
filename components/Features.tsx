@@ -20,6 +20,13 @@ const icon: Record<Feature["icon"], React.ReactNode> = {
   ),
 };
 
+const iconClass: Record<Feature["icon"], string> = {
+  upload: "group-hover:-translate-y-1.5 duration-300",
+  shield: "group-hover:scale-110 duration-300",
+  bolt: "group-hover:translate-x-0.5 group-hover:-translate-y-0.5 duration-300",
+  broom: "group-hover:rotate-12 duration-300 origin-bottom-left",
+};
+
 export default function Features() {
   return (
     <section id="features" className="relative py-24 sm:py-32">
@@ -63,7 +70,7 @@ export default function Features() {
                 <span className="relative z-10 grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-brand-500/25 to-accent-500/15 ring-1 ring-inset ring-[rgb(var(--hairline-strong))] transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:scale-105">
                   <svg
                     viewBox="0 0 24 24"
-                    className="h-[22px] w-[22px] text-brand-300 transition-colors duration-500 group-hover:text-brand-200"
+                    className={`h-[22px] w-[22px] text-brand-300 transition-all duration-300 group-hover:text-brand-200 ${iconClass[feature.icon]}`}
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="1.8"
@@ -75,7 +82,7 @@ export default function Features() {
                   </svg>
                 </span>
 
-                <h3 className="relative z-10 mt-5 text-[17px] font-semibold">
+                <h3 className="relative z-10 mt-5 text-[17px] font-semibold transition-colors duration-300 group-hover:text-brand-300">
                   {feature.title}
                 </h3>
                 <p className="relative z-10 mt-2.5 text-[14.5px] leading-relaxed text-muted">
