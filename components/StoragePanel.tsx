@@ -30,7 +30,11 @@ export default function StoragePanel() {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const canAnimate =
+      window.matchMedia("(min-width: 768px)").matches &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (!canAnimate) {
       setProgress(72);
       return;
     }
@@ -79,7 +83,7 @@ export default function StoragePanel() {
 
   return (
     <div
-      className="tilt relative animate-float"
+      className="tilt relative md:animate-float"
       data-tilt="8"
       aria-hidden="true"
     >

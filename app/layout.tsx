@@ -5,6 +5,20 @@ const SITE_URL = "https://cloud.aestora.cc";
 const DESCRIPTION =
   "Aestora — Your cloud, beautifully simple. Fast, private, and ridiculously easy cloud storage. Upload, share, and access your files from anywhere.";
 
+const THEME_INIT_SCRIPT = `
+(function () {
+  try {
+    var key = "aestora-theme";
+    var stored = localStorage.getItem(key);
+    var theme = stored === "dark" || stored === "light"
+      ? stored
+      : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", theme);
+    document.documentElement.style.colorScheme = theme;
+  } catch (e) {}
+})();
+`;
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
@@ -53,8 +67,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-theme="light">
+    <html lang="en" data-theme="light" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         {/* Google Fonts: Inter (400/500/600) + DM Serif Display (400, hero display) */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link

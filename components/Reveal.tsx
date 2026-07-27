@@ -11,10 +11,11 @@ export default function Reveal() {
     const nodes = Array.from(document.querySelectorAll<HTMLElement>(".reveal"));
     if (!nodes.length) return;
 
-    if (
-      typeof IntersectionObserver === "undefined" ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
+    const canAnimate =
+      window.matchMedia("(min-width: 768px)").matches &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (typeof IntersectionObserver === "undefined" || !canAnimate) {
       nodes.forEach((n) => n.classList.add("is-visible"));
       return;
     }

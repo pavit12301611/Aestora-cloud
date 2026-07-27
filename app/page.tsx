@@ -9,6 +9,7 @@ import FinalCta from "@/components/FinalCta";
 import Footer from "@/components/Footer";
 import ScrollProgress from "@/components/ScrollProgress";
 import Interactions from "@/components/Interactions";
+import Reveal from "@/components/Reveal";
 
 export default function AestoraLanding() {
   return (
@@ -25,6 +26,7 @@ export default function AestoraLanding() {
         <FinalCta />
       </main>
       <Footer />
+      <Reveal />
       <Interactions />
     </>
   );
