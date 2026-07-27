@@ -15,6 +15,7 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
       document.documentElement.getAttribute("data-theme") === "light"
         ? "light"
         : "dark";
+    document.documentElement.style.colorScheme = current;
     setTheme(current);
     setMounted(true);
   }, []);
@@ -24,6 +25,7 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
   useEffect(() => {
     const apply = (next: Theme) => {
       document.documentElement.setAttribute("data-theme", next);
+      document.documentElement.style.colorScheme = next;
       setTheme(next);
     };
 
@@ -54,6 +56,7 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
     setTheme((prev) => {
       const next: Theme = prev === "dark" ? "light" : "dark";
       document.documentElement.setAttribute("data-theme", next);
+      document.documentElement.style.colorScheme = next;
       try {
         localStorage.setItem(THEME_STORAGE_KEY, next);
       } catch {

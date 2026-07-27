@@ -167,6 +167,28 @@
 .delay-1100 { animation-delay: 1100ms }
 .delay-1200 { animation-delay: 1200ms }
 
+/* Desktop-only entrance helpers. Mobile gets the final layout immediately, so
+   the hero feels lighter and avoids layout jank on smaller devices. */
+@media (min-width: 768px) {
+  .desktop-animate-fade-up { animation: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both }
+  .desktop-animate-slide-in-right { animation: slide-in-right 0.9s cubic-bezier(0.16, 1, 0.3, 1) both }
+  .desktop-animate-scale-in { animation: scale-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both }
+  .desktop-animate-word-pop { opacity: 0; animation: word-pop 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) both }
+
+  .desktop-delay-100 { animation-delay: 100ms }
+  .desktop-delay-200 { animation-delay: 200ms }
+  .desktop-delay-300 { animation-delay: 300ms }
+  .desktop-delay-400 { animation-delay: 400ms }
+  .desktop-delay-500 { animation-delay: 500ms }
+  .desktop-delay-600 { animation-delay: 600ms }
+  .desktop-delay-700 { animation-delay: 700ms }
+  .desktop-delay-800 { animation-delay: 800ms }
+  .desktop-delay-900 { animation-delay: 900ms }
+  .desktop-delay-1000 { animation-delay: 1000ms }
+  .desktop-delay-1100 { animation-delay: 1100ms }
+  .desktop-delay-1200 { animation-delay: 1200ms }
+}
+
 /* Hero bottom photos: fluid widths, capped heights per breakpoint.
    Mobile is uncapped; tablet 60/75/60vh; desktop follows the
    min(vh, vw) recipe. */

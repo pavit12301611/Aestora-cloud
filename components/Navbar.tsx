@@ -116,7 +116,7 @@ export default function Navbar() {
       <div
         className={`relative flex items-center justify-between gap-4 px-4 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:px-8 lg:px-12 ${
           scrolled
-            ? "border-b border-[#1a3d1a]/10 bg-[rgb(255_255_255/0.88)] py-2.5 shadow-[0_18px_40px_-30px_rgba(13,32,13,0.4)] backdrop-blur-xl"
+            ? "border-b border-[rgb(var(--hairline))] bg-[rgb(var(--surface-strong))] py-2.5 shadow-[0_18px_40px_-30px_var(--brand-glow)] backdrop-blur-xl"
             : "border-b border-transparent bg-transparent py-4"
         }`}
       >
@@ -143,8 +143,8 @@ export default function Navbar() {
                 aria-current={isActive ? "location" : undefined}
                 className={`nav-underline relative py-2 text-sm font-medium transition-colors duration-300 ${
                   isActive || i === 0
-                    ? "text-[#1a3d1a]"
-                    : "text-[#5b7355] hover:text-[#1a3d1a]"
+                    ? "text-[var(--text)]"
+                    : "text-muted hover:text-[var(--text)]"
                 } ${isActive ? "font-semibold" : ""}`}
               >
                 {item.label}
@@ -174,7 +174,7 @@ export default function Navbar() {
             href="/login"
             aria-label="Sign in to your account"
             title="Sign in"
-            className="relative hidden h-10 w-10 overflow-hidden rounded-full border border-[#1a3d1a]/15 ring-2 ring-white transition-transform duration-300 hover:scale-105 sm:block"
+            className="relative hidden h-10 w-10 overflow-hidden rounded-full border border-[rgb(var(--hairline))] ring-2 ring-[color:var(--bg)] transition-transform duration-300 hover:scale-105 sm:block"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
