@@ -1,77 +1,50 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import "./marketeam.css";
 
 const SITE_URL = "https://cloud.aestora.cc";
 const DESCRIPTION =
-  "Aestora is fast, private, and ridiculously easy cloud storage. Upload, share, and access your files from anywhere.";
+  "Marketeam — Unlock top marketing talent you thought was out of reach. Now just one click away.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Aestora — Secure Cloud Storage",
-    template: "%s — Aestora",
+    default: "Marketeam — Unlock Top Marketing Talent",
+    template: "%s — Marketeam",
   },
   description: DESCRIPTION,
-  applicationName: "Aestora",
+  applicationName: "Marketeam",
   keywords: [
-    "cloud storage",
-    "file sharing",
-    "secure uploads",
-    "private cloud",
-    "Aestora",
+    "marketing talent",
+    "freelance marketers",
+    "growth specialists",
+    "marketing platform",
+    "Marketeam",
   ],
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     url: SITE_URL,
-    siteName: "Aestora",
+    siteName: "Marketeam",
     locale: "en_US",
-    title: "Aestora — Secure Cloud Storage",
+    title: "Marketeam — Unlock Top Marketing Talent",
     description: DESCRIPTION,
   },
   twitter: {
-    // `summary_large_image` promises an image the site does not ship, so
-    // Twitter/X falls back to a bare, broken-looking card. `summary` is the
-    // honest card type until real OG artwork exists in /public.
     card: "summary",
-    title: "Aestora — Secure Cloud Storage",
+    title: "Marketeam — Unlock Top Marketing Talent",
     description: DESCRIPTION,
   },
   robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#05060f" },
-    { media: "(prefers-color-scheme: light)", color: "#faf8f4" },
-  ],
+  themeColor: "#060218",
   width: "device-width",
   initialScale: 1,
-  // The default of 1 locked users out of pinch-zoom on mobile.
   maximumScale: 5,
   userScalable: true,
 };
-
-/**
- * Applied before paint to avoid a theme flash.
- *
- * Only ever writes a value from a known allow-list, so a corrupted or
- * hand-edited localStorage entry can't put `data-theme="null"` (or anything
- * else with no matching CSS) on <html> and leave the page unstyled.
- */
-const themeBootstrap = `
-(function () {
-  try {
-    var stored = localStorage.getItem("aestora-theme");
-    var theme = stored === "light" || stored === "dark"
-      ? stored
-      : (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
-    document.documentElement.setAttribute("data-theme", theme);
-  } catch (e) {
-    document.documentElement.setAttribute("data-theme", "dark");
-  }
-})();
-`;
 
 export default function RootLayout({
   children,
@@ -79,20 +52,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-theme="dark" suppressHydrationWarning>
+    <html lang="en">
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
-        {/* `.reveal` starts at opacity:0 and is only un-hidden by an
-            IntersectionObserver. Without JS that observer never runs, so
-            most of the page would render permanently blank. */}
-        <noscript>
-          <style>{`.reveal,.word{opacity:1!important;transform:none!important;animation:none!important}`}</style>
-        </noscript>
+        {/* Google Fonts: Inter (400/500/600/700) + Urbanist (600/700) */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Urbanist:wght@600;700&display=swap"
+          rel="stylesheet"
+        />
       </head>
       <body className="min-h-screen antialiased">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-brand-500 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-black focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
         >
           Skip to content
         </a>
