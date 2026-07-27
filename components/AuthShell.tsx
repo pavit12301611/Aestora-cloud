@@ -37,7 +37,7 @@ export default function AuthShell({
           </div>
 
           <div className="tilt-scene mt-8">
-            <div className="spotlight ring-gradient relative overflow-hidden rounded-4xl glass-strong sheen p-8 shadow-[0_50px_100px_-40px_rgba(0,0,0,.9)]">
+            <div className="spotlight ring-gradient relative overflow-hidden rounded-4xl glass-strong sheen p-8 shadow-[0_50px_100px_-40px_rgba(13,32,13,.4)]">
               <div
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-x-12 top-0 h-px bg-gradient-to-r from-transparent via-brand-300 to-transparent"

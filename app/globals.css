@@ -1,38 +1,43 @@
 @import "tailwindcss";
 
 /* ============================================================
-   AESTORA DESIGN SYSTEM v6 — "Lux Minimal"
-   Premium light-luxury gold-amber + deep navy theme.
-   High-end, ridiculously simple, boutique SaaS feel.
+   AESTORA DESIGN SYSTEM v7 — "Fresh Meadow"
+   Light mint (#EFFDF0) + deep forest green (#1a3d1a) + warm
+   orange (#E86A10) — a boutique, friendly, ridiculously simple
+   aesthetic, with the full staggered entrance-animation kit.
+   Same copy, same components — entirely new skin.
    ============================================================ */
 
 @theme {
   --font-sans: "Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-display: "Urbanist", "Inter", -apple-system, BlinkMacSystemFont,
+  --font-display: "Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, sans-serif;
+  --font-serif-display: "DM Serif Display", Georgia, "Times New Roman", serif;
   --font-mono: "SF Mono", "JetBrains Mono", ui-monospace, SFMono-Regular,
     Menlo, Consolas, monospace;
 
-  /* Lux Minimal palette: Deep navy + warm gold-amber */
-  --color-brand-50: #f9f5eb;
-  --color-brand-100: #f2e9d6;
-  --color-brand-200: #e6d4a8;
-  --color-brand-300: #d9c07c;
-  --color-brand-400: #d1b46a;
-  --color-brand-500: #c5a26f;     /* core warm gold */
-  --color-brand-600: #b38e5a;
-  --color-brand-700: #8f7147;
-  --color-brand-800: #68553a;
-  --color-brand-900: #423725;
+  /* Fresh Meadow palette: deep forest greens */
+  --color-brand-50: #f0f8f0;
+  --color-brand-100: #e0f0e1;
+  --color-brand-200: #c2e3c6;
+  --color-brand-300: #4b9b52;
+  --color-brand-400: #2f7a37;
+  --color-brand-500: #2a5a2a;     /* hover green */
+  --color-brand-600: #1a3d1a;     /* primary dark green */
+  --color-brand-700: #153113;
+  --color-brand-800: #102610;
+  --color-brand-900: #0b1d0b;
 
-  --color-accent-300: #e8c670;
-  --color-accent-400: #d4af37;
-  --color-accent-500: #c9a227;
-  --color-accent-600: #a17f1f;
+  /* Warm pumpkin-orange accent ramp */
+  --color-accent-300: #f78f43;
+  --color-accent-400: #e86a10;    /* core orange */
+  --color-accent-500: #d45e0d;    /* orange hover */
+  --color-accent-600: #b04d0b;
 
-  --color-plasma-400: #e8c670;
-  --color-plasma-500: #d4af37;
+  /* Fresh light-green support ramp (gradient mid-tones) */
+  --color-plasma-400: #8fcf93;
+  --color-plasma-500: #4b9b52;
 
   /* Pill geometry */
   --radius-4xl: 2rem;
@@ -94,53 +99,135 @@
 }
 @keyframes spin-angle { to { --angle: 360deg } }
 
-/* ============================================
-   LUX MINIMAL THEME — Deep Navy + Gold/Amber
-   ============================================ */
-:root {
-  color-scheme: dark;
-  --bg: #0a1328;               /* Deep navy */
-  --bg-elev: #121e35;
-  --surface: 255 255 255 / 0.045;
-  --surface-strong: 255 255 255 / 0.08;
-  --hairline: 197 162 111 / 0.18;   /* warm gold hairline */
-  --hairline-strong: 197 162 111 / 0.32;
-  --text: #f5f1e6;                  /* warm off-white */
-  --text-muted: #b9a98c;
-  --text-faint: #8d7c5f;
-  --glow-a: rgba(197, 162, 111, 0.38);
-  --glow-b: rgba(212, 175, 55, 0.28);
-  --glow-c: rgba(232, 198, 112, 0.22);
-  --brand-glow: rgba(197, 162, 111, 0.55);
-  --brand-glow-soft: rgba(197, 162, 111, 0.32);
-  --card-shadow: 0 40px 90px -32px rgba(5, 12, 32, .96), 0 0 0 1px rgb(var(--hairline-strong));
-  --grid-line: rgba(197, 162, 111, .055);
-  --spot: rgba(197, 162, 111, 0.14);
-  --spot-strong: rgba(197, 162, 111, 0.2);
-  --sheen: rgba(255, 255, 255, 0.07);
+/* ============================================================
+   HERO ENTRANCE KIT — staggered, springy, buttery.
+   Every class below runs once with `animation-fill-mode: both`;
+   pair with `.delay-*` (100–1200ms) for the cascade.
+   ============================================================ */
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(30px) }
+  to { opacity: 1; transform: none }
+}
+@keyframes fade-in {
+  from { opacity: 0 }
+  to { opacity: 1 }
+}
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(60px) }
+  to { opacity: 1; transform: none }
+}
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-40px) }
+  to { opacity: 1; transform: none }
+}
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(40px) }
+  to { opacity: 1; transform: none }
+}
+@keyframes text-reveal {
+  from { opacity: 0; transform: translateY(40px) skewY(3deg); filter: blur(4px) }
+  to { opacity: 1; transform: none; filter: blur(0) }
+}
+@keyframes word-pop {
+  0% { opacity: 0; transform: translateY(60px) scale(0.7) rotate(-4deg); filter: blur(8px) }
+  55% { opacity: 1; transform: translateY(-6px) scale(1.05) rotate(1.25deg); filter: blur(0) }
+  78% { opacity: 1; transform: translateY(2px) scale(0.985) rotate(-0.4deg); filter: blur(0) }
+  100% { opacity: 1; transform: none; filter: blur(0) }
+}
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.85) }
+  to { opacity: 1; transform: scale(1) }
+}
+@keyframes photo-reveal {
+  from { opacity: 0; transform: translateY(80px) scale(1.02) }
+  to { opacity: 1; transform: none }
 }
 
-:root[data-theme="light"] {
+.animate-fade-up { animation: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both }
+.animate-fade-in { animation: fade-in 0.6s ease-out both }
+.animate-slide-up { animation: slide-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both }
+.animate-slide-in-left { animation: slide-in-left 0.8s cubic-bezier(0.16, 1, 0.3, 1) both }
+.animate-slide-in-right { animation: slide-in-right 0.8s cubic-bezier(0.16, 1, 0.3, 1) both }
+.animate-text-reveal { animation: text-reveal 1s cubic-bezier(0.16, 1, 0.3, 1) both }
+.animate-word-pop { opacity: 0; animation: word-pop 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) both }
+.animate-scale-in { animation: scale-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both }
+.animate-photo-reveal { transform-origin: 50% 100%; animation: photo-reveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) both }
+
+.delay-100 { animation-delay: 100ms }
+.delay-200 { animation-delay: 200ms }
+.delay-300 { animation-delay: 300ms }
+.delay-400 { animation-delay: 400ms }
+.delay-500 { animation-delay: 500ms }
+.delay-600 { animation-delay: 600ms }
+.delay-700 { animation-delay: 700ms }
+.delay-800 { animation-delay: 800ms }
+.delay-900 { animation-delay: 900ms }
+.delay-1000 { animation-delay: 1000ms }
+.delay-1100 { animation-delay: 1100ms }
+.delay-1200 { animation-delay: 1200ms }
+
+/* Hero bottom photos: fluid widths, capped heights per breakpoint.
+   Mobile is uncapped; tablet 60/75/60vh; desktop follows the
+   min(vh, vw) recipe. */
+.hero-shot { width: 100% }
+.hero-shot > img { width: 100%; height: auto; display: block }
+@media (min-width: 768px) {
+  .hero-shot-side { max-height: 60vh }
+  .hero-shot-center { max-height: 75vh }
+}
+@media (min-width: 1024px) {
+  .hero-shot-side { max-height: min(70vh, 55vw) }
+  .hero-shot-center { max-height: min(85vh, 70vw) }
+}
+
+/* ============================================
+   FRESH MEADOW THEME — Mint + Forest + Pumpkin
+   ============================================ */
+:root {
   color-scheme: light;
-  --bg: #f4f0e6;               /* warm cream */
+  --bg: #effdf0;               /* light mint green */
   --bg-elev: #ffffff;
-  --surface: 255 255 255 / 0.82;
-  --surface-strong: 255 255 255 / 0.95;
-  --hairline: 181 146 89 / 0.22;
-  --hairline-strong: 181 146 89 / 0.36;
-  --text: #1f1a12;
-  --text-muted: #64563f;
-  --text-faint: #8f7c5f;
-  --glow-a: rgba(181, 146, 89, 0.26);
-  --glow-b: rgba(197, 162, 111, 0.22);
-  --glow-c: rgba(212, 175, 55, 0.18);
-  --brand-glow: rgba(181, 146, 89, 0.38);
-  --brand-glow-soft: rgba(181, 146, 89, 0.22);
-  --card-shadow: 0 30px 70px -30px rgba(45, 34, 19, 0.16), 0 0 0 1px rgb(var(--hairline-strong));
-  --grid-line: rgba(181, 146, 89, 0.13);
-  --spot: rgba(181, 146, 89, 0.12);
-  --spot-strong: rgba(181, 146, 89, 0.19);
-  --sheen: rgba(255, 255, 255, 0.68);
+  --surface: 255 255 255 / 0.62;
+  --surface-strong: 255 255 255 / 0.88;
+  --hairline: 26 61 26 / 0.12;    /* forest-tinted hairline */
+  --hairline-strong: 26 61 26 / 0.22;
+  --text: #1a3d1a;                /* primary dark green */
+  --text-muted: #46603f;
+  --text-faint: #74906f;
+  --glow-a: rgba(232, 106, 16, 0.16);
+  --glow-b: rgba(232, 106, 16, 0.12);
+  --glow-c: rgba(42, 90, 42, 0.10);
+  --brand-glow: rgba(42, 90, 42, 0.42);
+  --brand-glow-soft: rgba(42, 90, 42, 0.22);
+  --card-shadow: 0 34px 76px -34px rgba(26, 61, 26, 0.24), 0 0 0 1px rgb(var(--hairline-strong));
+  --grid-line: rgba(26, 61, 26, 0.06);
+  --spot: rgba(232, 106, 16, 0.10);
+  --spot-strong: rgba(232, 106, 16, 0.17);
+  --sheen: rgba(255, 255, 255, 0.6);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0c1b0d;               /* deep forest night */
+  --bg-elev: #132a15;
+  --surface: 255 255 255 / 0.05;
+  --surface-strong: 255 255 255 / 0.09;
+  --hairline: 190 230 190 / 0.14;
+  --hairline-strong: 190 230 190 / 0.26;
+  --text: #eef7ee;
+  --text-muted: #b3cdb0;
+  --text-faint: #88a685;
+  --glow-a: rgba(232, 106, 16, 0.24);
+  --glow-b: rgba(232, 106, 16, 0.16);
+  --glow-c: rgba(143, 207, 147, 0.12);
+  --brand-glow: rgba(143, 207, 147, 0.4);
+  --brand-glow-soft: rgba(143, 207, 147, 0.24);
+  --card-shadow: 0 40px 90px -32px rgba(3, 10, 4, 0.9), 0 0 0 1px rgb(var(--hairline-strong));
+  --grid-line: rgba(190, 230, 190, 0.06);
+  --spot: rgba(232, 106, 16, 0.14);
+  --spot-strong: rgba(232, 106, 16, 0.22);
+  --sheen: rgba(255, 255, 255, 0.07);
 }
 
 @layer base {
@@ -152,15 +239,15 @@
     overflow-x: hidden;
   }
   body { background-color: var(--bg); color: var(--text); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-  ::selection { background: rgba(197, 162, 111, 0.32); color: inherit; }
+  ::selection { background: rgba(232, 106, 16, 0.26); color: inherit; }
   h1, h2, h3 { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.032em; text-wrap: balance; }
   h4 { letter-spacing: -0.02em; text-wrap: balance; }
   p { text-wrap: pretty; }
-  :focus-visible { outline: 2px solid var(--color-brand-500); outline-offset: 3px; border-radius: 8px; }
+  :focus-visible { outline: 2px solid var(--color-accent-400); outline-offset: 3px; border-radius: 8px; }
   ::-webkit-scrollbar { width: 11px; height: 11px }
   ::-webkit-scrollbar-track { background: transparent }
   ::-webkit-scrollbar-thumb { background: rgb(var(--hairline-strong)); border-radius: 99px; border: 3px solid transparent; background-clip: content-box; }
-  ::-webkit-scrollbar-thumb:hover { background-color: var(--color-brand-500) }
+  ::-webkit-scrollbar-thumb:hover { background-color: var(--color-brand-400) }
 }
 
 @layer utilities {
@@ -173,21 +260,21 @@
 
   .sheen { background-image: linear-gradient(to bottom, var(--sheen) 0%, transparent 22%); }
 
-  .text-gradient { 
-    background-image: linear-gradient(100deg, var(--color-brand-500) 0%, var(--color-accent-400) 32%, var(--color-brand-400) 60%, var(--color-accent-500) 92%); 
-    background-size: 200% auto; 
-    -webkit-background-clip: text; 
-    background-clip: text; 
-    color: transparent; 
-    animation: shimmer 9s linear infinite; 
+  .text-gradient {
+    background-image: linear-gradient(100deg, var(--color-brand-500) 0%, var(--color-brand-300) 30%, var(--color-accent-400) 62%, var(--color-accent-500) 92%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 9s linear infinite;
   }
-  .shimmer-text { 
-    background-image: linear-gradient(100deg, var(--text) 25%, var(--color-brand-400) 48%, var(--text) 75%); 
-    background-size: 200% auto; 
-    -webkit-background-clip: text; 
-    background-clip: text; 
-    color: transparent; 
-    animation: shimmer 5s linear infinite; 
+  .shimmer-text {
+    background-image: linear-gradient(100deg, var(--text) 25%, var(--color-brand-300) 48%, var(--text) 75%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 5s linear infinite;
   }
   .grid-bg { background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px); background-size: 64px 64px; }
 
@@ -195,9 +282,9 @@
 
   .noise {
     background-image:
-      radial-gradient(circle at 25% 30%, rgba(255,255,255,0.035) 0.6px, transparent 1px),
-      radial-gradient(circle at 70% 65%, rgba(255,255,255,0.025) 0.8px, transparent 1.2px),
-      radial-gradient(circle at 40% 80%, rgba(255,255,255,0.03) 0.5px, transparent 0.9px);
+      radial-gradient(circle at 25% 30%, rgba(26,61,26,0.035) 0.6px, transparent 1px),
+      radial-gradient(circle at 70% 65%, rgba(26,61,26,0.025) 0.8px, transparent 1.2px),
+      radial-gradient(circle at 40% 80%, rgba(26,61,26,0.03) 0.5px, transparent 0.9px);
     background-size: 180px 180px, 240px 240px, 130px 130px;
     background-position: 0 0, 40px 60px, 90px 30px;
     opacity: 0.65;
@@ -206,6 +293,10 @@
   .mask-fade-b {
     -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%);
     mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%);
+  }
+  .mask-fade-t {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 22%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 22%);
   }
   .mask-fade-x {
     -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%);
@@ -263,7 +354,7 @@
     background:
       radial-gradient(
         260px circle at var(--mx, 50%) var(--my, 50%),
-        var(--color-brand-400),
+        var(--color-accent-300),
         transparent 62%
       ),
       linear-gradient(
@@ -298,12 +389,12 @@
     margin-left: 4px;
     vertical-align: text-bottom;
     border-radius: 2px;
-    background: var(--color-brand-500);
-    box-shadow: 0 0 12px var(--brand-glow);
+    background: var(--color-accent-400);
+    box-shadow: 0 0 12px var(--glow-a);
     animation: caret-blink 0.9s steps(1) infinite;
   }
 
-  /* Lux pill CTA — warm gold fill sweep */
+  /* Pill CTA — fresh green fill sweep */
   .pill-btn {
     position: relative;
     overflow: hidden;
@@ -341,9 +432,9 @@
     background: conic-gradient(
       from var(--border-angle),
       var(--color-brand-500),
-      #0a1328,
-      var(--color-brand-500),
-      #0a1328,
+      transparent,
+      var(--color-accent-400),
+      transparent,
       var(--color-brand-500)
     );
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -356,9 +447,9 @@
   .orbit-ring {
     background: linear-gradient(
       180deg,
-      rgba(197, 162, 111, 0) 0%,
-      rgba(197, 162, 111, 1) 43%,
-      rgba(197, 162, 111, 0) 100%
+      rgba(42, 90, 42, 0) 0%,
+      rgba(42, 90, 42, 1) 43%,
+      rgba(42, 90, 42, 0) 100%
     );
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;

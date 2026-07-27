@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a1328",
+  themeColor: "#effdf0",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -53,9 +53,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-theme="dark">
+    <html lang="en" data-theme="light">
       <head>
-        {/* Google Fonts: Inter (400/500/600/700) + Urbanist (600/700) */}
+        {/* Google Fonts: Inter (400/500/600) + DM Serif Display (400, hero display) */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -63,7 +63,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Urbanist:wght@600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap"
           rel="stylesheet"
         />
       </head>

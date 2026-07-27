@@ -41,7 +41,7 @@ export default function FinalCta() {
               <SmartLink
                 href={finalCta.cta.href}
                 data-magnetic="0.22"
-                className="pill-btn magnetic group inline-flex items-center justify-center gap-2 bg-[#060218] px-8 py-4 text-[15px] font-semibold text-white"
+                className="pill-btn magnetic group inline-flex items-center justify-center gap-2 bg-[#1a3d1a] px-8 py-4 text-[15px] font-semibold text-white"
               >
                 <span className="relative">{finalCta.cta.label}</span>
                 <svg
