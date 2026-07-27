@@ -43,7 +43,7 @@ export default function NotFound() {
             <SmartLink
               href="/"
               data-magnetic="0.2"
-              className="pill-btn magnetic bg-[#060218] px-7 py-3.5 text-[15px] font-semibold text-white"
+              className="pill-btn magnetic bg-[#1a3d1a] px-7 py-3.5 text-[15px] font-semibold text-white"
             >
               <span className="relative">Go home</span>
             </SmartLink>

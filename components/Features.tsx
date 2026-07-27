@@ -70,7 +70,7 @@ export default function Features() {
                 <span className="relative z-10 grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-brand-500/30 to-accent-500/15 ring-1 ring-inset ring-[rgb(var(--hairline-strong))] transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:scale-105">
                   <svg
                     viewBox="0 0 24 24"
-                    className={`h-[22px] w-[22px] text-brand-300 transition-all duration-300 group-hover:text-brand-200 ${iconClass[feature.icon]}`}
+                    className={`h-[22px] w-[22px] text-brand-300 transition-all duration-300 group-hover:text-brand-500 ${iconClass[feature.icon]}`}
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="1.8"

@@ -78,11 +78,11 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
       aria-label={label}
       title={label}
       aria-pressed={mounted ? !isDark : undefined}
-      className={`group relative grid h-9 w-9 place-items-center rounded-xl glass transition-colors hover:border-brand-400/40 ${className}`}
+      className={`group relative grid h-10 w-10 place-items-center rounded-full glass transition-colors hover:border-brand-400/40 ${className}`}
     >
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        className="pointer-events-none absolute inset-0 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{ background: "radial-gradient(circle at 50% 50%, var(--glow-a), transparent 70%)" }}
       />
       <svg

@@ -5,6 +5,7 @@ import Logo from "./Logo";
 import ThemeToggle from "./ThemeToggle";
 import { nav } from "@/lib/content";
 import SmartLink from "./SmartLink";
+import { Star } from "lucide-react";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -111,102 +112,111 @@ export default function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
+      {/* Full-width bar — transparent over the hero, frosted on scroll */}
       <div
-        className={`mx-auto max-w-7xl px-3 transition-all duration-500 sm:px-6 ${
-          scrolled ? "pt-2.5" : "pt-4"
+        className={`relative flex items-center justify-between gap-4 px-4 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:px-8 lg:px-12 ${
+          scrolled
+            ? "border-b border-[#1a3d1a]/10 bg-[rgb(255_255_255/0.88)] py-2.5 shadow-[0_18px_40px_-30px_rgba(13,32,13,0.4)] backdrop-blur-xl"
+            : "border-b border-transparent bg-transparent py-4"
         }`}
       >
-        {/* Floating pill bar — condenses and lifts on scroll */}
-        <div
-          className={`relative flex items-center justify-between gap-4 rounded-full px-3 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:px-4 ${
-            scrolled
-              ? "glass-strong sheen py-2 shadow-[0_20px_50px_-24px_rgba(0,0,0,.85)]"
-              : "border border-transparent bg-transparent py-3"
-          }`}
+        <SmartLink
+          href="#top"
+          className="group shrink-0 animate-fade-in rounded-xl delay-100"
+          aria-label="Aestora home"
         >
+          <Logo />
+        </SmartLink>
+
+        <nav
+          className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 animate-fade-in items-center gap-8 delay-200 md:flex"
+          aria-label="Primary"
+        >
+          {nav.map((item, i) => {
+            const isActive = active === item.href;
+            return (
+              <SmartLink
+                key={item.href}
+                href={item.href}
+                // `aria-current="true"` is not a valid token for a nav link;
+                // "location" is the value screen readers expect here.
+                aria-current={isActive ? "location" : undefined}
+                className={`nav-underline relative py-2 text-sm font-medium transition-colors duration-300 ${
+                  isActive || i === 0
+                    ? "text-[#1a3d1a]"
+                    : "text-[#5b7355] hover:text-[#1a3d1a]"
+                } ${isActive ? "font-semibold" : ""}`}
+              >
+                {item.label}
+              </SmartLink>
+            );
+          })}
+        </nav>
+
+        <div className="flex animate-fade-in items-center gap-2.5 delay-300 sm:gap-3">
+          <ThemeToggle />
+
+          {/* Pro upgrade — the favorite-star moment, in orange */}
           <SmartLink
-            href="#top"
-            className="group shrink-0 rounded-xl"
-            aria-label="Aestora home"
+            href="/membership/patreon"
+            aria-label="Upgrade to Cloud Pro"
+            title="Upgrade to Cloud Pro"
+            className="group/star relative grid h-10 w-10 place-items-center rounded-full bg-[#e86a10] text-white shadow-md shadow-[#e86a10]/30 transition-all duration-300 hover:scale-105 hover:bg-[#d45e0d]"
           >
-            <Logo />
+            <Star
+              className="h-[18px] w-[18px] fill-current transition-transform duration-500 group-hover/star:rotate-[72deg]"
+              aria-hidden="true"
+            />
           </SmartLink>
 
-          <nav
-            className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 md:flex"
-            aria-label="Primary"
+          {/* Account avatar */}
+          <SmartLink
+            href="/login"
+            aria-label="Sign in to your account"
+            title="Sign in"
+            className="relative hidden h-10 w-10 overflow-hidden rounded-full border border-[#1a3d1a]/15 ring-2 ring-white transition-transform duration-300 hover:scale-105 sm:block"
           >
-            {nav.map((item) => {
-              const isActive = active === item.href;
-              return (
-                <SmartLink
-                  key={item.href}
-                  href={item.href}
-                  // `aria-current="true"` is not a valid token for a nav link;
-                  // "location" is the value screen readers expect here.
-                  aria-current={isActive ? "location" : undefined}
-                  className={`nav-underline relative rounded-full px-3.5 py-2 text-[13.5px] font-medium transition-colors duration-300 ${
-                    isActive
-                      ? "text-[var(--text)]"
-                      : "text-muted hover:text-[var(--text)]"
-                  }`}
-                >
-                  {isActive && (
-                    <span
-                      aria-hidden="true"
-                      className="absolute inset-0 -z-10 rounded-full bg-[rgb(var(--hairline))] ring-1 ring-inset ring-[rgb(var(--hairline-strong))]"
-                    />
-                  )}
-                  {item.label}
-                </SmartLink>
-              );
-            })}
-          </nav>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/hero/avatar.jpg"
+              alt=""
+              className="h-full w-full object-cover"
+            />
+          </SmartLink>
 
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-            <SmartLink
-              href="/login"
-              className="nav-underline hidden rounded-full px-3.5 py-2 text-[13.5px] font-medium text-muted transition-colors hover:text-[var(--text)] sm:block"
-            >
-              Sign in
-            </SmartLink>
-            <span className="btn-border-wrap hidden sm:inline-flex">
-              <SmartLink
-                href="/register"
-                className="pill-btn magnetic bg-[#060218] px-4 py-2 text-[13.5px] font-semibold text-white"
-                data-magnetic="0.16"
-              >
-                <span className="relative">Get started</span>
-              </SmartLink>
-            </span>
+          <SmartLink
+            href="/register"
+            data-magnetic="0.16"
+            className="pill-btn magnetic hidden bg-[#1a3d1a] px-4 py-2 text-[13.5px] font-semibold text-white sm:inline-flex"
+          >
+            <span className="relative">Get started</span>
+          </SmartLink>
 
-            <button
-              ref={toggleButton}
-              type="button"
-              onClick={() => setOpen((v) => !v)}
-              aria-label={open ? "Close menu" : "Open menu"}
-              aria-expanded={open}
-              aria-controls="mobile-menu"
-              className="grid h-9 w-9 place-items-center rounded-full glass md:hidden"
+          <button
+            ref={toggleButton}
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            className="grid h-10 w-10 place-items-center rounded-full glass md:hidden"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="h-[18px] w-[18px]"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              aria-hidden="true"
             >
-              <svg
-                viewBox="0 0 24 24"
-                className="h-[18px] w-[18px]"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                aria-hidden="true"
-              >
-                {open ? (
-                  <path d="M18 6 6 18M6 6l12 12" />
-                ) : (
-                  <path d="M3.5 7h17M3.5 12h17M3.5 17h17" />
-                )}
-              </svg>
-            </button>
-          </div>
+              {open ? (
+                <path d="M18 6 6 18M6 6l12 12" />
+              ) : (
+                <path d="M3.5 7h17M3.5 12h17M3.5 17h17" />
+              )}
+            </svg>
+          </button>
         </div>
       </div>
 
@@ -219,7 +229,7 @@ export default function Navbar() {
           // this must not also be announced or reachable by keyboard.
           aria-hidden="true"
           onClick={() => setOpen(false)}
-          className={`fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${
+          className={`fixed inset-0 bg-[#0d200d]/40 backdrop-blur-sm transition-opacity duration-300 ${
             open ? "opacity-100" : "opacity-0"
           }`}
         />
@@ -229,7 +239,7 @@ export default function Navbar() {
           // Hidden from the a11y tree and from tab order when closed —
           // otherwise the links stay focusable behind an invisible panel.
           inert={!open}
-          className={`absolute inset-x-3 top-[72px] origin-top rounded-3xl glass-strong sheen p-3 shadow-2xl transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          className={`absolute inset-x-3 top-[68px] origin-top rounded-3xl glass-strong sheen p-3 shadow-2xl transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             open
               ? "translate-y-0 scale-100 opacity-100"
               : "-translate-y-3 scale-95 opacity-0"
@@ -255,9 +265,16 @@ export default function Navbar() {
               Sign in
             </SmartLink>
             <SmartLink
+              href="/membership/patreon"
+              onClick={() => setOpen(false)}
+              className="rounded-full px-4 py-3 text-[15px] font-medium text-muted transition-colors hover:bg-[rgb(var(--hairline))] hover:text-[var(--text)]"
+            >
+              Upgrade to Pro
+            </SmartLink>
+            <SmartLink
               href="/register"
               onClick={() => setOpen(false)}
-              className="pill-btn mt-1 block bg-gradient-to-r from-brand-500 to-brand-600 px-4 py-3 text-center text-[15px] font-semibold text-white"
+              className="pill-btn mt-1 block bg-[#1a3d1a] px-4 py-3 text-center text-[15px] font-semibold text-white"
             >
               Get started
             </SmartLink>

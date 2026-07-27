@@ -133,7 +133,7 @@ export default function Pricing() {
                       <span
                         className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full transition-transform duration-300 group-hover:scale-110 ${
                           plan.featured
-                            ? "bg-brand-500/25 text-brand-200"
+                            ? "bg-brand-500/25 text-brand-500"
                             : "bg-[rgb(var(--hairline))] text-accent-400"
                         }`}
                       >
@@ -160,7 +160,7 @@ export default function Pricing() {
                   data-magnetic="0.14"
                   className={`pill-btn magnetic relative z-10 mt-8 inline-flex items-center justify-center gap-2 px-6 py-3.5 text-[15px] font-semibold ${
                     plan.featured
-                      ? "bg-[#060218] text-white"
+                      ? "bg-[#1a3d1a] text-white"
                       : "pill-btn-rtl glass hover:border-brand-400/40 hover:text-white"
                   }`}
                 >
