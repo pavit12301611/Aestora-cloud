@@ -3,6 +3,7 @@ import { hero, heroStats, plans, stats, finalCta } from "@/lib/content";
 import StoragePanel from "./StoragePanel";
 import Counter from "./Counter";
 import SmartLink from "./SmartLink";
+import Orbits from "./Orbits";
 import { ArrowRight, ArrowUpRight, CheckCircle2, Play, Plus, Star } from "lucide-react";
 
 /* Hero copy is split into words so the desktop reveal can stagger cleanly.
@@ -97,7 +98,7 @@ function PlanMiniCard({ className = "" }: { className?: string }) {
     <SmartLink
       href="#pricing"
       aria-label={`${proPlan.name}, ${proPlan.price}${proPlan.period} — see pricing`}
-      className={`group rounded-[1.6rem] border border-[rgb(var(--hairline))] bg-[rgb(var(--surface-strong))] p-3 shadow-[0_18px_45px_-32px_var(--brand-glow)] backdrop-blur-xl transition-transform duration-300 md:hover:-translate-y-1 ${className}`}
+      className={`group rounded-[1.6rem] border border-[rgb(var(--hairline))] bg-[rgb(var(--surface-strong))] p-3 shadow-[0_18px_45px_-32px_var(--brand-glow)] backdrop-blur-xl transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:hover:-translate-y-1.5 md:hover:shadow-[0_24px_50px_-24px_var(--brand-glow)] ${className}`}
     >
       <span className="flex items-center gap-3">
         <span className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl sm:h-[4.5rem] sm:w-[4.5rem]">
@@ -105,7 +106,7 @@ function PlanMiniCard({ className = "" }: { className?: string }) {
           <img
             src="/hero/plan-card.jpg"
             alt=""
-            className="h-full w-full object-cover transition-transform duration-700 md:group-hover:scale-105"
+            className="h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:group-hover:scale-110"
           />
         </span>
         <span className="min-w-0 flex-1">
@@ -120,8 +121,8 @@ function PlanMiniCard({ className = "" }: { className?: string }) {
             <span className="font-medium text-faint">{proPlan.period}</span>
           </span>
         </span>
-        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-brand-600 text-white shadow-lg shadow-brand-500/25 transition-colors duration-300 md:group-hover:bg-brand-500">
-          <ArrowUpRight className="h-4 w-4 transition-transform duration-300 md:group-hover:-translate-y-0.5 md:group-hover:translate-x-0.5" aria-hidden="true" />
+        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-brand-600 text-white shadow-lg shadow-brand-500/25 transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:group-hover:bg-brand-500 md:group-hover:scale-110">
+          <ArrowUpRight className="h-4 w-4 transition-transform duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:group-hover:-translate-y-0.5 md:group-hover:translate-x-0.5" aria-hidden="true" />
         </span>
       </span>
     </SmartLink>
@@ -133,7 +134,7 @@ function TourMiniCard({ className = "" }: { className?: string }) {
     <a
       href="#features"
       aria-label={tourCaption}
-      className={`group rounded-[1.6rem] border border-[rgb(var(--hairline))] bg-[rgb(var(--surface-strong))] p-3 shadow-[0_18px_45px_-32px_var(--brand-glow)] backdrop-blur-xl transition-transform duration-300 md:hover:-translate-y-1 ${className}`}
+      className={`group rounded-[1.6rem] border border-[rgb(var(--hairline))] bg-[rgb(var(--surface-strong))] p-3 shadow-[0_18px_45px_-32px_var(--brand-glow)] backdrop-blur-xl transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:hover:-translate-y-1.5 md:hover:shadow-[0_24px_50px_-24px_var(--brand-glow)] ${className}`}
     >
       <span className="flex items-center gap-3">
         <span className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl sm:h-[4.5rem] sm:w-[4.5rem]">
@@ -141,10 +142,10 @@ function TourMiniCard({ className = "" }: { className?: string }) {
           <img
             src="/hero/video-card.jpg"
             alt=""
-            className="h-full w-full object-cover transition-transform duration-700 md:group-hover:scale-105"
+            className="h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:group-hover:scale-110"
           />
           <span className="absolute inset-0 grid place-items-center bg-[#0d200d]/20">
-            <span className="grid h-8 w-8 place-items-center rounded-full bg-accent-400 text-white shadow-lg shadow-accent-400/25 transition-transform duration-300 md:group-hover:scale-110">
+            <span className="grid h-8 w-8 place-items-center rounded-full bg-accent-400 text-white shadow-lg shadow-accent-400/25 transition-transform duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:group-hover:scale-115">
               <Play className="ml-0.5 h-3.5 w-3.5 fill-current" aria-hidden="true" />
             </span>
           </span>
@@ -161,6 +162,7 @@ function TourMiniCard({ className = "" }: { className?: string }) {
 function HeroVisual() {
   return (
     <div className={`relative ${desktopMotion("slide-in-right", 500)}`}>
+      <Orbits className="hidden md:block absolute -z-10" />
       <div
         aria-hidden="true"
         className="absolute -inset-5 -z-10 rounded-[3rem] opacity-80 blur-3xl"
@@ -184,14 +186,14 @@ function HeroVisual() {
           />
 
           <div className="absolute left-4 right-4 top-4 flex items-center justify-between gap-3 sm:left-5 sm:right-5 sm:top-5">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/14 px-3 py-2 text-xs font-semibold text-white shadow-lg shadow-black/10 backdrop-blur-md ring-1 ring-white/18">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/14 px-3 py-2 text-xs font-semibold text-white shadow-lg shadow-black/10 backdrop-blur-md ring-1 ring-white/18 transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:hover:scale-105 md:hover:bg-white/20">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full rounded-full bg-accent-400 opacity-70 md:animate-ping" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-accent-400" />
               </span>
               Live storage ready
             </div>
-            <div className="hidden rounded-full bg-white/14 px-3 py-2 text-xs font-semibold text-white backdrop-blur-md ring-1 ring-white/18 sm:block">
+            <div className="hidden rounded-full bg-white/14 px-3 py-2 text-xs font-semibold text-white backdrop-blur-md ring-1 ring-white/18 sm:block transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:hover:scale-105 md:hover:bg-white/20">
               Private by default
             </div>
           </div>
@@ -261,17 +263,17 @@ export default function Hero() {
           <div className={`mt-7 flex flex-col items-center gap-3 sm:flex-row md:justify-start ${desktopMotion("fade-up", 600)}`}>
             <SmartLink
               href={hero.primaryCta.href}
-              className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent-400 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-accent-400/25 transition-colors duration-300 hover:bg-accent-500 sm:w-auto"
+              className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent-400 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-accent-400/25 transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:bg-accent-500 md:hover:-translate-y-0.5 md:hover:scale-[1.03] md:hover:shadow-[0_16px_36px_rgba(232,106,16,0.35)] sm:w-auto"
             >
               {hero.primaryCta.label}
               <ArrowRight
-                className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+                className="h-4 w-4 transition-transform duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:group-hover:translate-x-1.5"
                 aria-hidden="true"
               />
             </SmartLink>
             <SmartLink
               href={hero.secondaryCta.href}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-[rgb(var(--hairline-strong))] bg-[rgb(var(--surface))] px-7 py-3.5 text-sm font-semibold text-[var(--text)] backdrop-blur-xl transition-colors duration-300 hover:bg-[rgb(var(--surface-strong))] sm:w-auto"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-[rgb(var(--hairline-strong))] bg-[rgb(var(--surface))] px-7 py-3.5 text-sm font-semibold text-[var(--text)] backdrop-blur-xl transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:bg-[rgb(var(--surface-strong))] md:hover:-translate-y-0.5 md:hover:scale-[1.03] md:hover:border-brand-400/40 sm:w-auto"
             >
               {hero.secondaryCta.label}
             </SmartLink>

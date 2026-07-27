@@ -81,7 +81,7 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
       aria-label={label}
       title={label}
       aria-pressed={mounted ? !isDark : undefined}
-      className={`group relative grid h-10 w-10 place-items-center rounded-full glass transition-colors hover:border-brand-400/40 ${className}`}
+      className={`group relative grid h-10 w-10 place-items-center rounded-full glass transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:border-brand-400/40 md:hover:scale-110 ${className}`}
     >
       <span
         aria-hidden="true"
@@ -90,7 +90,7 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
       />
       <svg
         viewBox="0 0 24 24"
-        className="relative h-[18px] w-[18px]"
+        className="relative h-[18px] w-[18px] transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:group-hover:rotate-[30deg] md:group-hover:scale-110"
         fill="none"
         stroke="currentColor"
         strokeWidth="1.7"

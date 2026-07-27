@@ -161,10 +161,10 @@ export default function Navbar() {
             href="/membership/patreon"
             aria-label="Upgrade to Cloud Pro"
             title="Upgrade to Cloud Pro"
-            className="group/star relative grid h-10 w-10 place-items-center rounded-full bg-[#e86a10] text-white shadow-md shadow-[#e86a10]/30 transition-all duration-300 hover:scale-105 hover:bg-[#d45e0d]"
+            className="group/star relative grid h-10 w-10 place-items-center rounded-full bg-[#e86a10] text-white shadow-md shadow-[#e86a10]/30 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:hover:scale-110 hover:bg-[#d45e0d]"
           >
             <Star
-              className="h-[18px] w-[18px] fill-current transition-transform duration-500 group-hover/star:rotate-[72deg]"
+              className="h-[18px] w-[18px] fill-current transition-transform duration-600 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:group-hover/star:rotate-[144deg] md:group-hover/star:scale-110"
               aria-hidden="true"
             />
           </SmartLink>
@@ -174,20 +174,20 @@ export default function Navbar() {
             href="/login"
             aria-label="Sign in to your account"
             title="Sign in"
-            className="relative hidden h-10 w-10 overflow-hidden rounded-full border border-[rgb(var(--hairline))] ring-2 ring-[color:var(--bg)] transition-transform duration-300 hover:scale-105 sm:block"
+            className="relative hidden h-10 w-10 overflow-hidden rounded-full border border-[rgb(var(--hairline))] ring-2 ring-[color:var(--bg)] transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:hover:scale-110 sm:block"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/hero/avatar.jpg"
               alt=""
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:group-hover:scale-110"
             />
           </SmartLink>
 
           <SmartLink
             href="/register"
             data-magnetic="0.16"
-            className="pill-btn magnetic hidden bg-[#1a3d1a] px-4 py-2 text-[13.5px] font-semibold text-white sm:inline-flex"
+            className="pill-btn magnetic hidden bg-[#1a3d1a] px-4 py-2 text-[13.5px] font-semibold text-white sm:inline-flex transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:hover:-translate-y-0.5 md:hover:scale-[1.03]"
           >
             <span className="relative">Get started</span>
           </SmartLink>

@@ -325,10 +325,8 @@
     mask-image: linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%);
   }
 
-  .reveal { opacity: 0; transform: translateY(28px) scale(0.99); transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo); will-change: opacity, transform; }
-  .reveal.is-visible { opacity: 1; transform: none; will-change: auto; }
-  .lift { transition: transform 0.45s var(--ease-out-expo), box-shadow 0.45s var(--ease-out-expo), border-color 0.45s ease; }
-  .lift:hover { transform: translateY(-6px); box-shadow: var(--card-shadow); border-color: rgb(var(--hairline-strong)); }
+  .lift { transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.55s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.45s ease; }
+  .lift:hover { transform: translateY(-8px); box-shadow: var(--card-shadow); border-color: rgb(var(--hairline-strong)); }
 
   .spotlight { position: relative; isolation: isolate; }
   .spotlight::before {
@@ -388,7 +386,8 @@
       );
   }
 
-  .nav-underline { position: relative; }
+  .nav-underline { position: relative; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease; }
+  .nav-underline:hover { transform: translateY(-1.5px); }
   .nav-underline::after {
     content: "";
     position: absolute;
@@ -399,7 +398,7 @@
     background: currentColor;
     transform: scaleX(0);
     transform-origin: left;
-    transition: transform 0.3s ease;
+    transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
   .nav-underline:hover::after,
   .nav-underline:focus-visible::after { transform: scaleX(1); }

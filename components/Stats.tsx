@@ -26,18 +26,20 @@ export default function Stats() {
 
           <div className="relative grid gap-10 sm:grid-cols-3 sm:gap-6">
             {stats.map((stat, i) => (
-              <div key={stat.label} className="relative text-center sm:text-left">
+              <div key={stat.label} className="relative text-center sm:text-left group/stat">
                 {i > 0 && (
                   <span
                     aria-hidden="true"
                     className="absolute -left-3 top-1/2 hidden h-16 w-px -translate-y-1/2 bg-gradient-to-b from-transparent via-[rgb(var(--hairline-strong))] to-transparent sm:block"
                   />
                 )}
-                <p className="text-[clamp(2.6rem,5.4vw,3.8rem)] font-semibold leading-none tracking-tight text-gradient tabular">
-                  <Counter value={stat.value} />
-                </p>
-                <p className="mt-3 text-[15px] font-semibold">{stat.label}</p>
-                <p className="mt-1 text-[13px] text-faint">{stat.hint}</p>
+                <div className="transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:group-hover/stat:-translate-y-1 md:group-hover/stat:scale-[1.02]">
+                  <p className="text-[clamp(2.6rem,5.4vw,3.8rem)] font-semibold leading-none tracking-tight text-gradient tabular">
+                    <Counter value={stat.value} />
+                  </p>
+                  <p className="mt-3 text-[15px] font-semibold">{stat.label}</p>
+                  <p className="mt-1 text-[13px] text-faint">{stat.hint}</p>
+                </div>
               </div>
             ))}
           </div>

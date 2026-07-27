@@ -129,8 +129,8 @@ export default function StoragePanel() {
           </div>
 
           {/* Dropzone */}
-          <div className="relative overflow-hidden rounded-3xl border border-dashed border-brand-400/35 bg-brand-500/[0.06] p-6 text-center transition-all duration-300 hover:border-brand-400/60 hover:bg-brand-500/[0.09]">
-            <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 shadow-lg shadow-brand-600/30">
+          <div className="group/dropzone relative overflow-hidden rounded-3xl border border-dashed border-brand-400/35 bg-brand-500/[0.06] p-6 text-center transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:border-brand-400/60 hover:bg-brand-500/[0.09]">
+            <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 shadow-lg shadow-brand-600/30 transition-transform duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:group-hover/dropzone:scale-110 md:group-hover/dropzone:-translate-y-0.5">
               <svg
                 viewBox="0 0 24 24"
                 className="h-5 w-5 text-white"
@@ -169,10 +169,10 @@ export default function StoragePanel() {
             {files.map((file) => (
               <li
                 key={file.name}
-                className="group flex items-center gap-3 rounded-2xl px-3 py-2.5 transition-all duration-300 hover:bg-[rgb(var(--hairline-strong))]"
+                className="group flex items-center gap-3 rounded-2xl px-3 py-2.5 transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:bg-[rgb(var(--hairline-strong))] md:hover:translate-x-1"
               >
                 <span
-                  className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br ${file.tint}`}
+                  className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br ${file.tint} transition-transform duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:group-hover:scale-110 md:group-hover:rotate-3`}
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -188,7 +188,7 @@ export default function StoragePanel() {
                   </svg>
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-[13px] font-medium transition-colors duration-300 group-hover:text-brand-300">
+                  <span className="block truncate text-[13px] font-medium transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:text-brand-300 md:group-hover:translate-x-0.5">
                     {file.name}
                   </span>
                   <span className="block text-[11px] text-faint">{file.size}</span>
@@ -196,7 +196,7 @@ export default function StoragePanel() {
                 <button
                   type="button"
                   onClick={(e) => handleShareClick(file, e)}
-                  className="rounded-lg px-2.5 py-1 text-[11px] font-semibold text-brand-400 glass transition-all duration-300 hover:bg-brand-500/15 hover:text-brand-300 focus:opacity-100 group-hover:opacity-100 opacity-0 cursor-pointer"
+                  className="rounded-lg px-2.5 py-1 text-[11px] font-semibold text-brand-400 glass transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:bg-brand-500/15 hover:text-brand-300 focus:opacity-100 group-hover:opacity-100 opacity-0 md:group-hover:scale-105 cursor-pointer"
                 >
                   Share
                 </button>

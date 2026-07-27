@@ -21,10 +21,10 @@ const icon: Record<Feature["icon"], React.ReactNode> = {
 };
 
 const iconClass: Record<Feature["icon"], string> = {
-  upload: "group-hover:-translate-y-1.5 duration-300",
-  shield: "group-hover:scale-110 duration-300",
-  bolt: "group-hover:translate-x-0.5 group-hover:-translate-y-0.5 duration-300",
-  broom: "group-hover:rotate-12 duration-300 origin-bottom-left",
+  upload: "transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:group-hover:-translate-y-1.5",
+  shield: "transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:group-hover:scale-115",
+  bolt: "transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:group-hover:translate-x-1 md:group-hover:-translate-y-1",
+  broom: "transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] origin-bottom-left md:group-hover:rotate-12",
 };
 
 export default function Features() {
@@ -67,7 +67,7 @@ export default function Features() {
                   {String(i + 1).padStart(2, "0")}
                 </span>
 
-                <span className="relative z-10 grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-brand-500/30 to-accent-500/15 ring-1 ring-inset ring-[rgb(var(--hairline-strong))] transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:scale-105">
+                <span className="relative z-10 grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-brand-500/30 to-accent-500/15 ring-1 ring-inset ring-[rgb(var(--hairline-strong))] transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:group-hover:-translate-y-1.5 md:group-hover:scale-110">
                   <svg
                     viewBox="0 0 24 24"
                     className={`h-[22px] w-[22px] text-brand-300 transition-all duration-300 group-hover:text-brand-500 ${iconClass[feature.icon]}`}

@@ -131,7 +131,7 @@ export default function Pricing() {
                       className="flex items-start gap-3 text-[14.5px]"
                     >
                       <span
-                        className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full transition-transform duration-300 group-hover:scale-110 ${
+                        className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:group-hover:scale-115 md:group-hover:rotate-12 ${
                           plan.featured
                             ? "bg-brand-500/25 text-brand-500"
                             : "bg-[rgb(var(--hairline))] text-accent-400"

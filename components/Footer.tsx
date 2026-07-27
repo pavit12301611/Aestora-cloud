@@ -76,9 +76,11 @@ export default function Footer() {
                     >
                       <span
                         aria-hidden="true"
-                        className="h-px w-0 bg-gradient-to-r from-brand-400 to-accent-400 transition-all duration-300 group-hover/link:w-3"
+                        className="h-px w-0 bg-gradient-to-r from-brand-400 to-accent-400 transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover/link:w-3.5"
                       />
-                      {link.label}
+                      <span className="transition-transform duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover/link:translate-x-0.5">
+                        {link.label}
+                      </span>
                     </SmartLink>
                   </li>
                 ))}

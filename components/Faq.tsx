@@ -22,7 +22,7 @@ export default function Faq() {
                 style={{ transitionDelay: `${i * 60}ms` }}
               >
                 <div
-                  className={`spotlight spotlight-edge relative overflow-hidden rounded-[1.75rem] glass sheen transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                  className={`group spotlight spotlight-edge relative overflow-hidden rounded-[1.75rem] glass sheen transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                     isOpen
                       ? "border-brand-400/30 shadow-[0_24px_60px_-32px_var(--brand-glow-soft)]"
                       : "hover:border-[rgb(var(--hairline-strong))]"
@@ -46,14 +46,14 @@ export default function Faq() {
                       className="relative z-10 flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
                     >
                       <span
-                        className={`text-[15.5px] font-medium transition-colors duration-300 ${
-                          isOpen ? "text-[var(--text)]" : ""
+                        className={`text-[15.5px] font-medium transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+                          isOpen ? "text-[var(--text)]" : "text-muted group-hover:text-[var(--text)] md:group-hover:translate-x-1"
                         }`}
                       >
                         {faq.q}
                       </span>
                       <span
-                        className={`grid h-7 w-7 shrink-0 place-items-center rounded-full transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                        className={`grid h-7 w-7 shrink-0 place-items-center rounded-full transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] md:group-hover:scale-110 md:group-hover:rotate-12 ${
                           isOpen
                             ? "rotate-[135deg] bg-gradient-to-br from-brand-500 to-plasma-500 text-white shadow-lg shadow-brand-600/40"
                             : "bg-[rgb(var(--hairline))] text-muted"
