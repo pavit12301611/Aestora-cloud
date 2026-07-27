@@ -166,9 +166,8 @@ export default function AuthForm({
         type="submit"
         disabled={pending}
         aria-busy={pending}
-        className="shine group relative mt-2 w-full rounded-2xl bg-gradient-to-r from-brand-500 via-brand-500 to-brand-600 px-6 py-3.5 text-[15px] font-semibold text-white glow-ring transition-shadow duration-300 hover:shadow-[0_24px_55px_-18px_var(--brand-glow)] disabled:cursor-not-allowed disabled:opacity-70"
+        className="pill-btn pill-btn-rtl group relative mt-2 w-full bg-[#060218] px-6 py-3.5 text-[15px] font-semibold text-white glow-ring transition-shadow duration-300 hover:shadow-[0_24px_55px_-18px_var(--brand-glow)] disabled:cursor-not-allowed disabled:opacity-70"
       >
-        <span className="shine-layer" aria-hidden="true" />
         <span className="relative">{pending ? "Please wait…" : submitLabel}</span>
       </button>
 
@@ -185,7 +184,7 @@ export default function AuthForm({
         onClick={() =>
           setNotice("Google sign-in isn't connected in this preview build.")
         }
-        className="flex w-full items-center justify-center gap-3 rounded-2xl glass px-6 py-3.5 text-[14.5px] font-semibold transition-colors duration-300 hover:border-brand-400/40"
+        className="flex w-full items-center justify-center gap-3 rounded-full glass px-6 py-3.5 text-[14.5px] font-semibold transition-colors duration-300 hover:border-brand-400/40"
       >
         <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" aria-hidden="true">
           <path

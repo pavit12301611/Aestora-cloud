@@ -1,5 +1,5 @@
 /**
- * Ambient page backdrop: Elegant gold-amber & teal aurora for Aestora's luxury cloud aesthetic.
+ * Ambient page backdrop: electric-violet aurora over deep ink.
  * Soft drifting blooms, refined light beams, subtle grid + noise texture.
  * Purely decorative, fixed behind all content.
  */
@@ -13,7 +13,7 @@ export default function Aurora() {
           so its `opacity: 0.65` washed out every bloom underneath it. */}
       <div className="absolute inset-0 noise" />
 
-      {/* Base wash - deep elegant navy with subtle gold spot */}
+      {/* Base wash — deep ink with a violet spot bleeding down from the top */}
       <div
         className="absolute inset-0"
         style={{

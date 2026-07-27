@@ -67,7 +67,7 @@ export default function Pricing() {
               style={{ transitionDelay: `${i * 90}ms` }}
             >
               <article
-                className={`spotlight group relative flex h-full flex-col overflow-hidden rounded-4xl p-8 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                className={`spotlight group relative flex h-full flex-col overflow-hidden rounded-[2.5rem] p-8 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                   plan.featured
                     ? "ring-conic glass-strong sheen shadow-[0_50px_100px_-40px_var(--brand-glow-soft)] lg:-translate-y-5 lg:scale-[1.03]"
                     : "spotlight-edge ring-gradient glass sheen lift"
@@ -158,13 +158,12 @@ export default function Pricing() {
                 <SmartLink
                   href={plan.cta.href}
                   data-magnetic="0.14"
-                  className={`shine magnetic relative z-10 mt-8 inline-flex items-center justify-center gap-2 rounded-2xl px-6 py-3.5 text-[15px] font-semibold transition-shadow duration-300 ${
+                  className={`pill-btn magnetic relative z-10 mt-8 inline-flex items-center justify-center gap-2 px-6 py-3.5 text-[15px] font-semibold ${
                     plan.featured
-                      ? "bg-gradient-to-r from-brand-500 to-brand-600 text-white glow-ring hover:shadow-[0_26px_60px_-18px_var(--brand-glow)]"
-                      : "glass hover:border-brand-400/40"
+                      ? "bg-[#060218] text-white"
+                      : "pill-btn-rtl glass hover:border-brand-400/40 hover:text-white"
                   }`}
                 >
-                  <span className="shine-layer" aria-hidden="true" />
                   <span className="relative">{plan.cta.label}</span>
                   <svg
                     viewBox="0 0 24 24"

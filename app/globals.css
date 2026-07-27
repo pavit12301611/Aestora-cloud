@@ -1,35 +1,40 @@
 @import "tailwindcss";
 
 /* ============================================================
-   AESTORA DESIGN SYSTEM v4 — "Lux Minimal"
-   Light luxury, gold-amber + deep navy, refined glass.
+   AESTORA DESIGN SYSTEM v5 — "Marketeam"
+   Electric violet on deep ink, Urbanist display + Inter body,
+   pill geometry and rotating conic borders.
    ============================================================ */
 
 @theme {
   --font-sans: "Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Urbanist", "Inter", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, sans-serif;
   --font-mono: "SF Mono", "JetBrains Mono", ui-monospace, SFMono-Regular,
     Menlo, Consolas, monospace;
 
-  --color-brand-50: #fdf9f0;
-  --color-brand-100: #f8efdc;
-  --color-brand-200: #f2dfb6;
-  --color-brand-300: #e8c78a;
-  --color-brand-400: #dbac60;
-  --color-brand-500: #d1953e;
-  --color-brand-600: #c27d30;
-  --color-brand-700: #a06428;
-  --color-brand-800: #825225;
-  --color-brand-900: #6d4522;
+  /* Brand ramp built around the Marketeam accent #A068FF */
+  --color-brand-50: #f6f0ff;
+  --color-brand-100: #ede0ff;
+  --color-brand-200: #dcc4ff;
+  --color-brand-300: #d9a1ff;
+  --color-brand-400: #b98aff;
+  --color-brand-500: #a068ff;
+  --color-brand-600: #8a4df0;
+  --color-brand-700: #6f3ad0;
+  --color-brand-800: #532a9e;
+  --color-brand-900: #2d1760;
 
-  --color-accent-300: #a8ddd6;
-  --color-accent-400: #7ecfc4;
-  --color-accent-500: #56bfb3;
-  --color-accent-600: #3fa89c;
+  --color-accent-300: #cbb4ff;
+  --color-accent-400: #9f7dff;
+  --color-accent-500: #7d55f5;
+  --color-accent-600: #6135d6;
 
-  --color-plasma-400: #d2a07a;
-  --color-plasma-500: #b07d58;
+  --color-plasma-400: #ff7ab4;
+  --color-plasma-500: #e0559b;
 
+  /* Pill geometry — the Marketeam language is fully rounded */
   --radius-4xl: 2rem;
   --radius-5xl: 2.75rem;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -49,6 +54,23 @@
   syntax: "<angle>";
   initial-value: 0deg;
   inherits: false;
+}
+
+/* Drives the rotating conic border on `.btn-border-wrap`. Registered for the
+   same reason as --angle: unregistered custom properties cannot animate. */
+@property --border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes border-spin { to { --border-angle: 360deg } }
+@keyframes caret-blink { 0%, 49% { opacity: 1 } 50%, 100% { opacity: 0 } }
+@keyframes spin-left { to { transform: translate(-50%, -50%) rotate(-360deg) } }
+@keyframes spin-right { to { transform: translate(-50%, -50%) rotate(360deg) } }
+@keyframes orbit-fly-in {
+  from { opacity: 0; filter: blur(8px); transform: translate(-50%, -50%) scale(0.3) rotate(-180deg) }
+  to { opacity: 1; filter: blur(0); transform: translate(-50%, -50%) scale(1) rotate(0deg) }
 }
 
 @keyframes shimmer { 0% { background-position: -200% 0 } 100% { background-position: 200% 0 } }
@@ -83,50 +105,48 @@
    on <html>; light is opt-in via the attribute set by the theme bootstrap. */
 :root {
   color-scheme: dark;
-  --bg: #05060f;
-  --bg-elev: #0b0c17;
-  --surface: 255 255 255 / 0.035;
-  --surface-strong: 255 255 255 / 0.065;
-  --hairline: 255 255 255 / 0.07;
-  --hairline-strong: 255 255 255 / 0.13;
-  --text: #f5f3fa;
-  --text-muted: #a7a1c0;
-  --text-faint: #706b8b;
-  --glow-a: rgba(209, 149, 62, 0.38);
-  --glow-b: rgba(86, 191, 179, 0.32);
-  --glow-c: rgba(210, 160, 122, 0.24);
-  --brand-glow: rgba(209, 149, 62, 0.55);
-  --brand-glow-soft: rgba(209, 149, 62, 0.32);
-  --card-shadow: 0 40px 90px -32px rgba(0,0,0,.96), 0 0 0 1px rgb(var(--hairline-strong));
-  --grid-line: rgba(255,255,255,.028);
-  --spot: rgba(209, 149, 62, 0.13);
-  --spot-strong: rgba(209, 149, 62, 0.16);
+  --bg: #060218;
+  --bg-elev: #0d0726;
+  --surface: 255 255 255 / 0.04;
+  --surface-strong: 255 255 255 / 0.075;
+  --hairline: 217 161 255 / 0.14;
+  --hairline-strong: 217 161 255 / 0.28;
+  --text: #f7f4ff;
+  --text-muted: #b5a9d6;
+  --text-faint: #7e73a3;
+  --glow-a: rgba(160, 104, 255, 0.42);
+  --glow-b: rgba(217, 161, 255, 0.3);
+  --glow-c: rgba(255, 122, 180, 0.22);
+  --brand-glow: rgba(160, 104, 255, 0.6);
+  --brand-glow-soft: rgba(160, 104, 255, 0.34);
+  --card-shadow: 0 40px 90px -32px rgba(6, 2, 24, .96), 0 0 0 1px rgb(var(--hairline-strong));
+  --grid-line: rgba(217, 161, 255, .04);
+  --spot: rgba(160, 104, 255, 0.15);
+  --spot-strong: rgba(160, 104, 255, 0.2);
   --sheen: rgba(255, 255, 255, 0.085);
-  --shine: rgba(255, 255, 255, 0.38);
 }
 
 :root[data-theme="light"] {
   color-scheme: light;
-  --bg: #faf8f4;
+  --bg: #f6f2ff;
   --bg-elev: #ffffff;
-  --surface: 255 255 255 / 0.72;
-  --surface-strong: 255 255 255 / 0.92;
-  --hairline: 224 220 205 / 0.55;
-  --hairline-strong: 224 220 205 / 0.9;
-  --text: #121018;
-  --text-muted: #5e5868;
-  --text-faint: #8a8494;
-  --glow-a: rgba(209, 149, 62, 0.26);
-  --glow-b: rgba(86, 191, 179, 0.22);
-  --glow-c: rgba(210, 160, 122, 0.24);
-  --brand-glow: rgba(194, 125, 48, 0.4);
-  --brand-glow-soft: rgba(194, 125, 48, 0.22);
-  --card-shadow: 0 30px 70px -30px rgba(40, 30, 70, 0.14), 0 0 0 1px rgb(var(--hairline-strong));
-  --grid-line: rgba(200, 195, 180, 0.35);
-  --spot: rgba(209, 149, 62, 0.14);
-  --spot-strong: rgba(209, 149, 62, 0.2);
+  --surface: 255 255 255 / 0.74;
+  --surface-strong: 255 255 255 / 0.93;
+  --hairline: 160 104 255 / 0.18;
+  --hairline-strong: 160 104 255 / 0.32;
+  --text: #100823;
+  --text-muted: #5b5175;
+  --text-faint: #8a80a6;
+  --glow-a: rgba(160, 104, 255, 0.28);
+  --glow-b: rgba(217, 161, 255, 0.24);
+  --glow-c: rgba(255, 122, 180, 0.2);
+  --brand-glow: rgba(138, 77, 240, 0.42);
+  --brand-glow-soft: rgba(138, 77, 240, 0.24);
+  --card-shadow: 0 30px 70px -30px rgba(45, 23, 96, 0.18), 0 0 0 1px rgb(var(--hairline-strong));
+  --grid-line: rgba(160, 104, 255, 0.12);
+  --spot: rgba(160, 104, 255, 0.14);
+  --spot-strong: rgba(160, 104, 255, 0.2);
   --sheen: rgba(255, 255, 255, 0.6);
-  --shine: rgba(255, 255, 255, 0.55);
 }
 
 @layer base {
@@ -140,8 +160,10 @@
     overflow-x: hidden;
   }
   body { background-color: var(--bg); color: var(--text); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-  ::selection { background: rgba(209, 149, 62, 0.28); color: inherit; }
-  h1, h2, h3, h4 { letter-spacing: -0.038em; text-wrap: balance; }
+  ::selection { background: rgba(160, 104, 255, 0.34); color: inherit; }
+  /* Urbanist is the Marketeam display face — headings only, Inter for body. */
+  h1, h2, h3 { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.032em; text-wrap: balance; }
+  h4 { letter-spacing: -0.02em; text-wrap: balance; }
   p { text-wrap: pretty; }
   /* `:focus-visible` is a pseudo-CLASS. The previous `::focus-visible`
      was invalid and silently removed every focus ring on the site. */
@@ -197,7 +219,6 @@
   /* ---- scroll reveal ----------------------------------------------- */
   .reveal { opacity: 0; transform: translateY(28px) scale(0.99); transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo); will-change: opacity, transform; }
   .reveal.is-visible { opacity: 1; transform: none; will-change: auto; }
-  .word { display: inline-block; opacity: 0; transform: translateY(0.55em) rotate(2deg); animation: rise 0.95s var(--ease-out-expo) forwards; }
   .lift { transition: transform 0.45s var(--ease-out-expo), box-shadow 0.45s var(--ease-out-expo), border-color 0.45s ease; }
   .lift:hover { transform: translateY(-6px); box-shadow: var(--card-shadow); border-color: rgb(var(--hairline-strong)); }
 
@@ -264,6 +285,104 @@
       );
   }
 
+  /* Nav links draw an underline out from the left on hover. */
+  .nav-underline { position: relative; }
+  .nav-underline::after {
+    content: "";
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    bottom: 4px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .nav-underline:hover::after,
+  .nav-underline:focus-visible::after { transform: scaleX(1); }
+
+  /* Blinking caret for the typewriter headline. */
+  .type-caret {
+    display: inline-block;
+    width: 3px;
+    height: 0.85em;
+    margin-left: 4px;
+    vertical-align: text-bottom;
+    border-radius: 2px;
+    background: var(--color-brand-500);
+    box-shadow: 0 0 12px var(--brand-glow);
+    animation: caret-blink 0.9s steps(1) infinite;
+  }
+
+  /* ---- Marketeam pill CTA -------------------------------------------
+     A pill button whose purple fill slides in on hover, wrapped by an
+     optional `.btn-border-wrap` that paints a rotating conic border. */
+  .pill-btn {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    border-radius: 50px;
+    transition: color 0.3s ease;
+  }
+  .pill-btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--color-brand-500);
+    transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .pill-btn:hover::after,
+  .pill-btn:focus-visible::after { transform: translateX(0); }
+  /* Secondary CTAs sweep in from the right instead, so a pair of buttons
+     side by side reads as one gesture rather than two identical ones. */
+  .pill-btn-rtl::after { transform: translateX(100%); }
+
+  .btn-border-wrap {
+    position: relative;
+    display: inline-flex;
+    border-radius: 50px;
+    isolation: isolate;
+  }
+  .btn-border-wrap::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    padding: 2px;
+    border-radius: 50px;
+    z-index: -1;
+    pointer-events: none;
+    background: conic-gradient(
+      from var(--border-angle),
+      var(--color-brand-500),
+      #070319,
+      var(--color-brand-500),
+      #070319,
+      var(--color-brand-500)
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    animation: border-spin 3s linear infinite;
+  }
+
+  /* Gradient hairline ring used by the orbit circles. */
+  .orbit-ring {
+    background: linear-gradient(
+      180deg,
+      rgba(217, 161, 255, 0) 0%,
+      rgba(217, 161, 255, 1) 43%,
+      rgba(217, 161, 255, 0) 100%
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+  }
+
   /* Rotating conic border for the focal pricing tier. */
   .ring-conic { position: relative; }
   .ring-conic::after {
@@ -304,23 +423,6 @@
       inset 0 0 0 1px rgba(255, 255, 255, 0.12);
   }
 
-  .shine { position: relative; overflow: hidden; }
-  .shine-layer {
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    background: linear-gradient(
-      105deg,
-      transparent 38%,
-      var(--shine) 50%,
-      transparent 62%
-    );
-    transform: translateX(-130%);
-    transition: transform 0.9s var(--ease-out-expo);
-  }
-  .shine:hover .shine-layer,
-  .shine:focus-visible .shine-layer { transform: translateX(130%); }
 
   /* ---- pointer-driven transforms ----------------------------------- */
   /* --rx/--ry/--tx/--ty are written by components/Interactions.tsx. */
@@ -357,9 +459,14 @@
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
-  .reveal, .word { opacity: 1 !important; transform: none !important; }
+  .reveal { opacity: 1 !important; transform: none !important; }
   .tilt, .magnetic { transform: none !important; }
-  .ring-conic::after { animation: none !important; }
+  .ring-conic::after, .btn-border-wrap::before { animation: none !important; }
+  /* The orbit nodes fly in from scale(.3); with animations neutered they
+     would freeze at their start frame, so land them at rest instead. */
+  .orbit-node { opacity: 1 !important; filter: none !important;
+    transform: translate(-50%, -50%) !important; }
+  .type-caret { display: none !important; }
 }
 
 
