@@ -3,7 +3,17 @@ import { hero, heroStats, plans, stats, finalCta } from "@/lib/content";
 import StoragePanel from "./StoragePanel";
 import Counter from "./Counter";
 import SmartLink from "./SmartLink";
-import { ArrowRight, ArrowUpRight, CheckCircle2, Play, Plus, Star } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  CheckCircle2,
+  Play,
+  Plus,
+  ShieldCheck,
+  Sparkles,
+  Star,
+  Zap,
+} from "lucide-react";
 
 /* Hero copy is split into words so the desktop reveal can stagger cleanly.
    On mobile the same markup renders immediately (no entrance animation). */
@@ -82,12 +92,16 @@ function MetricPill({
   icon?: ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-[rgb(var(--hairline))] bg-[rgb(var(--surface))] px-4 py-3 backdrop-blur-xl sm:px-5">
-      <div className="flex items-center gap-1.5 text-lg font-semibold tracking-tight text-[var(--text)] tabular">
+    <div className="ring-gradient glow-ring relative overflow-hidden rounded-[1.45rem] bg-[rgb(var(--surface-strong))] px-4 py-3 shadow-[0_20px_42px_-34px_var(--brand-glow-soft)] backdrop-blur-2xl sm:px-5">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-brand-300/70 to-transparent"
+      />
+      <div className="relative flex items-center gap-1.5 text-lg font-semibold tracking-tight text-[var(--text)] tabular">
         {value}
         {icon}
       </div>
-      <div className="mt-0.5 text-xs font-medium text-muted">{label}</div>
+      <div className="relative mt-0.5 text-xs font-medium text-muted">{label}</div>
     </div>
   );
 }
@@ -97,7 +111,7 @@ function PlanMiniCard({ className = "" }: { className?: string }) {
     <SmartLink
       href="#pricing"
       aria-label={`${proPlan.name}, ${proPlan.price}${proPlan.period} — see pricing`}
-      className={`group rounded-[1.6rem] border border-[rgb(var(--hairline))] bg-[rgb(var(--surface-strong))] p-3 shadow-[0_18px_45px_-32px_var(--brand-glow)] backdrop-blur-xl transition-transform duration-300 md:hover:-translate-y-1 ${className}`}
+      className={`spotlight spotlight-edge ring-gradient glow-ring group rounded-[1.6rem] bg-[rgb(var(--surface-strong))] p-3 shadow-[0_20px_45px_-34px_var(--brand-glow)] backdrop-blur-xl transition-transform duration-300 md:hover:-translate-y-1 ${className}`}
     >
       <span className="flex items-center gap-3">
         <span className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl sm:h-[4.5rem] sm:w-[4.5rem]">
@@ -121,7 +135,10 @@ function PlanMiniCard({ className = "" }: { className?: string }) {
           </span>
         </span>
         <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-brand-600 text-white shadow-lg shadow-brand-500/25 transition-colors duration-300 md:group-hover:bg-brand-500">
-          <ArrowUpRight className="h-4 w-4 transition-transform duration-300 md:group-hover:-translate-y-0.5 md:group-hover:translate-x-0.5" aria-hidden="true" />
+          <ArrowUpRight
+            className="h-4 w-4 transition-transform duration-300 md:group-hover:-translate-y-0.5 md:group-hover:translate-x-0.5"
+            aria-hidden="true"
+          />
         </span>
       </span>
     </SmartLink>
@@ -133,7 +150,7 @@ function TourMiniCard({ className = "" }: { className?: string }) {
     <a
       href="#features"
       aria-label={tourCaption}
-      className={`group rounded-[1.6rem] border border-[rgb(var(--hairline))] bg-[rgb(var(--surface-strong))] p-3 shadow-[0_18px_45px_-32px_var(--brand-glow)] backdrop-blur-xl transition-transform duration-300 md:hover:-translate-y-1 ${className}`}
+      className={`spotlight spotlight-edge ring-gradient glow-ring group rounded-[1.6rem] bg-[rgb(var(--surface-strong))] p-3 shadow-[0_20px_45px_-34px_var(--brand-glow)] backdrop-blur-xl transition-transform duration-300 md:hover:-translate-y-1 ${className}`}
     >
       <span className="flex items-center gap-3">
         <span className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl sm:h-[4.5rem] sm:w-[4.5rem]">
@@ -150,17 +167,77 @@ function TourMiniCard({ className = "" }: { className?: string }) {
           </span>
         </span>
         <span className="min-w-0 flex-1">
-          <span className="block text-sm font-semibold text-[var(--text)]">Product tour</span>
-          <span className="mt-1 block text-sm leading-snug text-muted">{tourCaption}</span>
+          <span className="block text-sm font-semibold text-[var(--text)]">
+            Product tour
+          </span>
+          <span className="mt-1 block text-sm leading-snug text-muted">
+            {tourCaption}
+          </span>
         </span>
       </span>
     </a>
   );
 }
 
+function FloatingSignal({
+  eyebrow,
+  title,
+  icon,
+  className,
+}: {
+  eyebrow: string;
+  title: string;
+  icon: ReactNode;
+  className: string;
+}) {
+  return (
+    <div
+      className={`pointer-events-none absolute hidden lg:block lg:opacity-0 ${className}`}
+      aria-hidden="true"
+    >
+      <div className="ring-gradient glow-ring rounded-[1.4rem] bg-[rgb(var(--surface-strong))] p-4 shadow-[0_28px_70px_-38px_var(--brand-glow)] backdrop-blur-2xl">
+        <div className="flex items-center gap-3">
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-brand-500/24 to-accent-400/12 text-brand-500 ring-1 ring-inset ring-[rgb(var(--hairline-strong))]">
+            {icon}
+          </span>
+          <span>
+            <span className="block text-[10.5px] font-semibold uppercase tracking-[0.16em] text-faint">
+              {eyebrow}
+            </span>
+            <span className="mt-1 block whitespace-nowrap text-sm font-semibold text-[var(--text)]">
+              {title}
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function HeroVisual() {
   return (
-    <div className={`relative ${desktopMotion("slide-in-right", 500)}`}>
+    <div
+      className={`relative lg:pl-6 lg:opacity-0 wide-animate-hero-shell wide-delay-300 ${desktopMotion("slide-in-right", 500)}`}
+    >
+      <FloatingSignal
+        eyebrow="Protected"
+        title="AES-256 encrypted by default"
+        icon={<ShieldCheck className="h-5 w-5" aria-hidden="true" />}
+        className="-left-1 top-10 wide-animate-fly-left wide-delay-600 xl:-left-12"
+      />
+      <FloatingSignal
+        eyebrow="Fast sharing"
+        title="Links ready in one click"
+        icon={<Zap className="h-5 w-5" aria-hidden="true" />}
+        className="-right-2 top-16 wide-animate-fly-right wide-delay-700 xl:-right-10"
+      />
+      <FloatingSignal
+        eyebrow="Clean workflow"
+        title="Uploads auto-organized daily"
+        icon={<Sparkles className="h-5 w-5" aria-hidden="true" />}
+        className="left-8 -bottom-5 wide-animate-fly-left wide-delay-800 xl:left-4"
+      />
+
       <div
         aria-hidden="true"
         className="absolute -inset-5 -z-10 rounded-[3rem] opacity-80 blur-3xl"
@@ -170,8 +247,8 @@ function HeroVisual() {
         }}
       />
 
-      <div className="rounded-[2rem] border border-[rgb(var(--hairline-strong))] bg-[rgb(var(--surface))] p-3 shadow-[0_38px_90px_-48px_var(--brand-glow)] backdrop-blur-2xl sm:rounded-[2.5rem] sm:p-4">
-        <figure className="relative isolate min-h-[23rem] overflow-hidden rounded-[1.45rem] bg-brand-900 sm:min-h-[28rem] sm:rounded-[2rem] lg:min-h-[33rem]">
+      <div className="ring-conic glow-ring rounded-[2rem] border border-[rgb(var(--hairline-strong))] bg-[linear-gradient(180deg,rgba(255,255,255,0.62),rgba(255,255,255,0.34))] p-3 shadow-[0_42px_95px_-48px_var(--brand-glow)] backdrop-blur-2xl sm:rounded-[2.5rem] sm:p-4 dark:bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))]">
+        <figure className="relative isolate min-h-[23rem] overflow-hidden rounded-[1.45rem] bg-brand-900 shadow-[0_22px_70px_-40px_rgba(7,22,7,0.95)] sm:min-h-[28rem] sm:rounded-[2rem] lg:min-h-[33rem]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/hero/bottom-center.jpg"
@@ -180,7 +257,12 @@ function HeroVisual() {
           />
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,24,9,0.18)_0%,rgba(9,24,9,0.18)_42%,rgba(9,24,9,0.78)_100%)]"
+            className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,24,9,0.14)_0%,rgba(9,24,9,0.16)_42%,rgba(9,24,9,0.84)_100%)]"
+          />
+
+          <div
+            aria-hidden="true"
+            className="absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent"
           />
 
           <div className="absolute left-4 right-4 top-4 flex items-center justify-between gap-3 sm:left-5 sm:right-5 sm:top-5">
@@ -194,6 +276,13 @@ function HeroVisual() {
             <div className="hidden rounded-full bg-white/14 px-3 py-2 text-xs font-semibold text-white backdrop-blur-md ring-1 ring-white/18 sm:block">
               Private by default
             </div>
+          </div>
+
+          <div className="absolute right-5 top-20 hidden rounded-[1.3rem] bg-white/10 px-4 py-3 text-white shadow-2xl shadow-black/20 backdrop-blur-xl ring-1 ring-white/14 sm:block">
+            <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/72">
+              Daily capacity
+            </div>
+            <div className="mt-1 text-xl font-semibold tabular">1 GB free</div>
           </div>
 
           <figcaption className="absolute inset-x-4 bottom-4 rounded-[1.35rem] bg-[#071607]/42 p-4 text-white shadow-2xl shadow-black/20 backdrop-blur-xl ring-1 ring-white/14 sm:inset-x-5 sm:bottom-5 sm:p-5">
@@ -232,11 +321,17 @@ function HeroVisual() {
 export default function Hero() {
   return (
     <section id="top" className="relative overflow-hidden">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 grid-bg opacity-70" />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 grid-bg opacity-55" />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 noise" />
       <div
         aria-hidden="true"
         className="pointer-events-none absolute left-1/2 top-0 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full opacity-70 blur-3xl"
         style={{ background: "radial-gradient(circle, var(--glow-a), transparent 66%)" }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-24 top-24 h-[22rem] w-[22rem] rounded-full opacity-55 blur-3xl"
+        style={{ background: "radial-gradient(circle, var(--glow-c), transparent 68%)" }}
       />
 
       <div aria-hidden="true" className="h-[76px] shrink-0 lg:h-[84px]" />
@@ -254,11 +349,29 @@ export default function Hero() {
             <Headline />
           </div>
 
-          <p className={`mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg md:mx-0 ${desktopMotion("fade-up", 500)}`}>
+          <p
+            className={`mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg md:mx-0 ${desktopMotion("fade-up", 500)}`}
+          >
             {hero.subtitle}
           </p>
 
-          <div className={`mt-7 flex flex-col items-center gap-3 sm:flex-row md:justify-start ${desktopMotion("fade-up", 600)}`}>
+          <div
+            className={`mt-5 inline-flex flex-wrap items-center justify-center gap-3 rounded-[1.35rem] border border-[rgb(var(--hairline))] bg-[rgb(var(--surface-strong))] px-4 py-3 text-sm text-muted shadow-[0_18px_42px_-34px_var(--brand-glow-soft)] backdrop-blur-xl md:justify-start ${desktopMotion("fade-up", 600)}`}
+          >
+            <span className="inline-flex items-center gap-2 font-semibold text-[var(--text)]">
+              <Sparkles className="h-4 w-4 text-accent-400" aria-hidden="true" />
+              Crafted for fast daily storage
+            </span>
+            <span
+              aria-hidden="true"
+              className="hidden h-1 w-1 rounded-full bg-[rgb(var(--hairline-strong))] sm:block"
+            />
+            <span className="text-sm text-muted">{usersStat.value} active users already onboard</span>
+          </div>
+
+          <div
+            className={`mt-7 flex flex-col items-center gap-3 sm:flex-row md:justify-start ${desktopMotion("fade-up", 700)}`}
+          >
             <SmartLink
               href={hero.primaryCta.href}
               className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent-400 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-accent-400/25 transition-colors duration-300 hover:bg-accent-500 sm:w-auto"
@@ -277,7 +390,9 @@ export default function Hero() {
             </SmartLink>
           </div>
 
-          <div className={`mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 ${desktopMotion("fade-up", 700)}`}>
+          <div
+            className={`mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 ${desktopMotion("fade-up", 800)}`}
+          >
             <MetricPill
               value={usersStat.value}
               label={usersStat.label}
@@ -298,7 +413,9 @@ export default function Hero() {
             </div>
           </div>
 
-          <div className={`mt-6 flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm font-medium text-muted md:justify-start ${desktopMotion("fade-up", 800)}`}>
+          <div
+            className={`mt-6 flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm font-medium text-muted md:justify-start ${desktopMotion("fade-up", 900)}`}
+          >
             {features().map((item) => (
               <span key={item} className="inline-flex items-center gap-1.5">
                 <CheckCircle2 className="h-4 w-4 text-accent-400" aria-hidden="true" />
