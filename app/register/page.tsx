@@ -19,7 +19,7 @@ export default function RegisterPage() {
           Already have an account?{" "}
           <SmartLink
             href="/login"
-            className="font-semibold text-brand-400 transition-colors hover:text-brand-300"
+            className="font-semibold text-link transition-colors"
           >
             Sign in
           </SmartLink>

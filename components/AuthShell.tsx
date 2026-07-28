@@ -22,7 +22,10 @@ export default function AuthShell({
       <Interactions />
       <Cursor />
 
-      <div className="relative flex min-h-screen items-center justify-center px-5 py-14">
+      <main
+        id="main-content"
+        className="relative flex min-h-screen items-center justify-center px-5 py-14"
+      >
         <div className="absolute right-5 top-5">
           <ThemeToggle />
         </div>
@@ -64,7 +67,7 @@ export default function AuthShell({
 
           <p className="mt-6 text-center text-[14px] text-muted">{footer}</p>
         </div>
-      </div>
+      </main>
     </>
   );
 }

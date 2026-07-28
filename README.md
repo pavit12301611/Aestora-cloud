@@ -141,10 +141,13 @@ Both auth screens were rebuilt as clean, accessible, presentational shells:
 
 ### SEO
 
-- Full Open Graph + Twitter card metadata
-- Per-route titles via a template
-- `FAQPage` JSON-LD structured data
-- Theme-color meta that responds to color scheme
+- Full Open Graph + Twitter card metadata, backed by a generated 1200x630
+  `opengraph-image` (the metadata previously advertised cards with no image)
+- Per-route titles via a template, and a per-route `canonical`
+- `FAQPage` JSON-LD structured data, generated from the same `faqs` array the
+  UI renders so the two cannot disagree
+- `robots.txt` + `sitemap.xml`, sharing one origin constant with the metadata
+- Theme-color meta with a separate value per color scheme
 
 ## Structure
 
@@ -165,4 +168,17 @@ lib/
 ```
 
 All user-facing text lives in `lib/content.ts` — edit copy there, never in
-components.
+components. Site-level constants (canonical origin, brand hexes used outside
+CSS) live in `lib/site.ts`.
+
+## Known follow-ups
+
+- **Fonts.** Inter and DM Serif Display are still loaded from
+  `fonts.googleapis.com` via `<link>`. Moving them to `next/font/google` would
+  self-host the files, remove the render-blocking stylesheet and two extra DNS
+  lookups, keep visitor IPs off Google's servers, and add size-adjusted
+  fallback metrics so the swap doesn't shift layout. It's a small change but it
+  needs network access at build time.
+- **Auth.** `AuthForm` is presentational. Pass an `onSubmit` to wire it up; with
+  no handler it renders an explicit "not connected" notice rather than silently
+  doing nothing.

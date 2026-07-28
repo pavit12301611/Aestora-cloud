@@ -1,5 +1,14 @@
 import type { ReactNode } from "react";
-import { hero, heroStats, plans, stats, finalCta } from "@/lib/content";
+import Image from "next/image";
+import {
+  hero,
+  heroStats,
+  heroTrustBadges,
+  heroVisual,
+  plans,
+  stats,
+  finalCta,
+} from "@/lib/content";
 import StoragePanel from "./StoragePanel";
 import Counter from "./Counter";
 import SmartLink from "./SmartLink";
@@ -30,7 +39,6 @@ const proPlan = plans.find((p) => p.featured) ?? plans[0];
 const usersStat = stats[0];
 const filesStat = stats[1];
 const uptimeStat = stats[2];
-const tourCaption = "Watch how Aestora works";
 
 function desktopMotion(
   animation: "fade-up" | "slide-in-right" | "scale-in",
@@ -40,27 +48,36 @@ function desktopMotion(
 }
 
 function Headline() {
+  /*
+    The headline is split per word so the desktop entrance can stagger. Each
+    word sat in its own `inline-block` with the gap faked by `margin-right`,
+    which meant the DOM text was literally "Yourcloud,beautifullysimple." —
+    that is what a screen reader announced, what a crawler indexed, and what
+    you got when you selected and copied the heading.
+
+    The accessible text now lives in one `sr-only` node, and the animated
+    words are `aria-hidden` decoration carrying real whitespace between them.
+  */
+  const accessibleText = `${hero.titleLead} ${hero.titleAccent}`;
+
+  const renderLine = (words: string[], offset: number) =>
+    words.map((word, i) => (
+      <span
+        key={`${offset}-${word}`}
+        className={`mr-[0.22em] inline-block last:mr-0 md:opacity-0 desktop-animate-word-pop ${
+          desktopWordDelays[offset + i] ?? "desktop-delay-400"
+        }`}
+      >
+        {word}
+      </span>
+    ));
+
   return (
     <h1 className="font-serif-display text-[clamp(3rem,14vw,4.55rem)] font-normal leading-[0.96] tracking-tight text-[var(--text)] sm:text-[clamp(4rem,10vw,6.7rem)] md:text-[clamp(4.2rem,7.7vw,7rem)]">
-      <span className="block">
-        {line1.map((word, i) => (
-          <span
-            key={word}
-            className={`mr-[0.22em] inline-block last:mr-0 md:opacity-0 desktop-animate-word-pop ${desktopWordDelays[i] ?? "desktop-delay-100"}`}
-          >
-            {word}
-          </span>
-        ))}
-      </span>
-      <span className="block">
-        {line2.map((word, i) => (
-          <span
-            key={word}
-            className={`mr-[0.22em] inline-block last:mr-0 md:opacity-0 desktop-animate-word-pop ${desktopWordDelays[line1.length + i] ?? "desktop-delay-400"}`}
-          >
-            {word}
-          </span>
-        ))}
+      <span className="sr-only">{accessibleText}</span>
+      <span aria-hidden="true">
+        <span className="block">{renderLine(line1, 0)}</span>
+        <span className="block">{renderLine(line2, line1.length)}</span>
       </span>
     </h1>
   );
@@ -69,10 +86,14 @@ function Headline() {
 function AvatarStack() {
   return (
     <span className="flex shrink-0 items-center">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      {/* next/image so a 1024x1024 source isn't shipped whole for a 32px
+          slot, and so the box is reserved before the bytes land. */}
+      <Image
         src="/hero/avatar.jpg"
         alt=""
+        width={32}
+        height={32}
+        sizes="32px"
         className="h-8 w-8 rounded-full object-cover ring-2 ring-[color:var(--bg)]"
       />
       <span className="-ml-2.5 grid h-8 w-8 place-items-center rounded-full bg-brand-600 text-white ring-2 ring-[color:var(--bg)]">
@@ -111,19 +132,20 @@ function PlanMiniCard({ className = "" }: { className?: string }) {
     <SmartLink
       href="#pricing"
       aria-label={`${proPlan.name}, ${proPlan.price}${proPlan.period} — see pricing`}
-      className={`spotlight spotlight-edge ring-gradient glow-ring group rounded-[1.6rem] bg-[rgb(var(--surface-strong))] p-3 shadow-[0_20px_45px_-34px_var(--brand-glow)] backdrop-blur-xl transition-transform duration-300 md:hover:-translate-y-1 ${className}`}
+      className={`spotlight spotlight-edge ring-gradient group rounded-[1.6rem] bg-[rgb(var(--surface-strong))] p-3 shadow-[0_20px_45px_-34px_var(--brand-glow)] backdrop-blur-xl transition-transform duration-300 md:hover:-translate-y-1 ${className}`}
     >
       <span className="flex items-center gap-3">
         <span className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl sm:h-[4.5rem] sm:w-[4.5rem]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src="/hero/plan-card.jpg"
             alt=""
-            className="h-full w-full object-cover transition-transform duration-700 md:group-hover:scale-105"
+            fill
+            sizes="(min-width: 640px) 72px, 64px"
+            className="object-cover transition-transform duration-700 md:group-hover:scale-105"
           />
         </span>
         <span className="min-w-0 flex-1">
-          <span className="inline-flex rounded-full bg-accent-400/12 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-accent-400">
+          <span className="inline-flex rounded-full bg-accent-400/12 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-ink-accent">
             {proPlan.badge ?? "Popular"}
           </span>
           <span className="mt-2 block text-sm font-semibold text-[var(--text)]">
@@ -149,16 +171,17 @@ function TourMiniCard({ className = "" }: { className?: string }) {
   return (
     <a
       href="#features"
-      aria-label={tourCaption}
-      className={`spotlight spotlight-edge ring-gradient glow-ring group rounded-[1.6rem] bg-[rgb(var(--surface-strong))] p-3 shadow-[0_20px_45px_-34px_var(--brand-glow)] backdrop-blur-xl transition-transform duration-300 md:hover:-translate-y-1 ${className}`}
+      aria-label={heroVisual.tourCaption}
+      className={`spotlight spotlight-edge ring-gradient group rounded-[1.6rem] bg-[rgb(var(--surface-strong))] p-3 shadow-[0_20px_45px_-34px_var(--brand-glow)] backdrop-blur-xl transition-transform duration-300 md:hover:-translate-y-1 ${className}`}
     >
       <span className="flex items-center gap-3">
         <span className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl sm:h-[4.5rem] sm:w-[4.5rem]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src="/hero/video-card.jpg"
             alt=""
-            className="h-full w-full object-cover transition-transform duration-700 md:group-hover:scale-105"
+            fill
+            sizes="(min-width: 640px) 72px, 64px"
+            className="object-cover transition-transform duration-700 md:group-hover:scale-105"
           />
           <span className="absolute inset-0 grid place-items-center bg-[#0d200d]/20">
             <span className="grid h-8 w-8 place-items-center rounded-full bg-accent-400 text-white shadow-lg shadow-accent-400/25 transition-transform duration-300 md:group-hover:scale-110">
@@ -168,10 +191,10 @@ function TourMiniCard({ className = "" }: { className?: string }) {
         </span>
         <span className="min-w-0 flex-1">
           <span className="block text-sm font-semibold text-[var(--text)]">
-            Product tour
+            {heroVisual.tourTitle}
           </span>
           <span className="mt-1 block text-sm leading-snug text-muted">
-            {tourCaption}
+            {heroVisual.tourCaption}
           </span>
         </span>
       </span>
@@ -249,11 +272,16 @@ function HeroVisual() {
 
       <div className="ring-conic glow-ring rounded-[2rem] border border-[rgb(var(--hairline-strong))] bg-[linear-gradient(180deg,rgba(255,255,255,0.62),rgba(255,255,255,0.34))] p-3 shadow-[0_42px_95px_-48px_var(--brand-glow)] backdrop-blur-2xl sm:rounded-[2.5rem] sm:p-4 dark:bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))]">
         <figure className="relative isolate min-h-[23rem] overflow-hidden rounded-[1.45rem] bg-brand-900 shadow-[0_22px_70px_-40px_rgba(7,22,7,0.95)] sm:min-h-[28rem] sm:rounded-[2rem] lg:min-h-[33rem]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          {/* The hero image is the LCP element on every viewport, so it is
+              marked priority — it was previously lazy-discovered by the
+              preload scanner behind the CSS. */}
+          <Image
             src="/hero/bottom-center.jpg"
-            alt="Aestora cloud storage on phone, everywhere you go"
-            className="absolute inset-0 h-full w-full object-cover"
+            alt="Aestora cloud storage on a phone, accessible everywhere you go"
+            fill
+            priority
+            sizes="(min-width: 1024px) 46vw, (min-width: 768px) 52vw, 100vw"
+            className="object-cover"
           />
           <div
             aria-hidden="true"
@@ -271,18 +299,18 @@ function HeroVisual() {
                 <span className="absolute inline-flex h-full w-full rounded-full bg-accent-400 opacity-70 md:animate-ping" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-accent-400" />
               </span>
-              Live storage ready
+              {heroVisual.liveBadge}
             </div>
             <div className="hidden rounded-full bg-white/14 px-3 py-2 text-xs font-semibold text-white backdrop-blur-md ring-1 ring-white/18 sm:block">
-              Private by default
+              {heroVisual.privateBadge}
             </div>
           </div>
 
           <div className="absolute right-5 top-20 hidden rounded-[1.3rem] bg-white/10 px-4 py-3 text-white shadow-2xl shadow-black/20 backdrop-blur-xl ring-1 ring-white/14 sm:block">
             <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/72">
-              Daily capacity
+              {heroVisual.capacityLabel}
             </div>
-            <div className="mt-1 text-xl font-semibold tabular">1 GB free</div>
+            <div className="mt-1 text-xl font-semibold tabular">{heroVisual.capacityValue}</div>
           </div>
 
           <figcaption className="absolute inset-x-4 bottom-4 rounded-[1.35rem] bg-[#071607]/42 p-4 text-white shadow-2xl shadow-black/20 backdrop-blur-xl ring-1 ring-white/14 sm:inset-x-5 sm:bottom-5 sm:p-5">
@@ -292,12 +320,12 @@ function HeroVisual() {
                   {finalCta.title}
                 </p>
                 <p className="mt-1 max-w-sm text-sm text-white/78">
-                  1 GB free daily uploads with clean sharing and automatic cleanup.
+                  {heroVisual.captionBody}
                 </p>
               </div>
               <SmartLink
                 href={hero.primaryCta.href}
-                className="group inline-flex w-fit items-center gap-2 rounded-full bg-accent-400 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-accent-400/25 transition-colors duration-300 hover:bg-accent-500"
+                className="group inline-flex w-fit items-center gap-2 rounded-full btn-accent px-5 py-3 text-sm font-semibold shadow-lg shadow-accent-400/25"
               >
                 {hero.primaryCta.label}
                 <ArrowRight
@@ -360,7 +388,7 @@ export default function Hero() {
           >
             <span className="inline-flex items-center gap-2 font-semibold text-[var(--text)]">
               <Sparkles className="h-4 w-4 text-accent-400" aria-hidden="true" />
-              Crafted for fast daily storage
+              {heroVisual.craftedLine}
             </span>
             <span
               aria-hidden="true"
@@ -374,7 +402,7 @@ export default function Hero() {
           >
             <SmartLink
               href={hero.primaryCta.href}
-              className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent-400 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-accent-400/25 transition-colors duration-300 hover:bg-accent-500 sm:w-auto"
+              className="group inline-flex w-full items-center justify-center gap-2 rounded-full btn-accent px-7 py-3.5 text-sm font-semibold shadow-lg shadow-accent-400/25 sm:w-auto"
             >
               {hero.primaryCta.label}
               <ArrowRight
@@ -416,7 +444,7 @@ export default function Hero() {
           <div
             className={`mt-6 flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm font-medium text-muted md:justify-start ${desktopMotion("fade-up", 900)}`}
           >
-            {features().map((item) => (
+            {heroTrustBadges.map((item) => (
               <span key={item} className="inline-flex items-center gap-1.5">
                 <CheckCircle2 className="h-4 w-4 text-accent-400" aria-hidden="true" />
                 {item}
@@ -483,8 +511,4 @@ export default function Hero() {
       </section>
     </section>
   );
-}
-
-function features() {
-  return ["No credit card", "Private links", "Auto cleanup"];
 }

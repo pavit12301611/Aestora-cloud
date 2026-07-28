@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Logo from "./Logo";
 import ThemeToggle from "./ThemeToggle";
 import { nav } from "@/lib/content";
@@ -132,7 +133,7 @@ export default function Navbar() {
           className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 animate-fade-in items-center gap-8 delay-200 md:flex"
           aria-label="Primary"
         >
-          {nav.map((item, i) => {
+          {nav.map((item) => {
             const isActive = active === item.href;
             return (
               <SmartLink
@@ -141,11 +142,14 @@ export default function Navbar() {
                 // `aria-current="true"` is not a valid token for a nav link;
                 // "location" is the value screen readers expect here.
                 aria-current={isActive ? "location" : undefined}
-                className={`nav-underline relative py-2 text-sm font-medium transition-colors duration-300 ${
-                  isActive || i === 0
-                    ? "text-[var(--text)]"
-                    : "text-muted hover:text-[var(--text)]"
-                } ${isActive ? "font-semibold" : ""}`}
+                // `isActive || i === 0` used to force the first item to render
+                // in the active style permanently, so "Features" looked
+                // selected while you were reading Pricing or the FAQ.
+                className={`nav-underline relative py-2 text-sm transition-colors duration-300 ${
+                  isActive
+                    ? "font-semibold text-[var(--text)]"
+                    : "font-medium text-muted hover:text-[var(--text)]"
+                }`}
               >
                 {item.label}
               </SmartLink>
@@ -161,7 +165,7 @@ export default function Navbar() {
             href="/membership/patreon"
             aria-label="Upgrade to Cloud Pro"
             title="Upgrade to Cloud Pro"
-            className="group/star relative grid h-10 w-10 place-items-center rounded-full bg-[#e86a10] text-white shadow-md shadow-[#e86a10]/30 transition-all duration-300 hover:scale-105 hover:bg-[#d45e0d]"
+            className="btn-accent group/star relative grid h-10 w-10 place-items-center rounded-full shadow-md shadow-accent-400/30 transition-transform duration-300 hover:scale-105"
           >
             <Star
               className="h-[18px] w-[18px] fill-current transition-transform duration-500 group-hover/star:rotate-[72deg]"
@@ -176,10 +180,12 @@ export default function Navbar() {
             title="Sign in"
             className="relative hidden h-10 w-10 overflow-hidden rounded-full border border-[rgb(var(--hairline))] ring-2 ring-[color:var(--bg)] transition-transform duration-300 hover:scale-105 sm:block"
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src="/hero/avatar.jpg"
               alt=""
+              width={40}
+              height={40}
+              sizes="40px"
               className="h-full w-full object-cover"
             />
           </SmartLink>
@@ -187,7 +193,7 @@ export default function Navbar() {
           <SmartLink
             href="/register"
             data-magnetic="0.16"
-            className="pill-btn magnetic hidden bg-[#1a3d1a] px-4 py-2 text-[13.5px] font-semibold text-white sm:inline-flex"
+            className="pill-btn magnetic hidden btn-primary px-4 py-2 text-[13.5px] font-semibold sm:inline-flex"
           >
             <span className="relative">Get started</span>
           </SmartLink>
@@ -274,7 +280,7 @@ export default function Navbar() {
             <SmartLink
               href="/register"
               onClick={() => setOpen(false)}
-              className="pill-btn mt-1 block bg-[#1a3d1a] px-4 py-3 text-center text-[15px] font-semibold text-white"
+              className="pill-btn mt-1 block btn-primary px-4 py-3 text-center text-[15px] font-semibold"
             >
               Get started
             </SmartLink>

@@ -10,13 +10,37 @@ import Footer from "@/components/Footer";
 import ScrollProgress from "@/components/ScrollProgress";
 import Interactions from "@/components/Interactions";
 import Reveal from "@/components/Reveal";
+import { faqs } from "@/lib/content";
+
+/**
+ * The README claimed `FAQPage` structured data shipped, but no JSON-LD was
+ * ever emitted. Generated from the same `faqs` array the UI renders, so the
+ * markup and the structured data can't disagree.
+ */
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: { "@type": "Answer", text: faq.a },
+  })),
+};
 
 export default function AestoraLanding() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        // Content is authored, not user input, and JSON.stringify escapes the
+        // quotes; `</script>` is neutralised defensively all the same.
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <ScrollProgress />
       <Navbar />
-      <main className="relative">
+      <main id="main-content" className="relative">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 top-[18rem] h-[90rem] opacity-80"
