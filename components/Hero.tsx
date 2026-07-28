@@ -201,41 +201,6 @@ function TourMiniCard({ className = "" }: { className?: string }) {
   );
 }
 
-function FloatingSignal({
-  eyebrow,
-  title,
-  icon,
-  className,
-}: {
-  eyebrow: string;
-  title: string;
-  icon: ReactNode;
-  className: string;
-}) {
-  return (
-    <div
-      className={`pointer-events-none absolute hidden lg:block lg:opacity-0 ${className}`}
-      aria-hidden="true"
-    >
-      <div className="ring-gradient glow-ring rounded-[1.4rem] bg-[rgb(var(--surface-strong))] p-4 shadow-[0_28px_70px_-38px_var(--brand-glow)] backdrop-blur-2xl">
-        <div className="flex items-center gap-3">
-          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-brand-500/24 to-accent-400/12 text-brand-500 ring-1 ring-inset ring-[rgb(var(--hairline-strong))]">
-            {icon}
-          </span>
-          <span>
-            <span className="block text-[10.5px] font-semibold uppercase tracking-[0.16em] text-faint">
-              {eyebrow}
-            </span>
-            <span className="mt-1 block whitespace-nowrap text-sm font-semibold text-[var(--text)]">
-              {title}
-            </span>
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 const fileRows = [
   {
     name: "Client-assets.zip",
@@ -356,24 +321,8 @@ function HeroVisual() {
     <div
       className={`relative lg:pl-4 lg:opacity-0 wide-animate-hero-shell wide-delay-300 ${desktopMotion("slide-in-right", 500)}`}
     >
-      <FloatingSignal
-        eyebrow="Protected"
-        title="AES-256 encrypted by default"
-        icon={<ShieldCheck className="h-5 w-5" aria-hidden="true" />}
-        className="-left-2 top-8 wide-animate-fly-left wide-delay-600 xl:-left-6 xl:top-10"
-      />
-      <FloatingSignal
-        eyebrow="Fast sharing"
-        title="Links ready in one click"
-        icon={<Zap className="h-5 w-5" aria-hidden="true" />}
-        className="-right-2 top-14 wide-animate-fly-right wide-delay-700 xl:-right-6 xl:top-16"
-      />
-      <FloatingSignal
-        eyebrow="Clean workflow"
-        title="Uploads auto-organized daily"
-        icon={<Sparkles className="h-5 w-5" aria-hidden="true" />}
-        className="left-6 -bottom-3 wide-animate-fly-left wide-delay-800 xl:left-10"
-      />
+
+
 
       <div
         aria-hidden="true"
