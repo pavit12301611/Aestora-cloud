@@ -32,6 +32,11 @@ export default function Interactions() {
       let frame = 0;
       let px = 0;
       let py = 0;
+      // Until the pointer has actually moved we have no idea where it is.
+      // Defaulting to (0, 0) meant the first scroll ran a hit test against the
+      // top-left corner of the viewport and lit up whatever card happened to
+      // be there, with the ambient bloom pinned to the corner.
+      let havePointer = false;
 
       const active: {
         spot: HTMLElement | null;
@@ -111,8 +116,12 @@ export default function Interactions() {
       };
 
       const onMove = (e: PointerEvent) => {
+        // Touch and pen already get no effects via the media query, but a
+        // hybrid device can fire both; ignore anything that isn't a mouse.
+        if (e.pointerType !== "mouse") return;
         px = e.clientX;
         py = e.clientY;
+        havePointer = true;
         if (!frame) frame = requestAnimationFrame(apply);
       };
 
@@ -130,11 +139,13 @@ export default function Interactions() {
         active.tilt = null;
         active.mag = null;
         active.spot = null;
+        havePointer = false;
       };
 
       // Scrolling moves elements under a stationary cursor, so the cached
       // hover target goes stale. Re-run the hit test on scroll too.
       const onScroll = () => {
+        if (!havePointer) return;
         if (!frame) frame = requestAnimationFrame(apply);
       };
 

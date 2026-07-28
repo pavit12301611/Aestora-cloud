@@ -1,28 +1,42 @@
 "use client";
 
-import { useState } from "react";
-import { plans, pricingSection } from "@/lib/content";
+import { useId, useState } from "react";
+import { ANNUAL_DISCOUNT, billing, plans, pricingSection } from "@/lib/content";
+import type { Plan } from "@/lib/content";
 import SectionHeading from "./SectionHeading";
 import SmartLink from "./SmartLink";
 
+type BillingPeriod = "monthly" | "annually";
+
+/** One formatter instance, not a new `toFixed` string concat per render. */
+const currency = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
+
+/**
+ * Prices are derived from `plan.priceMonthly` (a real number) rather than by
+ * string-parsing the display price, which returned NaN for any plan whose
+ * price isn't a bare "$n.nn" — the old code rendered a literal "$NaN".
+ */
+function priceFor(plan: Plan, period: BillingPeriod) {
+  if (plan.priceMonthly === null) return plan.price;
+  const monthly =
+    period === "annually"
+      ? plan.priceMonthly * (1 - ANNUAL_DISCOUNT)
+      : plan.priceMonthly;
+  return currency.format(monthly);
+}
+
+function periodFor(plan: Plan, period: BillingPeriod) {
+  if (plan.priceMonthly === null) return plan.period;
+  return period === "annually" ? "/month, billed annually" : plan.period;
+}
+
 export default function Pricing() {
-  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annually">("monthly");
-
-  const getPrice = (name: string, defaultPrice: string) => {
-    if (name === "Free") return "$0";
-    const numeric = parseFloat(defaultPrice.replace("$", ""));
-    if (billingPeriod === "annually") {
-      // 20% off and round to 2 decimal places
-      return `$${(numeric * 0.8).toFixed(2)}`;
-    }
-    return defaultPrice;
-  };
-
-  const getPeriodText = (name: string, defaultPeriod: string) => {
-    if (name === "Free") return "forever";
-    if (billingPeriod === "annually") return "/month, billed annually";
-    return defaultPeriod;
-  };
+  const [billingPeriod, setBillingPeriod] = useState<BillingPeriod>("monthly");
+  const groupId = useId();
+  const isAnnual = billingPeriod === "annually";
 
   return (
     <section id="pricing" className="relative py-24 sm:py-32">
@@ -33,30 +47,64 @@ export default function Pricing() {
           subtitle={pricingSection.subtitle}
         />
 
-        {/* Billing Toggle Switch */}
-        <div className="reveal mt-10 flex items-center justify-center gap-4" style={{ transitionDelay: "100ms" }}>
-          <span className={`text-sm font-medium transition-colors duration-300 ${billingPeriod === "monthly" ? "text-[var(--text)]" : "text-faint"}`}>
-            Billed Monthly
+        {/*
+          A two-value choice, exposed as a real `role="switch"` with an
+          associated label. The previous markup was a bare `aria-pressed`
+          button labelled "Toggle billing period": screen-reader users heard
+          "pressed"/"not pressed" with no way to know which period that meant,
+          and the two side labels were inert text with no programmatic link to
+          the control.
+        */}
+        <div
+          className="reveal mt-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-3"
+          style={{ transitionDelay: "100ms" }}
+        >
+          <span id={`${groupId}-legend`} className="sr-only">
+            {billing.legend}
           </span>
+
+          <span
+            className={`text-sm font-medium transition-colors duration-300 ${
+              isAnnual ? "text-faint" : "text-[var(--text)]"
+            }`}
+          >
+            {billing.monthlyLabel}
+          </span>
+
           <button
             type="button"
-            onClick={() => setBillingPeriod(billingPeriod === "monthly" ? "annually" : "monthly")}
-            className="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-[rgb(var(--hairline-strong))] transition-colors duration-300 ease-in-out hover:border-brand-400/40 focus:outline-none"
-            aria-label="Toggle billing period"
-            aria-pressed={billingPeriod === "annually"}
+            role="switch"
+            aria-checked={isAnnual}
+            aria-labelledby={`${groupId}-legend`}
+            aria-describedby={`${groupId}-state`}
+            onClick={() => setBillingPeriod(isAnnual ? "monthly" : "annually")}
+            className="relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent bg-[rgb(var(--hairline-strong))] transition-colors duration-300 ease-in-out hover:border-brand-400/40"
           >
             <span
-              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-brand-400 shadow-md ring-0 transition duration-300 ease-in-out ${
-                billingPeriod === "annually" ? "translate-x-5 bg-brand-300" : "translate-x-0"
+              aria-hidden="true"
+              className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-[var(--btn-primary-bg)] shadow-md ring-0 transition-transform duration-300 ease-in-out ${
+                isAnnual ? "translate-x-5" : "translate-x-0"
               }`}
             />
           </button>
-          <span className={`inline-flex items-center gap-2 text-sm font-medium transition-colors duration-300 ${billingPeriod === "annually" ? "text-[var(--text)]" : "text-faint"}`}>
-            Billed Annually
-            <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11px] font-semibold text-emerald-400 border border-emerald-500/20">
-              Save 20%
+
+          <span
+            className={`inline-flex items-center gap-2 text-sm font-medium transition-colors duration-300 ${
+              isAnnual ? "text-[var(--text)]" : "text-faint"
+            }`}
+          >
+            {billing.annualLabel}
+            <span className="rounded-full border border-[rgb(var(--hairline-strong))] bg-[rgb(var(--surface-strong))] px-2 py-0.5 text-[11px] font-semibold text-link">
+              {billing.saveBadge}
             </span>
           </span>
+
+          {/* Announced on change, so the price update isn't silent. */}
+          <p id={`${groupId}-state`} role="status" className="sr-only">
+            {isAnnual
+              ? `${billing.annualLabel}. ${billing.saveBadge}.`
+              : billing.monthlyLabel}
+          </p>
         </div>
 
         <div className="mt-14 grid items-start gap-6 lg:grid-cols-3">
@@ -115,10 +163,10 @@ export default function Pricing() {
                       plan.featured ? "text-gradient" : ""
                     }`}
                   >
-                    {getPrice(plan.name, plan.price)}
+                    {priceFor(plan, billingPeriod)}
                   </span>
                   <span className="text-[15px] text-faint transition-all duration-300">
-                    {getPeriodText(plan.name, plan.period)}
+                    {periodFor(plan, billingPeriod)}
                   </span>
                 </div>
 
@@ -134,7 +182,7 @@ export default function Pricing() {
                         className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full transition-transform duration-300 group-hover:scale-110 ${
                           plan.featured
                             ? "bg-brand-500/25 text-brand-500"
-                            : "bg-[rgb(var(--hairline))] text-accent-400"
+                            : "bg-[rgb(var(--hairline))] text-ink-accent"
                         }`}
                       >
                         <svg
@@ -160,8 +208,8 @@ export default function Pricing() {
                   data-magnetic="0.14"
                   className={`pill-btn magnetic relative z-10 mt-8 inline-flex items-center justify-center gap-2 px-6 py-3.5 text-[15px] font-semibold ${
                     plan.featured
-                      ? "bg-[#1a3d1a] text-white"
-                      : "pill-btn-rtl glass hover:border-brand-400/40 hover:text-white"
+                      ? "btn-primary"
+                      : "pill-btn-rtl glass hover:border-brand-400/40"
                   }`}
                 >
                   <span className="relative">{plan.cta.label}</span>

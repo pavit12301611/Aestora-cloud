@@ -1,11 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { faqs, faqSection } from "@/lib/content";
 import SectionHeading from "./SectionHeading";
 
 export default function Faq() {
   const [open, setOpen] = useState<number | null>(0);
+  // Hard-coded `faq-trigger-0` style IDs are global; two FAQ blocks on one
+  // page would produce duplicate IDs and cross-wired aria-controls.
+  const uid = useId();
+  const triggerId = (i: number) => `${uid}-faq-trigger-${i}`;
+  const panelId = (i: number) => `${uid}-faq-panel-${i}`;
 
   return (
     <section id="faq" className="relative py-24 sm:py-32">
@@ -38,11 +43,11 @@ export default function Faq() {
 
                   <h3>
                     <button
-                      id={`faq-trigger-${i}`}
+                      id={triggerId(i)}
                       type="button"
                       onClick={() => setOpen(isOpen ? null : i)}
                       aria-expanded={isOpen}
-                      aria-controls={`faq-panel-${i}`}
+                      aria-controls={panelId(i)}
                       className="relative z-10 flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
                     >
                       <span
@@ -75,9 +80,11 @@ export default function Faq() {
                   </h3>
 
                   <div
-                    id={`faq-panel-${i}`}
-                    role="region"
-                    aria-labelledby={`faq-trigger-${i}`}
+                    id={panelId(i)}
+                    // `role="region"` on each of four panels floods the
+                    // landmark list with near-identical entries; a disclosure
+                    // panel needs no role, only the trigger association.
+                    aria-labelledby={triggerId(i)}
                     // A collapsed 0fr row is only *visually* collapsed: the
                     // answer text stayed in the accessibility tree and in the
                     // find-in-page results. `inert` takes it out of both while

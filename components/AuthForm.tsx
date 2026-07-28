@@ -83,7 +83,7 @@ export default function AuthForm({
               {field.hint && (
                 <a
                   href={field.hint.href}
-                  className="text-[12.5px] font-medium text-brand-400 transition-colors hover:text-brand-300"
+                  className="text-[12.5px] font-medium text-link transition-colors"
                 >
                   {field.hint.label}
                 </a>
@@ -166,7 +166,7 @@ export default function AuthForm({
         type="submit"
         disabled={pending}
         aria-busy={pending}
-        className="pill-btn pill-btn-rtl group relative mt-2 w-full bg-[#1a3d1a] px-6 py-3.5 text-[15px] font-semibold text-white glow-ring transition-shadow duration-300 hover:shadow-[0_24px_55px_-18px_var(--brand-glow)] disabled:cursor-not-allowed disabled:opacity-70"
+        className="pill-btn pill-btn-rtl group relative mt-2 w-full btn-primary px-6 py-3.5 text-[15px] font-semibold glow-ring transition-shadow duration-300 hover:shadow-[0_24px_55px_-18px_var(--brand-glow)] disabled:cursor-not-allowed disabled:opacity-70"
       >
         <span className="relative">{pending ? "Please wait…" : submitLabel}</span>
       </button>

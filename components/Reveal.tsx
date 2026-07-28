@@ -32,8 +32,41 @@ export default function Reveal() {
       { rootMargin: "0px 0px -8% 0px", threshold: 0.12 }
     );
 
-    nodes.forEach((n) => observer.observe(n));
-    return () => observer.disconnect();
+    const observe = (el: HTMLElement) => {
+      if (el.classList.contains("is-visible")) return;
+      observer.observe(el);
+    };
+
+    nodes.forEach(observe);
+
+    /*
+      The old version queried `.reveal` exactly once on mount. Anything added
+      to the DOM afterwards — a client-rendered branch, a route transition that
+      reuses this component, a lazily hydrated island — kept `.reveal`'s
+      `opacity: 0` and never received `.is-visible`, so it was invisible
+      forever. Watching for new nodes makes the effect self-healing.
+    */
+    const mutations =
+      typeof MutationObserver !== "undefined"
+        ? new MutationObserver((records) => {
+            records.forEach((record) => {
+              record.addedNodes.forEach((node) => {
+                if (!(node instanceof HTMLElement)) return;
+                if (node.classList.contains("reveal")) observe(node);
+                node
+                  .querySelectorAll<HTMLElement>(".reveal")
+                  .forEach(observe);
+              });
+            });
+          })
+        : null;
+
+    mutations?.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+      mutations?.disconnect();
+    };
   }, []);
 
   return null;

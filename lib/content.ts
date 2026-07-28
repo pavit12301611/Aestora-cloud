@@ -21,6 +21,35 @@ export const hero = {
   secondaryCta: { label: "See pricing", href: "#pricing" },
 };
 
+/**
+ * Hero micro-copy. These strings used to be hard-coded inside Hero.tsx —
+ * including a `function features()` at the bottom of the file that returned a
+ * literal array and shadowed the imported `features` export, which is exactly
+ * the drift the "all copy lives in content.ts" rule exists to prevent.
+ */
+export const heroTrustBadges = [
+  "No credit card",
+  "Private links",
+  "Auto cleanup",
+];
+
+export const heroVisual = {
+  liveBadge: "Live storage ready",
+  privateBadge: "Private by default",
+  capacityLabel: "Daily capacity",
+  capacityValue: "1 GB free",
+  captionBody:
+    "1 GB free daily uploads with clean sharing and automatic cleanup.",
+  tourTitle: "Product tour",
+  tourCaption: "Watch how Aestora works",
+  craftedLine: "Crafted for fast daily storage",
+  signals: [
+    { eyebrow: "Protected", title: "AES-256 encrypted by default", icon: "shield" },
+    { eyebrow: "Fast sharing", title: "Links ready in one click", icon: "zap" },
+    { eyebrow: "Clean workflow", title: "Uploads auto-organized daily", icon: "sparkles" },
+  ],
+} as const;
+
 export const heroStats = [
   { label: "Storage Allocation", value: "248 MB", hint: "of 1 GB today", pct: 24.8 },
   { label: "Active Uploads", value: "27", hint: "in progress", pct: 68 },
@@ -73,10 +102,33 @@ export const pricingSection = {
   subtitle: "Start free. Upgrade when you outgrow it.",
 };
 
+/**
+ * Billing config lives here rather than inside <Pricing>, so the discount rate
+ * and the "Save 20%" badge can never drift apart — previously the rate was a
+ * `* 0.8` literal in the component and the badge was a separate hard-coded
+ * string, so changing one silently lied about the other.
+ */
+export const ANNUAL_DISCOUNT = 0.2;
+
+export const billing = {
+  monthlyLabel: "Billed Monthly",
+  annualLabel: "Billed Annually",
+  saveBadge: `Save ${Math.round(ANNUAL_DISCOUNT * 100)}%`,
+  legend: "Billing period",
+} as const;
+
 export type Plan = {
   name: string;
   tagline: string;
+  /** Display string for the monthly price, e.g. "$5.99". */
   price: string;
+  /**
+   * The same figure as a number, so the annual discount is computed from real
+   * data instead of `parseFloat(price.replace("$", ""))` — which quietly
+   * produced NaN for anything that isn't a bare dollar amount ("Free",
+   * "£5.99", "$1,299"). `null` means the plan has no recurring charge.
+   */
+  priceMonthly: number | null;
   period: string;
   features: string[];
   cta: { label: string; href: string };
@@ -90,6 +142,7 @@ export const plans: Plan[] = [
     name: "Free",
     tagline: "Perfect for casual storage and sharing.",
     price: "$0",
+    priceMonthly: null,
     period: "forever",
     features: [
       "1 GB daily upload limit",
@@ -104,6 +157,7 @@ export const plans: Plan[] = [
     name: "Cloud Pro",
     tagline: "For creators who need more room to work.",
     price: "$5.99",
+    priceMonthly: 5.99,
     period: "/month",
     badge: "🔥 Hot",
     featured: true,
@@ -120,6 +174,7 @@ export const plans: Plan[] = [
     name: "Cloud Exclusive",
     tagline: "Unlimited power for teams and pros.",
     price: "$9.99",
+    priceMonthly: 9.99,
     period: "/month",
     badge: "🚀 Coming soon",
     muted: true,

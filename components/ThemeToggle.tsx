@@ -41,7 +41,15 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
 
     const onStorage = (e: StorageEvent) => {
       if (e.key !== THEME_STORAGE_KEY) return;
-      apply(e.newValue === "light" ? "light" : "dark");
+      // `newValue` is null when the key is *removed* (another tab reset to
+      // "follow the system"). Treating that as "dark" forced a theme the user
+      // never picked, so fall back to the OS preference instead.
+      if (e.newValue === null) {
+        apply(system.matches ? "light" : "dark");
+        return;
+      }
+      if (e.newValue !== "light" && e.newValue !== "dark") return;
+      apply(e.newValue);
     };
 
     system.addEventListener("change", onSystemChange);

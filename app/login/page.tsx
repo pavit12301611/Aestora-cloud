@@ -23,7 +23,7 @@ export default function LoginPage() {
           Don&apos;t have an account?{" "}
           <SmartLink
             href="/register"
-            className="font-semibold text-brand-400 transition-colors hover:text-brand-300"
+            className="font-semibold text-link transition-colors"
           >
             Create one
           </SmartLink>

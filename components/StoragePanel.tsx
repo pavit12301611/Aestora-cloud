@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type FileKind = "zip" | "video" | "doc" | "image";
 
@@ -24,10 +24,27 @@ const icons: Record<FileKind, React.ReactNode> = {
   image: <><rect x="3" y="4" width="18" height="16" rx="2" /><circle cx="9" cy="10" r="1.6" /><path d="m5 18 5-4.5 3.5 3L17 13l2 2" /></>,
 };
 
+type DemoFile = (typeof files)[number];
+
+const shareUrlFor = (file: DemoFile) => `https://aestora.cc/s/${file.id}a9f4`;
+
 export default function StoragePanel() {
   const [progress, setProgress] = useState(0);
-  const [activeShare, setActiveShare] = useState<typeof files[0] | null>(null);
-  const [copied, setCopied] = useState(false);
+  const [activeShare, setActiveShare] = useState<DemoFile | null>(null);
+  const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">(
+    "idle"
+  );
+  const copyTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const closeButton = useRef<HTMLButtonElement>(null);
+  const lastTrigger = useRef<HTMLElement | null>(null);
+
+  // A pending "Copied!" reset must not fire into an unmounted tree.
+  useEffect(
+    () => () => {
+      if (copyTimer.current) clearTimeout(copyTimer.current);
+    },
+    []
+  );
 
   useEffect(() => {
     const canAnimate =
@@ -64,28 +81,78 @@ export default function StoragePanel() {
     };
   }, []);
 
-  const handleShareClick = (file: typeof files[0], e: React.MouseEvent) => {
+  const handleShareClick = (file: DemoFile, e: React.MouseEvent) => {
     e.stopPropagation();
+    lastTrigger.current = e.currentTarget as HTMLElement;
     setActiveShare(file);
-    setCopied(false);
+    setCopyState("idle");
   };
 
-  const handleCopyLink = () => {
+  const closeShare = useCallback(() => {
+    setActiveShare(null);
+    setCopyState("idle");
+    // Focus was inside the overlay; returning it to the trigger keeps
+    // keyboard users from being dumped back at the top of the document.
+    lastTrigger.current?.focus();
+  }, []);
+
+  const handleCopyLink = useCallback(async () => {
     if (!activeShare) return;
-    const url = `https://aestora.cc/s/${activeShare.id}a9f4`;
-    navigator.clipboard.writeText(url).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }).catch(() => {
-      setCopied(true);
-    });
-  };
+    const url = shareUrlFor(activeShare);
+
+    if (copyTimer.current) clearTimeout(copyTimer.current);
+
+    try {
+      // `navigator.clipboard` is undefined on insecure origins, so calling it
+      // unguarded threw a TypeError that the old `.catch()` never saw.
+      if (!navigator.clipboard?.writeText) throw new Error("unsupported");
+      await navigator.clipboard.writeText(url);
+      setCopyState("copied");
+    } catch {
+      // The old handler reported "Copied!" even when the write failed, so the
+      // user pasted stale clipboard contents believing it had worked.
+      setCopyState("failed");
+    }
+
+    copyTimer.current = setTimeout(() => setCopyState("idle"), 2000);
+  }, [activeShare]);
+
+  /* Escape closes the share overlay, and focus lands on its close button when
+     it opens — it is a modal-ish layer, so it needs both. */
+  useEffect(() => {
+    if (!activeShare) return;
+    closeButton.current?.focus();
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.stopPropagation();
+        closeShare();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [activeShare, closeShare]);
+
+  // Clamped once instead of re-derived at three call sites that each used a
+  // slightly different expression.
+  const clampedProgress = Math.min(100, Math.max(0, progress));
 
   return (
+    /*
+      This panel used to be `aria-hidden="true"` while still containing real
+      <button> elements. That is an ARIA violation and a keyboard trap: the
+      buttons stayed in the tab order but were removed from the accessibility
+      tree, so a screen-reader user would tab to a control that announced
+      nothing at all.
+
+      It is a product mock, so the honest fix is to describe it as one image-
+      like region and keep the decorative chrome hidden, while leaving the
+      genuinely interactive share controls exposed.
+    */
     <div
       className="tilt relative md:animate-float"
       data-tilt="8"
-      aria-hidden="true"
+      role="group"
+      aria-label="Product preview: the Aestora storage dashboard"
     >
       {/* Glow bed */}
       <div
@@ -98,8 +165,11 @@ export default function StoragePanel() {
       />
 
       <div className="ring-gradient relative overflow-hidden rounded-4xl glass-strong sheen shadow-2xl">
-        {/* Window chrome */}
-        <div className="flex items-center gap-2 border-b border-[rgb(var(--hairline))] px-5 py-3.5">
+        {/* Window chrome — pure decoration. */}
+        <div
+          aria-hidden="true"
+          className="flex items-center gap-2 border-b border-[rgb(var(--hairline))] px-5 py-3.5"
+        >
           <span className="h-2.5 w-2.5 rounded-full bg-red-400/70" />
           <span className="h-2.5 w-2.5 rounded-full bg-amber-400/70" />
           <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/70" />
@@ -149,17 +219,24 @@ export default function StoragePanel() {
           </div>
 
           {/* Active upload */}
-          <div className="mt-4 rounded-2xl surface p-4">
+          <div
+            className="mt-4 rounded-2xl surface p-4"
+            role="progressbar"
+            aria-label="Uploading session-master.wav"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(clampedProgress)}
+          >
             <div className="flex items-center justify-between text-xs">
               <span className="font-medium">session-master.wav</span>
               <span className="font-mono text-faint">
-                {Math.min(100, Math.round(progress))}%
+                {Math.round(clampedProgress)}%
               </span>
             </div>
             <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-[rgb(var(--hairline))]">
               <div
                 className="h-full rounded-full bg-gradient-to-r from-brand-400 via-plasma-400 to-accent-400 shadow-[0_0_12px] shadow-brand-500/60 transition-[width] duration-150 ease-linear"
-                style={{ width: `${Math.min(100, progress)}%` }}
+                style={{ width: `${clampedProgress}%` }}
               />
             </div>
           </div>
@@ -196,7 +273,13 @@ export default function StoragePanel() {
                 <button
                   type="button"
                   onClick={(e) => handleShareClick(file, e)}
-                  className="rounded-lg px-2.5 py-1 text-[11px] font-semibold text-brand-400 glass transition-all duration-300 hover:bg-brand-500/15 hover:text-brand-300 focus:opacity-100 group-hover:opacity-100 opacity-0 cursor-pointer"
+                  aria-label={`Share ${file.name}`}
+                  aria-haspopup="dialog"
+                  aria-expanded={activeShare?.id === file.id}
+                  // `opacity-0` with only `group-hover`/`focus` to reveal it
+                  // hid the control from touch users entirely — there is no
+                  // hover on a phone. It is now always visible below `md`.
+                  className="rounded-lg px-2.5 py-1 text-[11px] font-semibold text-link glass transition-all duration-300 hover:bg-brand-500/15 md:opacity-0 md:group-hover:opacity-100 md:focus-visible:opacity-100"
                 >
                   Share
                 </button>
@@ -207,16 +290,23 @@ export default function StoragePanel() {
 
         {/* Micro sharing overlay */}
         {activeShare && (
-          <div className="absolute inset-0 z-20 flex flex-col justify-end bg-black/60 backdrop-blur-md p-5 transition-all duration-300 animate-rise">
+          <div
+            role="dialog"
+            aria-modal="false"
+            aria-label={`Share link for ${activeShare.name}`}
+            className="absolute inset-0 z-20 flex flex-col justify-end bg-black/60 p-5 backdrop-blur-md transition-all duration-300 animate-rise"
+          >
             <div className="rounded-3xl glass-strong sheen p-5 shadow-2xl">
               <div className="flex items-center justify-between border-b border-[rgb(var(--hairline))] pb-3 mb-4">
                 <span className="text-[13px] font-semibold text-brand-300">Generated Share Link</span>
                 <button
+                  ref={closeButton}
                   type="button"
-                  onClick={() => setActiveShare(null)}
-                  className="rounded-lg p-1 text-faint hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                  onClick={closeShare}
+                  aria-label="Close share link"
+                  className="cursor-pointer rounded-lg p-1 text-faint transition-colors hover:bg-[rgb(var(--hairline-strong))] hover:text-[var(--text)]"
                 >
-                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                     <path d="M18 6L6 18M6 6l12 12" />
                   </svg>
                 </button>
@@ -225,19 +315,28 @@ export default function StoragePanel() {
               <p className="text-[11px] text-faint truncate mb-1">File: {activeShare.name}</p>
               <div className="flex items-center gap-2 rounded-xl bg-black/40 p-2.5 border border-[rgb(var(--hairline))]">
                 <span className="text-xs text-muted truncate flex-1 select-all font-mono">
-                  {`https://aestora.cc/s/${activeShare.id}a9f4`}
+                  {shareUrlFor(activeShare)}
                 </span>
                 <button
                   type="button"
                   onClick={handleCopyLink}
-                  className="rounded-lg bg-brand-500 px-3 py-1 text-[11px] font-semibold text-white transition-all duration-300 hover:bg-brand-600 focus:outline-none cursor-pointer"
+                  className="btn-primary cursor-pointer rounded-lg px-3 py-1 text-[11px] font-semibold transition-all duration-300"
                 >
-                  {copied ? "Copied!" : "Copy"}
+                  {copyState === "copied"
+                    ? "Copied!"
+                    : copyState === "failed"
+                      ? "Copy failed"
+                      : "Copy"}
                 </button>
               </div>
 
-              <p className="text-[10px] text-faint text-center mt-3">
-                Anyone with this link can preview and download the file.
+              {/* Announced on change so the copy result isn't silent. */}
+              <p role="status" className="mt-3 text-center text-[10px] text-faint">
+                {copyState === "copied"
+                  ? "Link copied to clipboard."
+                  : copyState === "failed"
+                    ? "Couldn't copy automatically — select the link and copy it."
+                    : "Anyone with this link can preview and download the file."}
               </p>
             </div>
           </div>
@@ -249,7 +348,7 @@ export default function StoragePanel() {
         <span className="grid h-8 w-8 place-items-center rounded-xl bg-accent-500/15">
           <svg
             viewBox="0 0 24 24"
-            className="h-4 w-4 text-accent-400"
+            className="h-4 w-4 text-ink-accent"
             fill="none"
             stroke="currentColor"
             strokeWidth="2.3"

@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+/**
+ * Tailwind v4's stock `dark:` variant compiles to
+ * `@media (prefers-color-scheme: dark)`, but this site's theme is driven by
+ * `data-theme` on <html> and is user-toggleable. Any `dark:` utility therefore
+ * followed the OS setting and ignored the toggle: a visitor on a dark OS who
+ * switched to the mint theme still got dark-only styles. Re-point the variant
+ * at the attribute that actually decides the theme.
+ */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 /* ============================================================
    AESTORA DESIGN SYSTEM v7 — "Fresh Meadow"
    Light mint (#EFFDF0) + deep forest green (#1a3d1a) + warm
@@ -249,8 +259,28 @@
   --hairline: 26 61 26 / 0.12;    /* forest-tinted hairline */
   --hairline-strong: 26 61 26 / 0.22;
   --text: #1a3d1a;                /* primary dark green */
-  --text-muted: #46603f;
-  --text-faint: #74906f;
+  --text-muted: #46603f;          /* 6.65:1 on mint */
+  /* Was #74906f — 3.35:1 on mint, below the 4.5:1 WCAG AA minimum for the
+     body-size text it is used on (stat hints, file sizes, footer legal). */
+  --text-faint: #5a7756;          /* 4.75:1 on mint, 4.99:1 on white */
+
+  /* Interactive ink. The raw brand/accent ramps are fixed hexes tuned for the
+     dark theme, so `text-accent-400` (3.07:1) and `text-brand-400` (…on dark
+     3.36:1) failed AA in whichever theme they weren't designed for. These
+     tokens carry the same hue at a legible weight per theme. */
+  --ink-link: #226b29;            /* 6.0:1 on mint  */
+  --ink-accent: #9c420a;          /* 6.25:1 on mint */
+  /* Solid accent fill that still clears 4.5:1 with white text on top. */
+  --accent-solid: #a8490b;        /* white text → 5.8:1 */
+  --accent-solid-hover: #8f3c09;
+  --accent-solid-ink: #ffffff;
+
+  /* Primary CTA fill. Every primary button used a hard-coded `bg-[#1a3d1a]`,
+     which is 11.6:1 against the mint bg but only 1.47:1 against the dark
+     theme's near-black green — the buttons all but disappeared in dark mode. */
+  --btn-primary-bg: #1a3d1a;
+  --btn-primary-ink: #ffffff;
+  --btn-primary-sweep: #2a5a2a;   /* the hover fill that sweeps in */
   --glow-a: rgba(232, 106, 16, 0.16);
   --glow-b: rgba(232, 106, 16, 0.12);
   --glow-c: rgba(42, 90, 42, 0.10);
@@ -273,7 +303,22 @@
   --hairline-strong: 190 230 190 / 0.26;
   --text: #eef7ee;
   --text-muted: #b3cdb0;
-  --text-faint: #88a685;
+  --text-faint: #88a685;          /* 6.65:1 on the night bg — already fine */
+
+  /* On the dark bg the light ends of each ramp are the legible ones. */
+  --ink-link: #8fcf93;            /* 9.77:1 */
+  --ink-accent: #f78f43;          /* 7.61:1 */
+  /* On dark, a light orange with dark ink reads far better than white-on-
+     orange (which is only 3.23:1 at any usable orange). */
+  --accent-solid: #f78f43;
+  --accent-solid-hover: #ffa661;
+  --accent-solid-ink: #24120a;    /* 8.6:1 on --accent-solid */
+
+  /* Light-on-dark inversion: a pale green chip with dark ink, 9.8:1 against
+     the page and 9.6:1 for its own label. */
+  --btn-primary-bg: #8fcf93;
+  --btn-primary-ink: #0b1d0b;
+  --btn-primary-sweep: #b6e3b9;
   --glow-a: rgba(232, 106, 16, 0.24);
   --glow-b: rgba(232, 106, 16, 0.16);
   --glow-c: rgba(143, 207, 147, 0.12);
@@ -348,6 +393,23 @@
   .text-muted { color: var(--text-muted) }
   .text-faint { color: var(--text-faint) }
 
+  /* Theme-aware interactive ink — use these instead of the raw
+     `text-accent-400` / `text-brand-400` utilities, which are single fixed
+     hexes and fail WCAG AA in one of the two themes. */
+  .text-link { color: var(--ink-link) }
+  .text-link:hover { color: var(--text) }
+  .text-ink-accent { color: var(--ink-accent) }
+
+  /* Solid accent CTA. Both the fill and the ink on top flip per theme so the
+     pair always clears 4.5:1; previously this was a hard-coded
+     white-on-#e86a10 at 3.23:1. */
+  .btn-accent {
+    background-color: var(--accent-solid);
+    color: var(--accent-solid-ink);
+    transition: background-color 0.3s ease;
+  }
+  .btn-accent:hover { background-color: var(--accent-solid-hover); }
+
   .surface { background-color: rgb(var(--surface)); border: 1px solid rgb(var(--hairline)); }
   .glass { background-color: rgb(var(--surface)); border: 1px solid rgb(var(--hairline)); backdrop-filter: blur(24px) saturate(160%); -webkit-backdrop-filter: blur(24px) saturate(160%); }
   .glass-strong { background-color: rgb(var(--surface-strong)); border: 1px solid rgb(var(--hairline-strong)); backdrop-filter: blur(32px) saturate(180%); -webkit-backdrop-filter: blur(32px) saturate(180%); }
@@ -373,6 +435,12 @@
   .grid-bg { background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px); background-size: 64px 64px; }
 
   .tabular { font-variant-numeric: tabular-nums; }
+
+  /* WCAG 2.2.2: content that moves automatically for more than five seconds
+     must offer a way to pause it. The ticker loops forever, so give it a
+     hover/focus pause. */
+  .marquee-track:hover,
+  .marquee-track:focus-within { animation-play-state: paused; }
 
   .noise {
     background-image:
@@ -488,6 +556,13 @@
     animation: caret-blink 0.9s steps(1) infinite;
   }
 
+  /* Primary pill CTA. `.btn-primary` carries the theme-aware fill + ink so
+     callers stop hard-coding `bg-[#1a3d1a] text-white`. */
+  .btn-primary {
+    background-color: var(--btn-primary-bg);
+    color: var(--btn-primary-ink);
+  }
+
   /* Pill CTA — fresh green fill sweep */
   .pill-btn {
     position: relative;
@@ -501,13 +576,19 @@
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: var(--color-brand-500);
+    background: var(--btn-primary-sweep);
     transform: translateX(-100%);
     transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   }
   .pill-btn:hover::after,
   .pill-btn:focus-visible::after { transform: translateX(0); }
   .pill-btn-rtl::after { transform: translateX(100%); }
+  /* Once the sweep has covered the button, the label sits on
+     --btn-primary-sweep, so it must switch to that pairing's ink. Secondary
+     (glass) pills used to hard-code `hover:text-white`, which is invisible
+     against the dark theme's pale-green sweep. */
+  .pill-btn:hover,
+  .pill-btn:focus-visible { color: var(--btn-primary-ink); }
 
   .btn-border-wrap {
     position: relative;
@@ -575,11 +656,19 @@
     animation: spin-angle 6s linear infinite;
   }
 
+  /* `.glow-ring` deliberately uses ::before.
+     It is routinely combined with `.ring-gradient`, `.ring-conic` and
+     `.pill-btn`, all of which own ::after. When it also used ::after the two
+     rules collided and whichever was defined last silently won — which is why
+     the conic ring never appeared on the hero shell and the fill-sweep never
+     ran on the auth submit button. Do not combine `.glow-ring` with
+     `.spotlight`, which owns ::before. */
   .glow-ring { position: relative; }
-  .glow-ring::after {
+  .glow-ring::before {
     content: "";
     position: absolute;
     inset: 0;
+    z-index: 0;
     border-radius: inherit;
     pointer-events: none;
     box-shadow:

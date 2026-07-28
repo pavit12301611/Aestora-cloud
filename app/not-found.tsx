@@ -18,7 +18,7 @@ export default function NotFound() {
       <Aurora />
       <Interactions />
       <Cursor />
-      <main className="relative flex min-h-screen flex-col items-center justify-center px-5 text-center">
+      <main id="main-content" className="relative flex min-h-screen flex-col items-center justify-center px-5 text-center">
         <SmartLink href="/" aria-label="Aestora home" className="rounded-xl">
           <Logo />
         </SmartLink>
@@ -43,7 +43,7 @@ export default function NotFound() {
             <SmartLink
               href="/"
               data-magnetic="0.2"
-              className="pill-btn magnetic bg-[#1a3d1a] px-7 py-3.5 text-[15px] font-semibold text-white"
+              className="pill-btn magnetic btn-primary px-7 py-3.5 text-[15px] font-semibold"
             >
               <span className="relative">Go home</span>
             </SmartLink>
@@ -51,7 +51,7 @@ export default function NotFound() {
           <SmartLink
             href="/storage"
             data-magnetic="0.14"
-            className="pill-btn pill-btn-rtl magnetic glass px-7 py-3.5 text-[15px] font-semibold transition-colors duration-300 hover:border-brand-400/40 hover:text-white"
+            className="pill-btn pill-btn-rtl magnetic glass px-7 py-3.5 text-[15px] font-semibold transition-colors duration-300 hover:border-brand-400/40"
           >
             <span className="relative">My Storage</span>
           </SmartLink>

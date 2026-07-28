@@ -6,7 +6,17 @@ import { marqueeItems } from "@/lib/content";
  */
 export default function Marquee() {
   return (
-    <section className="relative py-6 sm:py-10" aria-hidden="true">
+    /*
+      The whole ticker used to be `aria-hidden="true"`, which hid seven real
+      value propositions ("Private by Default", "99.9% uptime", "No credit card
+      required") from screen readers and from anything reading the accessibility
+      tree. The content is meaningful; only its *duplication* is decorative.
+
+      So: the section is exposed with a label, the first copy of the list is
+      read normally, and the second — which exists purely to make the scroll
+      loop seamless — is the part that gets hidden.
+    */
+    <section className="relative py-6 sm:py-10" aria-label="What you get">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <div className="reveal ring-gradient relative overflow-hidden rounded-[1.9rem] bg-[rgb(var(--surface-strong))] px-4 py-4 shadow-[0_26px_60px_-40px_var(--brand-glow-soft)] backdrop-blur-2xl">
           <div
@@ -32,16 +42,24 @@ export default function Marquee() {
             </div>
 
             <div className="min-w-0 flex-1 overflow-hidden mask-fade-x">
-              <div className="flex w-max animate-marquee items-center gap-10 pr-10">
+              <div className="marquee-track flex w-max animate-marquee items-center gap-10 pr-10">
                 {[0, 1].map((copy) => (
-                  <div key={copy} className="flex items-center gap-10">
+                  <div
+                    key={copy}
+                    // The second pass is the seam-hiding duplicate.
+                    aria-hidden={copy === 1 ? "true" : undefined}
+                    className="flex items-center gap-10"
+                  >
                     {marqueeItems.map((item) => (
                       <span
                         key={`${copy}-${item}`}
                         className="flex shrink-0 items-center gap-10 text-[13px] font-medium uppercase tracking-[0.22em] text-faint"
                       >
                         {item}
-                        <span className="h-1 w-1 shrink-0 rounded-full bg-gradient-to-r from-brand-400 to-accent-400" />
+                        <span
+                          aria-hidden="true"
+                          className="h-1 w-1 shrink-0 rounded-full bg-gradient-to-r from-brand-400 to-accent-400"
+                        />
                       </span>
                     ))}
                   </div>
