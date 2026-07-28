@@ -67,6 +67,12 @@ card was in the top-left, with the ambient bloom pinned to the corner.
 `newValue === null` means the key was *removed* (another tab reverted to
 "follow the system"), and this forced dark.
 
+### `Hero`, `Navbar` & `HeroVisual` — elements overlapping in desktop mode
+- **`Navbar`**: `<nav>` used `absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2` on desktop (`md:`), which caused the centered navigation links to collide with the logo and/or the right-side action buttons on medium/desktop screens. Replaced with standard flexbox (`mx-auto` inside `flex items-center justify-between`), guaranteeing zero overlap across all resolutions.
+- **`Hero` Headline**: Font size was set up to `7rem` (`7.7vw`) in Column 1 of a 2-column grid (`md:grid-cols-[0.94fr_1.06fr]`), causing "Your cloud, beautifully simple." to exceed column width by 200px+ and overlap `HeroVisual` in Column 2. Scaled headline down to `clamp(3.2rem, 4.4vw, 4.5rem)` so it wraps cleanly inside Column 1.
+- **`HeroVisual` Internal Overlaps**: Defined a nested 2-column grid (`lg:grid-cols-[1.05fr_0.95fr]`) inside Column 2 of the hero (~230px sub-columns), while the internal Storage Allocation card used `sm:flex-row` for text + `StorageDial` (~480px width required). This caused internal cards to overflow by 250px and overlap each other horizontally. Restructured `HeroVisual` as a clean, full-width vertical dashboard stack where cards take full width and never collide.
+- **`FloatingSignal` Badges**: Absolute coordinates (`-left-12`, `-right-10`, `-bottom-4`) caused floating badges to overlap Column 1 text, overflow the viewport right edge, and overlap the section below. Tucked badges safely into grid gaps and padding margins (`-left-6`, `-right-6`, `-bottom-3`) and replaced rigid `100svh` hero centering with responsive padding.
+
 ---
 
 ## 2. Accessibility

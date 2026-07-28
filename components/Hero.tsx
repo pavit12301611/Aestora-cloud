@@ -72,7 +72,7 @@ function Headline() {
     ));
 
   return (
-    <h1 className="font-serif-display text-[clamp(3rem,14vw,4.55rem)] font-normal leading-[0.96] tracking-tight text-[var(--text)] sm:text-[clamp(4rem,10vw,6.7rem)] md:text-[clamp(4.2rem,7.7vw,7rem)]">
+    <h1 className="font-serif-display text-[clamp(2.75rem,10vw,3.8rem)] font-normal leading-[0.98] tracking-tight text-[var(--text)] sm:text-[clamp(3.2rem,8vw,4.5rem)] md:text-[clamp(3.2rem,4.4vw,4.5rem)]">
       <span className="sr-only">{accessibleText}</span>
       <span aria-hidden="true">
         <span className="block">{renderLine(line1, 0)}</span>
@@ -354,25 +354,25 @@ function StorageDial() {
 function HeroVisual() {
   return (
     <div
-      className={`relative lg:pl-5 lg:opacity-0 wide-animate-hero-shell wide-delay-300 ${desktopMotion("slide-in-right", 500)}`}
+      className={`relative lg:pl-4 lg:opacity-0 wide-animate-hero-shell wide-delay-300 ${desktopMotion("slide-in-right", 500)}`}
     >
       <FloatingSignal
         eyebrow="Protected"
         title="AES-256 encrypted by default"
         icon={<ShieldCheck className="h-5 w-5" aria-hidden="true" />}
-        className="-left-4 top-24 wide-animate-fly-left wide-delay-600 xl:-left-12"
+        className="-left-2 top-8 wide-animate-fly-left wide-delay-600 xl:-left-6 xl:top-10"
       />
       <FloatingSignal
         eyebrow="Fast sharing"
         title="Links ready in one click"
         icon={<Zap className="h-5 w-5" aria-hidden="true" />}
-        className="-right-2 top-10 wide-animate-fly-right wide-delay-700 xl:-right-10"
+        className="-right-2 top-14 wide-animate-fly-right wide-delay-700 xl:-right-6 xl:top-16"
       />
       <FloatingSignal
         eyebrow="Clean workflow"
         title="Uploads auto-organized daily"
         icon={<Sparkles className="h-5 w-5" aria-hidden="true" />}
-        className="left-10 -bottom-4 wide-animate-fly-left wide-delay-800 xl:left-2"
+        className="left-6 -bottom-3 wide-animate-fly-left wide-delay-800 xl:left-10"
       />
 
       <div
@@ -384,7 +384,7 @@ function HeroVisual() {
         }}
       />
 
-      <div className="ring-conic glow-ring relative overflow-hidden rounded-[2rem] border border-[rgb(var(--hairline-strong))] bg-[linear-gradient(145deg,rgba(255,255,255,0.78),rgba(255,255,255,0.44))] p-3 shadow-[0_42px_105px_-54px_var(--brand-glow)] backdrop-blur-2xl sm:rounded-[2.65rem] sm:p-4 dark:bg-[linear-gradient(145deg,rgba(255,255,255,0.10),rgba(255,255,255,0.045))]">
+      <div className="ring-conic glow-ring relative overflow-hidden rounded-[2rem] border border-[rgb(var(--hairline-strong))] bg-[linear-gradient(145deg,rgba(255,255,255,0.78),rgba(255,255,255,0.44))] p-4 shadow-[0_42px_105px_-54px_var(--brand-glow)] backdrop-blur-2xl sm:rounded-[2.5rem] sm:p-5 dark:bg-[linear-gradient(145deg,rgba(255,255,255,0.10),rgba(255,255,255,0.045))]">
         <div aria-hidden="true" className="hero-visual-grid absolute inset-0 opacity-70" />
         <div aria-hidden="true" className="absolute -right-28 -top-24 h-72 w-72 rounded-full bg-accent-400/16 blur-3xl" />
         <div aria-hidden="true" className="absolute -bottom-28 -left-24 h-72 w-72 rounded-full bg-brand-500/14 blur-3xl" />
@@ -409,87 +409,86 @@ function HeroVisual() {
             </div>
           </div>
 
-          <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
-            <div className="grid gap-4">
-              <div className="rounded-[1.75rem] border border-white/55 bg-white/58 p-4 shadow-[0_24px_70px_-48px_rgba(26,61,26,0.7)] backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.055] sm:p-5">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-faint">
-                      Storage allocation
-                    </p>
-                    <h2 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--text)] sm:text-3xl">
-                      1 GB free every day
-                    </h2>
-                    <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted">
-                      Drag files in, share a private link, and let Aestora clean up the clutter automatically.
-                    </p>
-                  </div>
-                  <StorageDial />
-                </div>
+          <div className="rounded-[1.75rem] border border-white/55 bg-white/58 p-4 shadow-[0_24px_70px_-48px_rgba(26,61,26,0.7)] backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.055] sm:p-5">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-faint">
+                  Storage allocation
+                </p>
+                <h2 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--text)] sm:text-3xl">
+                  1 GB free every day
+                </h2>
+                <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted">
+                  Drag files in, share a private link, and let Aestora clean up the clutter automatically.
+                </p>
               </div>
+              <StorageDial />
+            </div>
+          </div>
 
-              <div className="grid gap-3">
-                {fileRows.map((file) => (
-                  <FileRow key={file.name} {...file} />
-                ))}
+          <div className="grid gap-3">
+            {fileRows.map((file) => (
+              <FileRow key={file.name} {...file} />
+            ))}
+          </div>
+
+          <div className="relative overflow-hidden rounded-[1.85rem] bg-brand-900 p-4 text-white shadow-[0_30px_85px_-45px_rgba(7,22,7,0.95)] sm:p-5">
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-[radial-gradient(circle_at_30%_0%,rgba(232,106,16,0.34),transparent_35%),radial-gradient(circle_at_88%_90%,rgba(143,207,147,0.20),transparent_42%)]"
+            />
+            <div className="relative z-10 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/62">
+                  Share link
+                </p>
+                <p className="mt-1 text-lg font-semibold">Ready in one click</p>
               </div>
+              <span className="rounded-full bg-white/12 px-3 py-1 text-xs font-bold text-white ring-1 ring-white/12">
+                Private
+              </span>
             </div>
 
-            <div className="grid gap-4">
-              <div className="relative overflow-hidden rounded-[1.85rem] bg-brand-900 p-4 text-white shadow-[0_30px_85px_-45px_rgba(7,22,7,0.95)] sm:p-5">
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 bg-[radial-gradient(circle_at_30%_0%,rgba(232,106,16,0.34),transparent_35%),radial-gradient(circle_at_88%_90%,rgba(143,207,147,0.20),transparent_42%)]"
-                />
-                <div className="relative z-10 flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/62">
-                      Share link
-                    </p>
-                    <p className="mt-1 text-lg font-semibold">Ready in one click</p>
-                  </div>
-                  <span className="rounded-full bg-white/12 px-3 py-1 text-xs font-bold text-white ring-1 ring-white/12">
-                    Private
-                  </span>
-                </div>
-
-                <div className="relative z-10 mt-5 rounded-[1.55rem] border border-white/12 bg-white/[0.08] p-3 backdrop-blur-xl">
-                  <div className="flex items-center gap-2 rounded-full bg-white/[0.08] px-3 py-2 text-xs font-medium text-white/78 ring-1 ring-white/10">
-                    <ShieldCheck className="h-4 w-4 text-accent-300" aria-hidden="true" />
-                    aestora.cloud/s/secure-vault
-                  </div>
-                  <div className="mt-4 grid grid-cols-2 gap-3">
-                    <div className="rounded-2xl bg-white/[0.08] p-3 ring-1 ring-white/10">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/48">
-                        Expires
-                      </p>
-                      <p className="mt-1 text-xl font-semibold tabular">30d</p>
-                    </div>
-                    <div className="rounded-2xl bg-white/[0.08] p-3 ring-1 ring-white/10">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/48">
-                        Uptime
-                      </p>
-                      <p className="mt-1 text-xl font-semibold tabular">99.9%</p>
-                    </div>
-                  </div>
-                </div>
+            <div className="relative z-10 mt-4 rounded-[1.55rem] border border-white/12 bg-white/[0.08] p-3.5 backdrop-blur-xl">
+              <div className="flex flex-wrap items-center justify-between gap-2 rounded-full bg-white/[0.08] px-3.5 py-2 text-xs font-medium text-white/90 ring-1 ring-white/10">
+                <span className="inline-flex items-center gap-2 truncate">
+                  <ShieldCheck className="h-4 w-4 shrink-0 text-accent-300" aria-hidden="true" />
+                  <span className="truncate font-mono">aestora.cloud/s/secure-vault</span>
+                </span>
+                <span className="shrink-0 rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-bold text-white">
+                  Active
+                </span>
               </div>
-
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-                <ActionTile
-                  eyebrow="Upload"
-                  title="Drop files anywhere"
-                  body="A calmer upload flow with instant previews and clean file states."
-                  icon={<Plus className="h-[18px] w-[18px]" aria-hidden="true" />}
-                />
-                <ActionTile
-                  eyebrow="Security"
-                  title="Private by default"
-                  body="Every file starts locked until you intentionally create a link."
-                  icon={<ShieldCheck className="h-[18px] w-[18px]" aria-hidden="true" />}
-                />
+              <div className="mt-3 grid grid-cols-2 gap-3">
+                <div className="rounded-2xl bg-white/[0.08] p-3 ring-1 ring-white/10">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/48">
+                    Expires
+                  </p>
+                  <p className="mt-1 text-xl font-semibold tabular">30d</p>
+                </div>
+                <div className="rounded-2xl bg-white/[0.08] p-3 ring-1 ring-white/10">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/48">
+                    Uptime
+                  </p>
+                  <p className="mt-1 text-xl font-semibold tabular">99.9%</p>
+                </div>
               </div>
             </div>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            <ActionTile
+              eyebrow="Upload"
+              title="Drop files anywhere"
+              body="Instant previews and clean file states."
+              icon={<Plus className="h-[18px] w-[18px]" aria-hidden="true" />}
+            />
+            <ActionTile
+              eyebrow="Security"
+              title="Private by default"
+              body="Files stay locked until shared."
+              icon={<ShieldCheck className="h-[18px] w-[18px]" aria-hidden="true" />}
+            />
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
@@ -520,7 +519,7 @@ export default function Hero() {
 
       <div aria-hidden="true" className="h-[76px] shrink-0 lg:h-[84px]" />
 
-      <div className="relative mx-auto grid min-h-[calc(100svh-76px)] max-w-7xl items-center gap-10 px-5 py-10 sm:px-8 md:grid-cols-[0.94fr_1.06fr] md:gap-12 md:py-14 lg:min-h-[calc(100svh-84px)] lg:px-12">
+      <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-5 py-12 sm:px-8 md:grid-cols-[0.96fr_1.04fr] md:gap-12 md:py-16 lg:px-12 lg:gap-14 lg:py-20">
         <div className="relative z-10 max-w-2xl text-center md:text-left">
           <div className={desktopMotion("fade-up", 100)}>
             <span className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--hairline))] bg-[rgb(var(--surface-strong))] px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted backdrop-blur-xl">
@@ -612,7 +611,7 @@ export default function Hero() {
         <HeroVisual />
       </div>
 
-      <section className="relative py-14 sm:py-20" aria-label="Live storage preview">
+      <section className="relative pb-16 pt-10 sm:pb-24 sm:pt-16" aria-label="Live storage preview">
         <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 sm:px-8 lg:grid-cols-[1.02fr_0.98fr] lg:gap-14">
           <div className="tilt-scene relative order-2 lg:order-1">
             <div

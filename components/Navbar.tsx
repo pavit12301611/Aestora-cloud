@@ -130,7 +130,7 @@ export default function Navbar() {
         </SmartLink>
 
         <nav
-          className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 animate-fade-in items-center gap-8 delay-200 md:flex"
+          className="hidden animate-fade-in items-center justify-center gap-6 delay-200 md:flex lg:gap-8 mx-auto"
           aria-label="Primary"
         >
           {nav.map((item) => {
