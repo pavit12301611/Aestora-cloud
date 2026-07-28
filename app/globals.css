@@ -433,6 +433,15 @@
     animation: shimmer 5s linear infinite;
   }
   .grid-bg { background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px); background-size: 64px 64px; }
+  .hero-visual-grid {
+    background-image:
+      linear-gradient(rgba(26, 61, 26, 0.075) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26, 61, 26, 0.075) 1px, transparent 1px),
+      radial-gradient(circle at 72% 18%, rgba(232, 106, 16, 0.18), transparent 34%),
+      radial-gradient(circle at 14% 88%, rgba(143, 207, 147, 0.18), transparent 38%);
+    background-size: 38px 38px, 38px 38px, auto, auto;
+    mask-image: radial-gradient(ellipse at 50% 44%, #000 0%, #000 58%, transparent 100%);
+  }
 
   .tabular { font-variant-numeric: tabular-nums; }
 

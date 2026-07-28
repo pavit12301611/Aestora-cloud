@@ -7,7 +7,6 @@ import {
   heroVisual,
   plans,
   stats,
-  finalCta,
 } from "@/lib/content";
 import StoragePanel from "./StoragePanel";
 import Counter from "./Counter";
@@ -60,13 +59,13 @@ function Headline() {
   */
   const accessibleText = `${hero.titleLead} ${hero.titleAccent}`;
 
-  const renderLine = (words: string[], offset: number) =>
+  const renderLine = (words: string[], offset: number, accent = false) =>
     words.map((word, i) => (
       <span
         key={`${offset}-${word}`}
         className={`mr-[0.22em] inline-block last:mr-0 md:opacity-0 desktop-animate-word-pop ${
-          desktopWordDelays[offset + i] ?? "desktop-delay-400"
-        }`}
+          accent ? "text-gradient" : ""
+        } ${desktopWordDelays[offset + i] ?? "desktop-delay-400"}`}
       >
         {word}
       </span>
@@ -77,7 +76,7 @@ function Headline() {
       <span className="sr-only">{accessibleText}</span>
       <span aria-hidden="true">
         <span className="block">{renderLine(line1, 0)}</span>
-        <span className="block">{renderLine(line2, line1.length)}</span>
+        <span className="block">{renderLine(line2, line1.length, true)}</span>
       </span>
     </h1>
   );
@@ -237,109 +236,266 @@ function FloatingSignal({
   );
 }
 
+const fileRows = [
+  {
+    name: "Client-assets.zip",
+    meta: "Shared privately • 184 MB",
+    pct: 78,
+    tone: "bg-accent-400",
+    icon: <Sparkles className="h-4 w-4" aria-hidden="true" />,
+  },
+  {
+    name: "Launch-video.mp4",
+    meta: "CDN ready • 96 MB",
+    pct: 56,
+    tone: "bg-brand-500",
+    icon: <Zap className="h-4 w-4" aria-hidden="true" />,
+  },
+  {
+    name: "Tax-documents.pdf",
+    meta: "Locked vault • 22 MB",
+    pct: 92,
+    tone: "bg-plasma-500",
+    icon: <ShieldCheck className="h-4 w-4" aria-hidden="true" />,
+  },
+];
+
+function FileRow({
+  name,
+  meta,
+  pct,
+  tone,
+  icon,
+}: {
+  name: string;
+  meta: string;
+  pct: number;
+  tone: string;
+  icon: ReactNode;
+}) {
+  return (
+    <div className="group rounded-2xl border border-white/55 bg-white/64 p-3 shadow-[0_18px_42px_-34px_rgba(26,61,26,0.65)] backdrop-blur-xl transition-transform duration-300 hover:-translate-y-0.5 dark:border-white/10 dark:bg-white/[0.07]">
+      <div className="flex items-center gap-3">
+        <div
+          className={`grid h-10 w-10 shrink-0 place-items-center rounded-2xl ${tone} text-white shadow-lg shadow-brand-900/10`}
+        >
+          {icon}
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center justify-between gap-3">
+            <p className="truncate text-sm font-semibold text-[var(--text)]">{name}</p>
+            <p className="text-xs font-bold text-ink-accent tabular">{pct}%</p>
+          </div>
+          <p className="mt-0.5 truncate text-xs font-medium text-muted">{meta}</p>
+        </div>
+      </div>
+      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-[rgb(var(--hairline))]">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-brand-400 via-plasma-400 to-accent-400 shadow-[0_0_14px] shadow-accent-400/35"
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function ActionTile({
+  eyebrow,
+  title,
+  body,
+  icon,
+}: {
+  eyebrow: string;
+  title: string;
+  body: string;
+  icon: ReactNode;
+}) {
+  return (
+    <div className="ring-gradient rounded-[1.45rem] bg-[rgb(var(--surface-strong))] p-4 shadow-[0_18px_42px_-34px_var(--brand-glow)] backdrop-blur-xl">
+      <div className="flex items-start gap-3">
+        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-brand-600 text-white shadow-lg shadow-brand-600/20 dark:bg-brand-300 dark:text-brand-900">
+          {icon}
+        </div>
+        <div>
+          <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-faint">{eyebrow}</p>
+          <p className="mt-1 text-sm font-semibold text-[var(--text)]">{title}</p>
+          <p className="mt-1 text-xs leading-relaxed text-muted">{body}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StorageDial() {
+  const used = heroStats[0].pct;
+  const degrees = used * 3.6;
+
+  return (
+    <div className="relative mx-auto grid h-36 w-36 place-items-center sm:h-40 sm:w-40">
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 rounded-full shadow-[0_22px_60px_-24px_var(--brand-glow)]"
+        style={{
+          background: `conic-gradient(var(--color-accent-400) 0deg, var(--color-plasma-400) ${degrees}deg, rgb(var(--hairline)) ${degrees}deg 360deg)`,
+        }}
+      />
+      <div className="absolute inset-3 rounded-full bg-[rgb(var(--surface-strong))] shadow-inner backdrop-blur-xl" />
+      <div className="relative text-center">
+        <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-faint">Today used</p>
+        <p className="mt-1 text-3xl font-semibold tracking-tight text-[var(--text)] tabular">
+          {heroStats[0].value}
+        </p>
+        <p className="mt-1 text-xs font-medium text-muted">{heroStats[0].hint}</p>
+      </div>
+    </div>
+  );
+}
+
 function HeroVisual() {
   return (
     <div
-      className={`relative lg:pl-6 lg:opacity-0 wide-animate-hero-shell wide-delay-300 ${desktopMotion("slide-in-right", 500)}`}
+      className={`relative lg:pl-5 lg:opacity-0 wide-animate-hero-shell wide-delay-300 ${desktopMotion("slide-in-right", 500)}`}
     >
       <FloatingSignal
         eyebrow="Protected"
         title="AES-256 encrypted by default"
         icon={<ShieldCheck className="h-5 w-5" aria-hidden="true" />}
-        className="-left-1 top-10 wide-animate-fly-left wide-delay-600 xl:-left-12"
+        className="-left-4 top-24 wide-animate-fly-left wide-delay-600 xl:-left-12"
       />
       <FloatingSignal
         eyebrow="Fast sharing"
         title="Links ready in one click"
         icon={<Zap className="h-5 w-5" aria-hidden="true" />}
-        className="-right-2 top-16 wide-animate-fly-right wide-delay-700 xl:-right-10"
+        className="-right-2 top-10 wide-animate-fly-right wide-delay-700 xl:-right-10"
       />
       <FloatingSignal
         eyebrow="Clean workflow"
         title="Uploads auto-organized daily"
         icon={<Sparkles className="h-5 w-5" aria-hidden="true" />}
-        className="left-8 -bottom-5 wide-animate-fly-left wide-delay-800 xl:left-4"
+        className="left-10 -bottom-4 wide-animate-fly-left wide-delay-800 xl:left-2"
       />
 
       <div
         aria-hidden="true"
-        className="absolute -inset-5 -z-10 rounded-[3rem] opacity-80 blur-3xl"
+        className="absolute -inset-7 -z-10 rounded-[3.5rem] opacity-90 blur-3xl"
         style={{
           background:
-            "radial-gradient(58% 58% at 62% 24%, var(--glow-a), transparent 72%), radial-gradient(46% 46% at 22% 78%, var(--glow-c), transparent 72%)",
+            "radial-gradient(52% 52% at 70% 16%, var(--glow-a), transparent 72%), radial-gradient(50% 50% at 18% 82%, var(--glow-c), transparent 76%)",
         }}
       />
 
-      <div className="ring-conic glow-ring rounded-[2rem] border border-[rgb(var(--hairline-strong))] bg-[linear-gradient(180deg,rgba(255,255,255,0.62),rgba(255,255,255,0.34))] p-3 shadow-[0_42px_95px_-48px_var(--brand-glow)] backdrop-blur-2xl sm:rounded-[2.5rem] sm:p-4 dark:bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))]">
-        <figure className="relative isolate min-h-[23rem] overflow-hidden rounded-[1.45rem] bg-brand-900 shadow-[0_22px_70px_-40px_rgba(7,22,7,0.95)] sm:min-h-[28rem] sm:rounded-[2rem] lg:min-h-[33rem]">
-          {/* The hero image is the LCP element on every viewport, so it is
-              marked priority — it was previously lazy-discovered by the
-              preload scanner behind the CSS. */}
-          <Image
-            src="/hero/bottom-center.jpg"
-            alt="Aestora cloud storage on a phone, accessible everywhere you go"
-            fill
-            priority
-            sizes="(min-width: 1024px) 46vw, (min-width: 768px) 52vw, 100vw"
-            className="object-cover"
-          />
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,24,9,0.14)_0%,rgba(9,24,9,0.16)_42%,rgba(9,24,9,0.84)_100%)]"
-          />
+      <div className="ring-conic glow-ring relative overflow-hidden rounded-[2rem] border border-[rgb(var(--hairline-strong))] bg-[linear-gradient(145deg,rgba(255,255,255,0.78),rgba(255,255,255,0.44))] p-3 shadow-[0_42px_105px_-54px_var(--brand-glow)] backdrop-blur-2xl sm:rounded-[2.65rem] sm:p-4 dark:bg-[linear-gradient(145deg,rgba(255,255,255,0.10),rgba(255,255,255,0.045))]">
+        <div aria-hidden="true" className="hero-visual-grid absolute inset-0 opacity-70" />
+        <div aria-hidden="true" className="absolute -right-28 -top-24 h-72 w-72 rounded-full bg-accent-400/16 blur-3xl" />
+        <div aria-hidden="true" className="absolute -bottom-28 -left-24 h-72 w-72 rounded-full bg-brand-500/14 blur-3xl" />
 
-          <div
-            aria-hidden="true"
-            className="absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent"
-          />
-
-          <div className="absolute left-4 right-4 top-4 flex items-center justify-between gap-3 sm:left-5 sm:right-5 sm:top-5">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/14 px-3 py-2 text-xs font-semibold text-white shadow-lg shadow-black/10 backdrop-blur-md ring-1 ring-white/18">
+        <div className="relative z-10 grid gap-4">
+          <div className="flex items-center justify-between gap-3 rounded-[1.55rem] border border-white/55 bg-white/62 px-4 py-3 shadow-[0_18px_46px_-36px_rgba(26,61,26,0.6)] backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.06]">
+            <div className="flex items-center gap-3">
+              <div className="grid h-10 w-10 place-items-center rounded-2xl bg-brand-600 text-white shadow-lg shadow-brand-600/20 dark:bg-brand-300 dark:text-brand-900">
+                <Sparkles className="h-[18px] w-[18px]" aria-hidden="true" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-[var(--text)]">Aestora Drive</p>
+                <p className="text-xs font-medium text-muted">Private workspace dashboard</p>
+              </div>
+            </div>
+            <div className="inline-flex items-center gap-2 rounded-full bg-accent-400/12 px-3 py-1.5 text-xs font-bold text-ink-accent ring-1 ring-accent-400/18">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full rounded-full bg-accent-400 opacity-70 md:animate-ping" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-accent-400" />
               </span>
               {heroVisual.liveBadge}
             </div>
-            <div className="hidden rounded-full bg-white/14 px-3 py-2 text-xs font-semibold text-white backdrop-blur-md ring-1 ring-white/18 sm:block">
-              {heroVisual.privateBadge}
-            </div>
           </div>
 
-          <div className="absolute right-5 top-20 hidden rounded-[1.3rem] bg-white/10 px-4 py-3 text-white shadow-2xl shadow-black/20 backdrop-blur-xl ring-1 ring-white/14 sm:block">
-            <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/72">
-              {heroVisual.capacityLabel}
-            </div>
-            <div className="mt-1 text-xl font-semibold tabular">{heroVisual.capacityValue}</div>
-          </div>
-
-          <figcaption className="absolute inset-x-4 bottom-4 rounded-[1.35rem] bg-[#071607]/42 p-4 text-white shadow-2xl shadow-black/20 backdrop-blur-xl ring-1 ring-white/14 sm:inset-x-5 sm:bottom-5 sm:p-5">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <p className="font-serif-display text-2xl leading-tight sm:text-3xl">
-                  {finalCta.title}
-                </p>
-                <p className="mt-1 max-w-sm text-sm text-white/78">
-                  {heroVisual.captionBody}
-                </p>
+          <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
+            <div className="grid gap-4">
+              <div className="rounded-[1.75rem] border border-white/55 bg-white/58 p-4 shadow-[0_24px_70px_-48px_rgba(26,61,26,0.7)] backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.055] sm:p-5">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-faint">
+                      Storage allocation
+                    </p>
+                    <h2 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--text)] sm:text-3xl">
+                      1 GB free every day
+                    </h2>
+                    <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted">
+                      Drag files in, share a private link, and let Aestora clean up the clutter automatically.
+                    </p>
+                  </div>
+                  <StorageDial />
+                </div>
               </div>
-              <SmartLink
-                href={hero.primaryCta.href}
-                className="group inline-flex w-fit items-center gap-2 rounded-full btn-accent px-5 py-3 text-sm font-semibold shadow-lg shadow-accent-400/25"
-              >
-                {hero.primaryCta.label}
-                <ArrowRight
-                  className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-                  aria-hidden="true"
-                />
-              </SmartLink>
-            </div>
-          </figcaption>
-        </figure>
 
-        <div className="mt-3 grid gap-3 sm:grid-cols-2">
-          <PlanMiniCard />
-          <TourMiniCard />
+              <div className="grid gap-3">
+                {fileRows.map((file) => (
+                  <FileRow key={file.name} {...file} />
+                ))}
+              </div>
+            </div>
+
+            <div className="grid gap-4">
+              <div className="relative overflow-hidden rounded-[1.85rem] bg-brand-900 p-4 text-white shadow-[0_30px_85px_-45px_rgba(7,22,7,0.95)] sm:p-5">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 bg-[radial-gradient(circle_at_30%_0%,rgba(232,106,16,0.34),transparent_35%),radial-gradient(circle_at_88%_90%,rgba(143,207,147,0.20),transparent_42%)]"
+                />
+                <div className="relative z-10 flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/62">
+                      Share link
+                    </p>
+                    <p className="mt-1 text-lg font-semibold">Ready in one click</p>
+                  </div>
+                  <span className="rounded-full bg-white/12 px-3 py-1 text-xs font-bold text-white ring-1 ring-white/12">
+                    Private
+                  </span>
+                </div>
+
+                <div className="relative z-10 mt-5 rounded-[1.55rem] border border-white/12 bg-white/[0.08] p-3 backdrop-blur-xl">
+                  <div className="flex items-center gap-2 rounded-full bg-white/[0.08] px-3 py-2 text-xs font-medium text-white/78 ring-1 ring-white/10">
+                    <ShieldCheck className="h-4 w-4 text-accent-300" aria-hidden="true" />
+                    aestora.cloud/s/secure-vault
+                  </div>
+                  <div className="mt-4 grid grid-cols-2 gap-3">
+                    <div className="rounded-2xl bg-white/[0.08] p-3 ring-1 ring-white/10">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/48">
+                        Expires
+                      </p>
+                      <p className="mt-1 text-xl font-semibold tabular">30d</p>
+                    </div>
+                    <div className="rounded-2xl bg-white/[0.08] p-3 ring-1 ring-white/10">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/48">
+                        Uptime
+                      </p>
+                      <p className="mt-1 text-xl font-semibold tabular">99.9%</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                <ActionTile
+                  eyebrow="Upload"
+                  title="Drop files anywhere"
+                  body="A calmer upload flow with instant previews and clean file states."
+                  icon={<Plus className="h-[18px] w-[18px]" aria-hidden="true" />}
+                />
+                <ActionTile
+                  eyebrow="Security"
+                  title="Private by default"
+                  body="Every file starts locked until you intentionally create a link."
+                  icon={<ShieldCheck className="h-[18px] w-[18px]" aria-hidden="true" />}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            <PlanMiniCard />
+            <TourMiniCard />
+          </div>
         </div>
       </div>
     </div>
