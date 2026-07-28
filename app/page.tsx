@@ -16,7 +16,15 @@ export default function AestoraLanding() {
     <>
       <ScrollProgress />
       <Navbar />
-      <main>
+      <main className="relative">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-[18rem] h-[90rem] opacity-80"
+          style={{
+            background:
+              "radial-gradient(42% 18% at 18% 12%, var(--glow-c), transparent 72%), radial-gradient(32% 14% at 82% 36%, var(--glow-a), transparent 72%), radial-gradient(38% 16% at 50% 82%, var(--glow-b), transparent 74%)",
+          }}
+        />
         <Hero />
         <Marquee />
         <Features />

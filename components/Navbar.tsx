@@ -111,13 +111,13 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50">
+    <header className="fixed inset-x-0 top-0 z-50 lg:opacity-0 wide-animate-fly-down wide-delay-100">
       {/* Full-width bar — transparent over the hero, frosted on scroll */}
       <div
         className={`relative flex items-center justify-between gap-4 px-4 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:px-8 lg:px-12 ${
           scrolled
-            ? "border-b border-[rgb(var(--hairline))] bg-[rgb(var(--surface-strong))] py-2.5 shadow-[0_18px_40px_-30px_var(--brand-glow)] backdrop-blur-xl"
-            : "border-b border-transparent bg-transparent py-4"
+            ? "border-b border-[rgb(var(--hairline))] bg-[rgb(var(--surface-strong))] py-2.5 shadow-[0_22px_52px_-32px_var(--brand-glow)] backdrop-blur-2xl"
+            : "border-b border-transparent bg-[linear-gradient(180deg,rgba(255,255,255,0.28),transparent)] py-4"
         }`}
       >
         <SmartLink
