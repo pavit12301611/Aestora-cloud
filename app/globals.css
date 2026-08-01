@@ -11,6 +11,69 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* ============================================================
+   MOBILE PERFORMANCE OPTIMIZATIONS
+   Reduces animations and effects on mobile for faster loading
+   ============================================================ */
+
+/* Mobile-first: disable heavy backdrop-filter on small screens */
+@media (max-width: 767px) {
+  .glass,
+  .glass-strong,
+  .backdrop-blur-2xl,
+  .backdrop-blur-xl,
+  .backdrop-blur-2xl,
+  [class*="backdrop-blur"] {
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+  }
+}
+
+/* Reduce motion on mobile by default */
+@media (max-width: 639px) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  /* Re-enable essential animations */
+  .animate-fade-in { animation-duration: 0.3s !important; }
+  .reveal { opacity: 1 !important; transform: none !important; }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Disable hover effects that cause jank on touch */
+  .lift:hover { transform: none !important; }
+  .spotlight:hover::before { opacity: 0 !important; }
+  .tilt { transform: none !important; }
+  .magnetic { transform: none !important; }
+  
+  /* Reduce shadow complexity on mobile */
+  [class*="shadow-"] {
+    box-shadow: none !important;
+  }
+  
+  /* Simplify glass effect */
+  .glass, .glass-strong {
+    background-color: rgb(var(--surface-strong));
+  }
+}
+
+/* Tablet optimizations */
+@media (min-width: 640px) and (max-width: 1023px) {
+  /* Reduce blur on tablet */
+  [class*="blur-3xl"] {
+    filter: blur(40px) !important;
+  }
+  [class*="blur-2xl"] {
+    filter: blur(24px) !important;
+  }
+}
+
+/* ============================================================
    AESTORA DESIGN SYSTEM v7 — "Fresh Meadow"
    Light mint (#EFFDF0) + deep forest green (#1a3d1a) + warm
    orange (#E86A10) — a boutique, friendly, ridiculously simple
