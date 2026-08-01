@@ -322,11 +322,10 @@ function HeroVisual() {
       className={`relative lg:pl-4 lg:opacity-0 wide-animate-hero-shell wide-delay-300 ${desktopMotion("slide-in-right", 500)}`}
     >
 
-
-
+      {/* Mobile-optimized glow - smaller, less blur */}
       <div
         aria-hidden="true"
-        className="absolute -inset-7 -z-10 rounded-[3.5rem] opacity-90 blur-3xl"
+        className="absolute -inset-4 sm:-inset-7 -z-10 rounded-[2rem] sm:rounded-[3.5rem] opacity-60 sm:opacity-90 blur-xl sm:blur-3xl"
         style={{
           background:
             "radial-gradient(52% 52% at 70% 16%, var(--glow-a), transparent 72%), radial-gradient(50% 50% at 18% 82%, var(--glow-c), transparent 76%)",
@@ -335,8 +334,9 @@ function HeroVisual() {
 
       <div className="ring-conic glow-ring relative overflow-hidden rounded-[2rem] border border-[rgb(var(--hairline-strong))] bg-[linear-gradient(145deg,rgba(255,255,255,0.78),rgba(255,255,255,0.44))] p-4 shadow-[0_42px_105px_-54px_var(--brand-glow)] backdrop-blur-2xl sm:rounded-[2.5rem] sm:p-5 dark:bg-[linear-gradient(145deg,rgba(255,255,255,0.10),rgba(255,255,255,0.045))]">
         <div aria-hidden="true" className="hero-visual-grid absolute inset-0 opacity-70" />
-        <div aria-hidden="true" className="absolute -right-28 -top-24 h-72 w-72 rounded-full bg-accent-400/16 blur-3xl" />
-        <div aria-hidden="true" className="absolute -bottom-28 -left-24 h-72 w-72 rounded-full bg-brand-500/14 blur-3xl" />
+        {/* Mobile: reduced blur size */}
+        <div aria-hidden="true" className="absolute -right-12 sm:-right-28 -top-12 sm:-top-24 h-40 sm:h-72 w-40 sm:w-72 rounded-full bg-accent-400/16 blur-2xl sm:blur-3xl" />
+        <div aria-hidden="true" className="absolute -bottom-12 sm:-bottom-28 -left-12 sm:-left-24 h-40 sm:h-72 w-40 sm:w-72 rounded-full bg-brand-500/14 blur-2xl sm:blur-3xl" />
 
         <div className="relative z-10 grid gap-4">
           <div className="flex items-center justify-between gap-3 rounded-[1.55rem] border border-white/55 bg-white/62 px-4 py-3 shadow-[0_18px_46px_-36px_rgba(26,61,26,0.6)] backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.06]">
@@ -454,15 +454,16 @@ export default function Hero() {
   return (
     <section id="top" className="relative overflow-hidden">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 grid-bg opacity-55" />
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 noise" />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 noise hidden sm:block" />
+      {/* Mobile-optimized background glows - smaller, reduced blur */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-0 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full opacity-70 blur-3xl"
+        className="pointer-events-none absolute left-1/2 top-0 h-[20rem] sm:h-[34rem] w-[20rem] sm:w-[34rem] -translate-x-1/2 rounded-full opacity-50 sm:opacity-70 blur-2xl sm:blur-3xl"
         style={{ background: "radial-gradient(circle, var(--glow-a), transparent 66%)" }}
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -left-24 top-24 h-[22rem] w-[22rem] rounded-full opacity-55 blur-3xl"
+        className="pointer-events-none absolute -left-12 sm:-left-24 top-24 h-[14rem] sm:h-[22rem] w-[14rem] sm:w-[22rem] rounded-full opacity-40 sm:opacity-55 blur-2xl sm:blur-3xl"
         style={{ background: "radial-gradient(circle, var(--glow-c), transparent 68%)" }}
       />
 

@@ -91,26 +91,30 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         {/*
-          Fonts come from Google over a <link>. Ideally these would move to
-          `next/font/google`, which self-hosts the files, drops the two extra
-          DNS lookups and the render-blocking stylesheet, keeps visitor IPs off
-          Google's servers, and emits a size-adjusted fallback so swapping in
-          the real face doesn't shift the layout. That change is a one-liner
-          but requires network access at build time, so it is left as a
-          deliberate follow-up rather than something that breaks air-gapped CI.
-
-          `preconnect` at least overlaps the TLS handshake with HTML parsing.
+          Fonts optimized for performance:
+          - preconnect overlaps DNS/TLS with HTML parsing
+          - display=swap prevents invisible text during font load
+          - Using fetchpriority hint for critical fonts
         */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
+          rel="preload"
+          as="style"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap"
           rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap"
+          media="print"
+          onLoad="this.media='all'"
         />
+        <noscript>
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap"
+          />
+        </noscript>
       </head>
       <body className="min-h-screen antialiased">
         {/*

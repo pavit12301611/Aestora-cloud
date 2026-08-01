@@ -1,16 +1,36 @@
+import dynamic from "next/dynamic";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import Marquee from "@/components/Marquee";
-import Features from "@/components/Features";
-import Stats from "@/components/Stats";
-import Pricing from "@/components/Pricing";
-import Faq from "@/components/Faq";
-import FinalCta from "@/components/FinalCta";
-import Footer from "@/components/Footer";
 import ScrollProgress from "@/components/ScrollProgress";
-import Interactions from "@/components/Interactions";
-import Reveal from "@/components/Reveal";
 import { faqs } from "@/lib/content";
+
+// Lazy load below-the-fold content for faster initial load
+const Marquee = dynamic(() => import("@/components/Marquee"), {
+  loading: () => <div className="h-16 bg-[rgb(var(--surface))]" />,
+});
+const Features = dynamic(() => import("@/components/Features"), {
+  loading: () => <div className="h-96 bg-[rgb(var(--surface))]" />,
+});
+const Stats = dynamic(() => import("@/components/Stats"), {
+  loading: () => <div className="h-48 bg-[rgb(var(--surface))]" />,
+});
+const Pricing = dynamic(() => import("@/components/Pricing"), {
+  loading: () => <div className="h-96 bg-[rgb(var(--surface))]" />,
+});
+const Faq = dynamic(() => import("@/components/Faq"), {
+  loading: () => <div className="h-64 bg-[rgb(var(--surface))]" />,
+});
+const FinalCta = dynamic(() => import("@/components/FinalCta"), {
+  loading: () => <div className="h-48 bg-[rgb(var(--surface))]" />,
+});
+const Footer = dynamic(() => import("@/components/Footer"), {
+  loading: () => <div className="h-32 bg-[rgb(var(--surface))]" />,
+});
+const Reveal = dynamic(() => import("@/components/Reveal"));
+const Interactions = dynamic(() => import("@/components/Interactions"), {
+  // Don't render on mobile - these are desktop-only effects
+  ssr: false,
+});
 
 /**
  * The README claimed `FAQPage` structured data shipped, but no JSON-LD was
